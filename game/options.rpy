@@ -13,6 +13,19 @@
 ## The _() surrounding the string marks it as eligible for translation.
 
 define config.name = _("Lucid Melody")
+define config.rollback_enabled = config.developer
+define config.developer = "auto"
+define config.has_autosave = False
+define config.autosave_on_quit = False
+define config.autosave_slots = 0
+define config.has_quicksave = False
+define config.quicksave_slots = 0
+define _dismiss_pause = False
+define config.menu_include_disabled = False
+define config.gl2 = True
+define config.has_sync = False
+
+define config.layers = [ 'master', 'transient', 'screens', 'overlay', 'front' ]
 
 
 ## Determines if the title given above is shown on the main menu screen. Set
@@ -48,7 +61,7 @@ define build.name = "LucidMelody"
 
 define config.has_sound = True
 define config.has_music = True
-define config.has_voice = True
+define config.has_voice = False
 
 
 ## To allow the user to play a test sound on the sound or voice channel,
@@ -73,23 +86,28 @@ define config.has_voice = True
 
 ## Entering or exiting the game menu.
 
-define config.enter_transition = Dissolve(0.2)
-define config.exit_transition = Dissolve(0.2)
+define config.enter_transition = wipeleft_menu
+define config.exit_transition = wipeleft_menu_reverse
 
+define config.end_splash_transition = fade
+
+define config.enter_yesno_transition = Dissolve(0.1)
+define config.exit_yesno_transition = Dissolve(0.1)
+define config.game_main_transition = eye_scene
 
 ## Between screens of the game menu.
 
-define config.intra_transition = Dissolve(0.2)
+define config.intra_transition = Dissolve(0.1)
 
 
 ## A transition that is used after a game has been loaded.
 
-define config.after_load_transition = None
+define config.after_load_transition = wipeleft_menu_afterLoad
 
 
 ## Used when entering the main menu after the game has ended.
 
-define config.end_game_transition = Dissolve(0.2)
+define config.end_game_transition = Dissolve(0.1)
 
 
 ## A variable to set the transition used when the game starts does not exist.

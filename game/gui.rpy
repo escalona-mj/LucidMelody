@@ -57,13 +57,13 @@ define gui.interface_text_color = u'#ffffff'
 ## Fonts and Font Sizes ########################################################
 
 ## The font used for in-game text.
-define gui.text_font = "DejaVuSans.ttf"
+define gui.text_font = "fonts/Rodin-Text.ttf"
 
 ## The font used for character names.
-define gui.name_text_font = "DejaVuSans.ttf"
+define gui.name_text_font = "fonts/Rodin-Name.ttf"
 
 ## The font used for out-of-game text.
-define gui.interface_text_font = "DejaVuSans.ttf"
+define gui.interface_text_font = "fonts/Rodin-Name.ttf"
 
 ## The size of normal dialogue text.
 define gui.text_size = 33
@@ -116,11 +116,11 @@ define gui.name_xalign = 0.0
 ## The width, height, and borders of the box containing the character's name, or
 ## None to automatically size it.
 define gui.namebox_width = None
-define gui.namebox_height = None
+define gui.namebox_height = 42
 
 ## The borders of the box containing the character's name, in left, top, right,
 ## bottom order.
-define gui.namebox_borders = Borders(5, 5, 5, 5)
+define gui.namebox_borders = Borders(40, 5, 40, 5)
 
 ## If True, the background of the namebox will be tiled, if False, the
 ## background of the namebox will be scaled.
@@ -426,10 +426,10 @@ init python:
     ## This changes the size and spacing of various GUI elements to ensure they
     ## are easily visible on phones.
     @gui.variant
-    def small():
+    def mobile():
 
         ## Font sizes.
-        gui.text_size = 45
+        gui.text_size = 40
         gui.name_text_size = 54
         gui.notify_text_size = 38
         gui.interface_text_size = 45
@@ -438,9 +438,12 @@ init python:
 
         ## Adjust the location of the textbox.
         gui.textbox_height = 360
-        gui.name_xpos = 120
-        gui.dialogue_xpos = 135
-        gui.dialogue_width = 1650
+        # gui.name_xpos = 120
+        gui.name_xpos = 0.125
+        gui.name_ypos = 50
+        gui.dialogue_xpos = 250
+        gui.dialogue_ypos = 125
+        gui.dialogue_width = 1400
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54
@@ -457,7 +460,7 @@ init python:
         gui.quick_button_text_size = 30
 
         ## File button layout.
-        gui.file_slot_cols = 2
+        gui.file_slot_cols = 3
         gui.file_slot_rows = 2
 
         ## NVL-mode.
@@ -475,3 +478,8 @@ init python:
 
         gui.nvl_button_width = 1860
         gui.nvl_button_xpos = 30
+
+
+#save indicator
+define gui.female = 'female'
+define gui.male = 'male'
