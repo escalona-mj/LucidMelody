@@ -25,7 +25,7 @@ define config.check_conflicting_properties = True
 ## The colors of text in the interface.
 
 ## An accent color used throughout the interface to label and highlight text.
-define gui.accent_color = u'#0099cc'
+define gui.accent_color = u'#ffffff'
 
 ## The color used for a text button when it is neither selected nor hovered.
 define gui.idle_color = u'#888888'
@@ -50,20 +50,20 @@ define gui.muted_color = u'#003d51'
 define gui.hover_muted_color = u'#005b7a'
 
 ## The colors used for dialogue and menu choice text.
-define gui.text_color = u'#ffffff'
+define gui.text_color = u'#000000'
 define gui.interface_text_color = u'#ffffff'
 
 
 ## Fonts and Font Sizes ########################################################
 
 ## The font used for in-game text.
-define gui.text_font = "fonts/Rodin-Text.ttf"
+define gui.text_font = "fonts/Gabarito-Regular.ttf"
 
 ## The font used for character names.
-define gui.name_text_font = "fonts/Rodin-Name.ttf"
+define gui.name_text_font = "fonts/Gabarito-SemiBold.ttf"
 
 ## The font used for out-of-game text.
-define gui.interface_text_font = "fonts/Rodin-Name.ttf"
+define gui.interface_text_font = "fonts/Gabarito-Regular.ttf"
 
 ## The size of normal dialogue text.
 define gui.text_size = 33
@@ -116,11 +116,11 @@ define gui.name_xalign = 0.0
 ## The width, height, and borders of the box containing the character's name, or
 ## None to automatically size it.
 define gui.namebox_width = None
-define gui.namebox_height = 42
+define gui.namebox_height = 118
 
 ## The borders of the box containing the character's name, in left, top, right,
 ## bottom order.
-define gui.namebox_borders = Borders(40, 5, 40, 5)
+define gui.namebox_borders = Borders(110, 5, 100, 5)
 
 ## If True, the background of the namebox will be tiled, if False, the
 ## background of the namebox will be scaled.
@@ -429,8 +429,8 @@ init python:
     def mobile():
 
         ## Font sizes.
-        gui.text_size = 40
-        gui.name_text_size = 54
+        gui.text_size = 38
+        gui.name_text_size = 50
         gui.notify_text_size = 38
         gui.interface_text_size = 45
         gui.button_text_size = 45
@@ -439,11 +439,11 @@ init python:
         ## Adjust the location of the textbox.
         gui.textbox_height = 360
         # gui.name_xpos = 120
-        gui.name_xpos = 0.125
-        gui.name_ypos = 50
-        gui.dialogue_xpos = 250
-        gui.dialogue_ypos = 125
-        gui.dialogue_width = 1400
+        gui.name_xpos = 350
+        gui.name_ypos = 0
+        gui.dialogue_xpos = 450
+        gui.dialogue_ypos = 115
+        gui.dialogue_width = 1025
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54

@@ -95,6 +95,10 @@ style frame:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#say
 
+transform textdissolve:
+    alpha 0
+    ease 0.25 alpha 1
+
 screen say(who, what):
     style_prefix "say"
 
@@ -108,8 +112,8 @@ screen say(who, what):
                 style "namebox"
                 text who id "who"
 
-        text what id "what"
-
+        text what id "what" at textdissolve
+    use quick_menu
 
     ## If there's a side image, display it above the text. Do not display on the
     ## phone variant - there's no room.
@@ -145,7 +149,7 @@ style namebox:
     ypos gui.name_ypos
     ysize gui.namebox_height
 
-    background Frame("gui/namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign)
+    background Frame("gui/namebox/namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign)
     padding gui.namebox_borders.padding
 
 style say_label:
@@ -153,17 +157,25 @@ style say_label:
     # xalign gui.name_xalign
     xalign 0.5
     yalign 0.5
-    outlines [(5, "#16161d", 2, 2)]
+    # outlines [(5, "#16161d", 2, 2)]
 
 style say_dialogue:
     properties gui.text_properties("dialogue")
     # outlines [(2, "#16161d", 2, 2)]
-    line_spacing 10
+    # line_spacing 10
     xpos gui.dialogue_xpos
     xsize gui.dialogue_width
     ypos gui.dialogue_ypos
 
     adjust_spacing False
+
+image ctc:
+    xalign 0.775 yalign 0.9 alpha 0.0 subpixel True
+    "gui/ctc.png"
+    block:
+        easeout 0.5 alpha 1.0 yoffset 0
+        easein 0.5 alpha 0.5 yoffset -5
+        repeat
 
 ## Input screen ################################################################
 ##
@@ -264,10 +276,12 @@ screen quick_menu():
 
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
 ## the player has not explicitly hidden the interface.
-init python:
-    config.overlay_screens.append("quick_menu")
+# init python:
+#     config.overlay_screens.append("quick_menu")
 
 default quick_menu = True
+
+default quick_menu_frame = False
 
 style quick_button is default
 style quick_button_text is button_text
@@ -291,20 +305,22 @@ style quick_button_text:
 screen navigation():
     
     if renpy.get_screen("main_menu"):
-        vbox:
+        hbox:
             style_prefix "navigation"
 
             # xpos gui.navigation_xpos
             xalign 0.5
             yalign 0.9
 
-            spacing gui.navigation_spacing
+            spacing 2
 
             textbutton _("Start") action Start()
 
             textbutton _("Load") action ShowMenu("load")
 
             textbutton _("Settings") action ShowMenu("preferences")
+
+            textbutton "Image Tools" action ShowMenu("image_tools")
 
             textbutton _("Extras") action ShowMenu("achievements")
 
@@ -387,14 +403,55 @@ style hnavigation_button_text:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#main-menu
 
+transform cloud_loop1:
+        xalign 1.0
+        linear 50 xalign 0.0
+        repeat
+
+transform cloud_loop2:
+        xalign 1.0
+        linear 200 xalign 0.0
+        repeat
+
+transform dandelion_spin:
+    xpos 0.5
+    ypos 0.5
+    linear 5 rotate 360
+    rotate 0
+    repeat
+
+image dandelions = SnowBlossom(At("gui/menu/dandelion.png", dandelion_spin), count=10, xspeed=(100,250), yspeed=(-150,-90), fast=True, horizontal=False)
+
+screen bg():
+    add "gui/menu/sky1.png"
+    add "gui/menu/clouds2.png" at cloud_loop2:
+        pos (0, 0)
+
+    add "gui/menu/clouds1.png" at cloud_loop1:
+        pos (0, -170)
+
+    add "gui/menu/grasshill.png":
+        pos (0, 700)
+        zoom 1.1
+
+    add "dandelions"
+
+    add "gui/menu/grassblur.png":
+        pos (0, 750)
+        zoom 1.5
+
+    add "gui/menu/vigenette.png":
+        zoom 1.5
+        yalign 0.5
+
 screen main_menu():
 
     ## This ensures that any other menu screen is replaced.
     tag menu
 
-    # add gui.main_menu_background
+    use bg
 
-    add "images/bg/galaxy.jpg"
+    # add gui.main_menu_background
 
     ## This empty frame darkens the main menu.
     # frame:
@@ -461,7 +518,7 @@ screen game_menu(title, scroll=None, yinitial=0.0):
     style_prefix "game_menu"
 
     if main_menu:
-        add "images/bg/galaxy.jpg"
+        use bg
         add "gui/overlay/confirm.png"
 
     else:
@@ -469,15 +526,18 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     frame:
         style "game_menu_outer_frame"
+        background Frame("gui/frame.png", gui.frame_borders, tile=gui.frame_tile)
 
-        hbox:
+        fixed:
 
             ## Reserve space for the navigation section.
             frame:
                 style "game_menu_navigation_frame"
+                background Frame("gui/frame.png", gui.frame_borders, tile=gui.frame_tile)
 
             frame:
                 style "game_menu_content_frame"
+                background Frame("gui/frame.png", gui.frame_borders, tile=gui.frame_tile)
 
                 if scroll == "viewport":
 
@@ -549,9 +609,12 @@ style game_menu_navigation_frame:
     yfill True
 
 style game_menu_content_frame:
-    left_margin 60
-    # right_margin 30
-    top_margin 15
+    # left_margin 60
+    # # right_margin 30
+    # top_margin 15
+    padding (50,50,50,50)
+    xalign 0.5
+    yalign 0.5
 
 style game_menu_viewport:
     xsize 1380
@@ -1443,24 +1506,78 @@ style pref_vbox:
 
 ## Since a mouse may not be present, we replace the quick menu with a version
 ## that uses fewer and bigger buttons that are easier to touch.
+# screen quick_menu():
+#     variant "mobile"
+
+#     zorder 100
+
+#     if quick_menu:
+
+#         hbox:
+#             style_prefix "quick"
+
+#             xalign 0.5
+#             yalign 1.0
+
+#             textbutton _("Back") action Rollback()
+#             textbutton _("Hide") action HideInterface()
+#             textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
+#             textbutton _("Auto") action Preference("auto-forward", "toggle")
+#             textbutton _("Menu") action ShowMenu()
+
 screen quick_menu():
     variant "mobile"
-
-    zorder 100
-
     if quick_menu:
+        imagebutton auto _("gui/quickmenu/menu_%s.png"):
+                action ToggleVariable("quick_menu_frame", True, False)
+                xalign 0.85
+                yalign 0.765
+        zorder 100
 
-        hbox:
-            style_prefix "quick"
+        if quick_menu_frame:
+            frame:
+                background None
+                xalign 0.70
+                yalign 0.765
+                vbox:
+                    hbox:
+                        if config.developer == True:
+                            textbutton _("Back") action Rollback()
+                        imagebutton auto _("gui/quickmenu/history_%s.png"):
+                            action ShowMenu('history')
+                            tooltip "History"
+                        imagebutton auto _("gui/quickmenu/hide_%s.png"):
+                            action HideInterface()
+                            tooltip "Hide"
+                        imagebutton auto _("gui/quickmenu/skip_%s.png"):
+                            action Skip() alternate Skip(fast=True, confirm=True)
+                            tooltip "Skip"
+                        imagebutton auto _("gui/quickmenu/load_%s.png"):
+                            action ShowMenu('load')
+                            tooltip "Load"
+                        imagebutton auto _("gui/quickmenu/save_%s.png"):
+                            action ShowMenu('save')
+                            tooltip "Save"
+                        imagebutton auto _("gui/quickmenu/settings_%s.png"):
+                            action ShowMenu('preferences')
+                            tooltip "Settings"
+    
 
-            xalign 0.5
-            yalign 1.0
+    # This has to be the last thing shown in the screen.
 
-            textbutton _("Back") action Rollback()
-            textbutton _("Hide") action HideInterface()
-            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
-            textbutton _("Menu") action ShowMenu()
+    $ tooltip = GetTooltip()
+
+    if tooltip:
+
+        nearrect:
+            focus "tooltip"
+            prefer_top True
+
+            frame:
+                background None
+                xalign 0.5
+                text tooltip style "tooltip_hover":
+                    size 35
 
 
 style window:
