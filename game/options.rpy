@@ -86,28 +86,28 @@ define config.has_voice = False
 
 ## Entering or exiting the game menu.
 
-define config.enter_transition = wipeleft_menu
-define config.exit_transition = wipeleft_menu_reverse
+define config.enter_transition = Dissolve(0.2)
+define config.exit_transition = Dissolve(0.2)
 
 define config.end_splash_transition = fade
 
-define config.enter_yesno_transition = Dissolve(0.1)
-define config.exit_yesno_transition = Dissolve(0.1)
+define config.enter_yesno_transition = Dissolve(0.2)
+define config.exit_yesno_transition = Dissolve(0.2)
 define config.game_main_transition = eye_scene
 
 ## Between screens of the game menu.
 
-define config.intra_transition = Dissolve(0.1)
+define config.intra_transition = Dissolve(0.2)
 
 
 ## A transition that is used after a game has been loaded.
 
-define config.after_load_transition = wipeleft_menu_afterLoad
+define config.after_load_transition = Dissolve(0.2)
 
 
 ## Used when entering the main menu after the game has ended.
 
-define config.end_game_transition = Dissolve(0.1)
+define config.end_game_transition = Dissolve(0.2)
 
 
 ## A variable to set the transition used when the game starts does not exist.

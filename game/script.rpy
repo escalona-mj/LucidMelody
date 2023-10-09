@@ -22,26 +22,37 @@
     p "Paimon is not your emergency food."
     p "Besides, where the heck are we~"
     p "Oh! Someone's coming!"
-    p "I have to hide!"
-    hide paimon at tcommon
+    menu:
+        "Hide!":
+            hide paimon at tcommon
+            $ achievement_get("start")
+            p "Phew, that was close..."
+        "Don't hide!":
+            p "Screw you."
+            hide paimon at tcommon
+            
     "..."
-    show lucy l_mouth_slightopen at tcommon
-    l "Hello? Is anyone there?"
-    l l_brow_sad -l_mouth_slightopen "..."
-    l l_eyes_closed "Much this chamber is nevermore and sad many the more. And with that nodded whom door days above I have not."
-    l -l_eyes_closed "Floor the the said gently stern over its other murmured, nothing many some a from whom surely bosoms. And with upon angels the chamber but this."
-    l -l_brow_sad "Our a out heart denser the sent ominous the of saintly. Nothing ghastly curtain and raven ease whose and bust."
-    l l_brow_sad l_mouth_serious "It's such a shame that other characters aren't supported in this font."
-    scene black with long_dissolve
-    l "But sign books bird plume this came as ancient. Denser the still nevermore word only, unbroken heaven bleak angels shrieked."
+    show dhannica at tcommon
+    dhannica "Hello? Is anyone there?"
+    dhannica "..."
+    dhannica "Much this chamber is nevermore and sad many the more. And with that nodded whom door days above I have not."
+    dhannica "Floor the the said gently stern over its other murmured, nothing many some a from whom surely bosoms. And with upon angels the chamber but this."
+    dhannica "Our a out heart denser the sent ominous the of saintly. Nothing ghastly curtain and raven ease whose and bust."
+    dhannica "It's such a shame that other characters aren't supported in this font."
+    dhannica "But sign books bird plume this came as ancient. Denser the still nevermore word only, unbroken heaven bleak angels shrieked."
+    show dhannica at left
+    show alec at tcommon
+    alec "In whom ah as grew and rapping merely. Tis i was said ever ancient still sorrow repeating implore, usby only."
+    alec "Chamber morrow she whom wind vainly door and turning. More lamplight the thy blessed. Some before murmured ancient back or.."
+
     return
 
-label femaleMC:
+label choseFemale:
     $ femaleMC = True
     "I am now a female."
     return
 
-label maleMC:
+label choseMale:
     $ maleMC = True
     "I am now a male."
     return

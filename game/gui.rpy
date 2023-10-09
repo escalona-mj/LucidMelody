@@ -25,17 +25,17 @@ define config.check_conflicting_properties = True
 ## The colors of text in the interface.
 
 ## An accent color used throughout the interface to label and highlight text.
-define gui.accent_color = u'#ffffff'
+define gui.accent_color = u'#6667ab'
 
 ## The color used for a text button when it is neither selected nor hovered.
-define gui.idle_color = u'#888888'
+define gui.idle_color = u'#ffffff'
 
 ## The small color is used for small text, which needs to be brighter/darker to
 ## achieve the same effect.
 define gui.idle_small_color = u'#aaaaaa'
 
 ## The color that is used for buttons and bars that are hovered.
-define gui.hover_color = u'#66c1e0'
+define gui.hover_color = u'#ffffff'
 
 ## The color used for a text button when it is selected but not focused. A
 ## button is selected if it is the current screen or preference value.
@@ -50,20 +50,20 @@ define gui.muted_color = u'#003d51'
 define gui.hover_muted_color = u'#005b7a'
 
 ## The colors used for dialogue and menu choice text.
-define gui.text_color = u'#000000'
+define gui.text_color = u'#6667ab'
 define gui.interface_text_color = u'#ffffff'
 
 
 ## Fonts and Font Sizes ########################################################
 
 ## The font used for in-game text.
-define gui.text_font = "fonts/Gabarito-Regular.ttf"
+define gui.text_font = "fonts/QuinnGothic.ttf"
 
 ## The font used for character names.
-define gui.name_text_font = "fonts/Gabarito-SemiBold.ttf"
+define gui.name_text_font = "fonts/QuinnGothic.ttf"
 
 ## The font used for out-of-game text.
-define gui.interface_text_font = "fonts/Gabarito-Regular.ttf"
+define gui.interface_text_font = "fonts/QuinnGothic.ttf"
 
 ## The size of normal dialogue text.
 define gui.text_size = 33
@@ -171,7 +171,7 @@ define gui.button_text_insensitive_color = gui.insensitive_color
 
 ## The horizontal alignment of the button text. (0.0 is left, 0.5 is center, 1.0
 ## is right).
-define gui.button_text_xalign = 0.5
+define gui.button_text_xalign = 0.0
 
 
 ## These variables override settings for different kinds of buttons. Please see
@@ -182,11 +182,11 @@ define gui.button_text_xalign = 0.5
 
 define gui.radio_button_borders = Borders(27, 6, 6, 6)
 
-define gui.check_button_borders = Borders(27, 6, 6, 6)
+define gui.check_button_borders = Borders(70, 6, 6, 6)
 
 define gui.confirm_button_text_xalign = 0.5
 
-define gui.page_button_borders = Borders(15, 6, 15, 6)
+define gui.page_button_borders = Borders(50, 6, 50, 6)
 
 define gui.quick_button_borders = Borders(15, 6, 15, 0)
 define gui.quick_button_text_size = 21
@@ -205,9 +205,9 @@ define gui.quick_button_text_selected_color = gui.accent_color
 ## Choice buttons are used in the in-game menus.
 
 define gui.choice_button_width = 1185
-define gui.choice_button_height = None
+define gui.choice_button_height = 119
 define gui.choice_button_tile = False
-define gui.choice_button_borders = Borders(150, 8, 150, 8)
+define gui.choice_button_borders = Borders(150, 25, 150, 25)
 define gui.choice_button_text_font = gui.text_font
 define gui.choice_button_text_size = gui.text_size
 define gui.choice_button_text_xalign = 0.5
@@ -225,7 +225,7 @@ define gui.choice_button_text_insensitive_color = u'#8888887f'
 ## The save slot button.
 define gui.slot_button_width = 414
 define gui.slot_button_height = 309
-define gui.slot_button_borders = Borders(15, 15, 15, 15)
+define gui.slot_button_borders = Borders(45, 35, 45, 45)
 define gui.slot_button_text_size = 21
 define gui.slot_button_text_xalign = 0.5
 define gui.slot_button_text_idle_color = gui.idle_small_color
@@ -233,8 +233,8 @@ define gui.slot_button_text_selected_idle_color = gui.selected_color
 define gui.slot_button_text_selected_hover_color = gui.hover_color
 
 ## The width and height of thumbnails used by the save slots.
-define config.thumbnail_width = 384
-define config.thumbnail_height = 216
+define config.thumbnail_width = 328
+define config.thumbnail_height = 184
 
 ## The number of columns and rows in the grid of save slots.
 define gui.file_slot_cols = 3
@@ -287,13 +287,16 @@ define gui.main_menu_text_xalign = 1.0
 define gui.frame_borders = Borders(6, 6, 6, 6)
 
 ## The frame that is used as part of the confirm screen.
-define gui.confirm_frame_borders = Borders(60, 60, 60, 60)
+define gui.confirm_frame_borders = Borders(90, 90, 90, 90)
 
 ## The frame that is used as part of the skip screen.
 define gui.skip_frame_borders = Borders(24, 8, 75, 8)
 
 ## The frame that is used as part of the notify screen.
 define gui.notify_frame_borders = Borders(24, 8, 60, 8)
+
+define gui.achievement_frame_borders = Borders(25, 25, 25, 25)
+
 
 ## Should frame backgrounds be tiled?
 define gui.frame_tile = False
@@ -318,7 +321,7 @@ define gui.scrollbar_tile = False
 define gui.slider_tile = False
 
 ## Horizontal borders.
-define gui.bar_borders = Borders(6, 6, 6, 6)
+define gui.bar_borders = Borders(25, 6, 25, 6)
 define gui.scrollbar_borders = Borders(6, 6, 6, 6)
 define gui.slider_borders = Borders(6, 6, 6, 6)
 
@@ -432,9 +435,9 @@ init python:
         gui.text_size = 38
         gui.name_text_size = 50
         gui.notify_text_size = 38
-        gui.interface_text_size = 45
-        gui.button_text_size = 45
-        gui.label_text_size = 51
+        gui.interface_text_size = 40
+        gui.button_text_size = 40
+        gui.label_text_size = 40
 
         ## Adjust the location of the textbox.
         gui.textbox_height = 360
@@ -442,19 +445,19 @@ init python:
         gui.name_xpos = 350
         gui.name_ypos = 0
         gui.dialogue_xpos = 450
-        gui.dialogue_ypos = 115
-        gui.dialogue_width = 1025
+        gui.dialogue_ypos = 110
+        gui.dialogue_width = 1000
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54
 
-        gui.choice_button_width = 1860
+        gui.choice_button_width = 1214
         gui.choice_button_text_size = 45
 
         gui.navigation_spacing = 30
         gui.pref_button_spacing = 15
 
-        gui.history_height = 285
+        gui.history_height = None
         gui.history_text_width = 1035
 
         gui.quick_button_text_size = 30

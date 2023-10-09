@@ -1,16 +1,36 @@
+# init -1 python: 
+#     def callback_builder(character_sprite_basename):
+#         def char_callback(event, **kwargs):
+#             if event == "show_done":
+#                 renpy.show(character_sprite_basename + " l_talk")
+#             elif event == "slow_done":
+#                 renpy.show(character_sprite_basename + " -l_talk")
+#                 renpy.restart_interaction()
+#         return char_callback
+
 #############################
 #           CHARACTER       #
 #############################
 
-default l_name = "Lucy"
-define l = DynamicCharacter(
-    'l_name',
+default mcName = ""
+define dhannica = DynamicCharacter(
+    'mcName',
     what_prefix='"',
     what_suffix='"',
     ctc="ctc",
     ctc_position="fixed",
     namebox_background=Frame("gui/namebox/lucy.png", gui.namebox_borders),
-    image="lucy"
+    image="dhannica"
+)
+
+define alec = DynamicCharacter(
+    'mcName',
+    what_prefix='"',
+    what_suffix='"',
+    ctc="ctc",
+    ctc_position="fixed",
+    namebox_background=Frame("gui/namebox/lucy.png", gui.namebox_borders),
+    image="alec"
 )
 
 default p_name = "Paimon"
@@ -47,7 +67,7 @@ image paimon = ("images/bg/Paimon.webp")
 
 # Transform that blurs the background when opening screens.
 transform withBlur:
-    blur 30
+    blur 10
 transform noBlur:
     blur 0
 
@@ -113,92 +133,66 @@ image camera_flash:
 #############################
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
 
-image lucy_eyes:
-    "images/characters/lucy/face/eyes_normal.png"
+image dhannica_blink:
+    "images/characters/dhannica/face/eyes_normal.png"
     choice:
         4.5
     choice:
         3.5
     choice:
         1.5
-    "images/characters/lucy/face/eyes_closed.png"
+    "images/characters/dhannica/face/eyes_closed.png"
     .10
     repeat
 
-image lucy_eyes_look:
-    "images/characters/lucy/face/eyes_look.png"
-    choice:
-        4.5
-    choice:
-        3.5
-    choice:
-        1.5
-    "images/characters/lucy/face/eyes_closed.png"
-    .10
-    repeat
-
-image lucy_eyes_anxious:
-    "images/characters/lucy/face/eyes_anxious.png"
-    choice:
-        4.5
-    choice:
-        3.5
-    choice:
-        1.5
-    "images/characters/lucy/face/eyes_closed.png"
-    .10
-    repeat
-
-layeredimage lucy:
+layeredimage dhannica:
 
     group base: #body
-        attribute l_base1 default:
-            "lucy 1l_1r"
-        attribute l_base2:
-            "lucy 2l_2r"
-        attribute l_base3:
-            "lucy 1l_2r"
-        attribute l_base4:
-            "lucy 2l_1r"
-
-    group water:
-        attribute l_sweat:
-            "images/characters/lucy/face/sweat.png"
-        attribute l_cry:
-            "images/characters/lucy/face/cry.png"
+        attribute base default:
+            "images/characters/dhannica/base.png"
 
     group eyes:
-        attribute l_eyes default:
-            "lucy_eyes"
-        attribute l_eyes_look:
-            "lucy_eyes_look"
-        attribute l_eyes_closed:
-            "images/characters/lucy/face/eyes_closed.png"
-        attribute l_eyes_closedhappy:
-            "images/characters/lucy/face/eyes_closedhappy.png"
-        attribute l_eyes_anxious:
-            "lucy_eyes_anxious"
+        attribute d_blink default:
+            "dhannica_blink"
+        attribute d_eyeclose:
+            "images/characters/dhannica/face/eyes_closed.png"
 
     group brows:
-        attribute l_brow default:
-            "images/characters/lucy/face/brow_normal.png"
-        attribute l_brow_sad:
-            "images/characters/lucy/face/brow_sad.png"
-        attribute l_brow_serious:
-            "images/characters/lucy/face/brow_serious.png"
+        attribute d_brow default:
+            "images/characters/dhannica/face/brow_normal.png"
 
-    group mouth:
-        attribute l_mouth default:
-            "images/characters/lucy/face/mouth_smile.png"
-        attribute l_mouth_open:
-            "images/characters/lucy/face/mouth_open.png"
-        attribute l_mouth_slightopen:
-            "images/characters/lucy/face/mouth_slightopen.png"
-        attribute l_mouth_serious:
-            "images/characters/lucy/face/mouth_serious.png"
+    group accesories:
+        attribute glasses default:
+            "images/characters/dhannica/face/glasses.png"
 
+image alec_blink:
+    "images/characters/alec/face/eyes_normal.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "images/characters/alec/face/eyes_closed.png"
+    .10
+    repeat
 
-image lucy 1l_1r = Composite((960, 960), (0, 0), "images/characters/lucy/lucy_head.png", (0, 0), "images/characters/lucy/1l.png", (0, 0), "images/characters/lucy/1r.png")
-image lucy 2l_2r = Composite((960, 960), (0, 0), "images/characters/lucy/lucy_head.png", (0, 0), "images/characters/lucy/2l.png", (0, 0), "images/characters/lucy/2r.png")
-image lucy 1l_2r = Composite((960, 960), (0, 0), "images/characters/lucy/lucy_head.png", (0, 0), "images/characters/lucy/1l.png", (0, 0), "images/characters/lucy/2r.png")
-image lucy 2l_1r = Composite((960, 960), (0, 0), "images/characters/lucy/lucy_head.png", (0, 0), "images/characters/lucy/2l.png", (0, 0), "images/characters/lucy/1r.png")
+layeredimage alec:
+
+    group base: #body
+        attribute base default:
+            "images/characters/alec/base.png"
+
+    group eyes:
+        attribute a_blink default:
+            "alec_blink"
+        attribute a_eyeclose:
+            "images/characters/alec/face/eyes_closed.png"
+
+    group brows:
+        attribute a_brow default:
+            "images/characters/alec/face/brow_normal.png"
+
+#blue 014d81
+#pantone 6463b1
+#pink eb7e8a

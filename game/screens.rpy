@@ -34,7 +34,8 @@ style button_text is gui_text:
 
 
 style label_text is gui_text:
-    properties gui.text_properties("label", accent=True)
+    # properties gui.text_properties("label", accent=True)
+    properties gui.text_properties("label")
 
 style prompt_text is gui_text:
     properties gui.text_properties("prompt")
@@ -157,12 +158,14 @@ style say_label:
     # xalign gui.name_xalign
     xalign 0.5
     yalign 0.5
+    color u"#fff"
     # outlines [(5, "#16161d", 2, 2)]
 
 style say_dialogue:
     properties gui.text_properties("dialogue")
     # outlines [(2, "#16161d", 2, 2)]
-    # line_spacing 10
+    # line_spacing -5
+    color u"#000"
     xpos gui.dialogue_xpos
     xsize gui.dialogue_width
     ypos gui.dialogue_ypos
@@ -221,6 +224,8 @@ style input:
 ## https://www.renpy.org/doc/html/screen_special.html#choice
 
 screen choice(items):
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
+    on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
     style_prefix "choice"
 
     vbox:
@@ -304,74 +309,90 @@ style quick_button_text:
 
 screen navigation():
     
-    if renpy.get_screen("main_menu"):
+    fixed:
+        textbutton "Image" action ShowMenu("image_tools")
+
         hbox:
             style_prefix "navigation"
-
             # xpos gui.navigation_xpos
             xalign 0.5
-            yalign 0.9
+            yalign 0.985
 
-            spacing 2
-
-            textbutton _("Start") action Start()
-
-            textbutton _("Load") action ShowMenu("load")
-
-            textbutton _("Settings") action ShowMenu("preferences")
-
-            textbutton "Image Tools" action ShowMenu("image_tools")
-
-            textbutton _("Extras") action ShowMenu("achievements")
-
-            textbutton _("About") action ShowMenu("about")
-
-            # if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
-
-            #     ## Help isn't necessary or relevant to mobile devices.
-            #     textbutton _("Help") action ShowMenu("help")
-
-            # if renpy.variant("pc"):
-
-                ## The quit button is banned on iOS and unnecessary on Android and
-                ## Web.
-            textbutton _("Quit") action Quit(confirm=not main_menu)
-    else:
-        vbox:
-            style_prefix "hnavigation"
-            xpos gui.navigation_xpos
-            yalign 0.5
-
-            spacing gui.navigation_spacing
-
-            if not main_menu:
-                textbutton _("History") action ShowMenu("history")
-
-            if not main_menu:
-                textbutton _("Save Game") action ShowMenu("save")
-
-            textbutton _("Load Game") action ShowMenu("load")
-
-            textbutton _("Settings") action ShowMenu("preferences")
+            spacing 0
 
             if main_menu:
-                textbutton _("Extras") action ShowMenu("achievements")
-
-            textbutton _("About") action ShowMenu("about")
+                imagebutton:
+                    auto "gui/navigation/start_%s.png"
+                    foreground Text(_("Start"), style="navigation_btn")
+                    hover_foreground Text(_("Start"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Start"), style="navigation_btn_selected")
+                    action Start()
 
             if not main_menu:
-                textbutton _("Main Menu") action MainMenu()
+                imagebutton:
+                    auto "gui/navigation/history_%s.png"
+                    foreground Text(_("History"), style="navigation_btn")
+                    hover_foreground Text(_("History"), style="navigation_btn_hover")
+                    selected_foreground Text(_("History"), style="navigation_btn_selected")
+                    action ShowMenu("history")
+                    
+                imagebutton:
+                    auto "gui/navigation/save_%s.png"
+                    foreground Text(_("Save"), style="navigation_btn")
+                    hover_foreground Text(_("Save"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Save"), style="navigation_btn_selected")
+                    action ShowMenu("save")
 
-            if renpy.variant("pc"):
+            imagebutton:
+                auto "gui/navigation/load_%s.png"
+                foreground Text(_("Load"), style="navigation_btn")
+                hover_foreground Text(_("Load"), style="navigation_btn_hover")
+                selected_foreground Text(_("Load"), style="navigation_btn_selected")
+                action ShowMenu("load")
 
-                ## The quit button is banned on iOS and unnecessary on Android and
-                ## Web.
-                textbutton _("Quit") action Quit(confirm=True)
+            imagebutton:
+                auto "gui/navigation/preferences_%s.png"
+                foreground Text(_("Settings"), style="navigation_btn")
+                hover_foreground Text(_("Settings"), style="navigation_btn_hover")
+                selected_foreground Text(_("Settings"), style="navigation_btn_selected")
+                action ShowMenu("preferences")
+
+            if main_menu:
+                imagebutton:
+                    auto "gui/navigation/extras_%s.png"
+                    foreground Text(_("Extras"), style="navigation_btn")
+                    hover_foreground Text(_("Extras"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Extras"), style="navigation_btn_selected")
+                    action ShowMenu("achievements")
+
+                imagebutton:
+                    auto "gui/navigation/about_%s.png"
+                    foreground Text(_("About"), style="navigation_btn")
+                    hover_foreground Text(_("About"), style="navigation_btn_hover")
+                    selected_foreground Text(_("About"), style="navigation_btn_selected")
+                    action ShowMenu("about")
+
+            if not main_menu:
+                imagebutton:
+                    auto "gui/navigation/mainmenu_%s.png"
+                    foreground Text(_("Title"), style="navigation_btn")
+                    hover_foreground Text(_("Title"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Title"), style="navigation_btn_selected")
+                    action MainMenu()
+
+            imagebutton:
+                auto "gui/navigation/quit_%s.png"
+                foreground Text(_("Quit"), style="navigation_btn")
+                hover_foreground Text(_("Quit"), style="navigation_btn_hover")
+                selected_foreground Text(_("Quit"), style="navigation_btn_selected")
+                action Quit(confirm=True)
 
             if _in_replay:
-
-                textbutton _("End Replay") action EndReplay(confirm=True)
-
+                imagebutton:
+                    auto "gui/navigation/gallery_%s.png"
+                    foreground Text(_("End Replay"), style="navigation_btn")
+                    hover_foreground Text(_("End Replay"), style="navigation_btn_hover")
+                    action EndReplay(confirm=True)
 
 
     #if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
@@ -383,8 +404,22 @@ screen navigation():
 style navigation_button is gui_button
 style navigation_button_text is gui_button_text
 
-style hnavigation_button is gui_button
-style hnavigation_button_text is gui_button_text
+style navigation_btn_hover:
+    color u"#fff"
+    xoffset 100
+    yoffset 31
+    font gui.interface_text_font
+
+style navigation_btn_selected:
+    color u"#fff"
+    xoffset 100
+    yoffset 31
+    font gui.interface_text_font
+
+style navigation_btn:
+    xoffset 100
+    yoffset 31
+    font gui.interface_text_font
 
 style navigation_button:
     size_group "navigation"
@@ -392,9 +427,6 @@ style navigation_button:
 
 style navigation_button_text:
     properties gui.button_text_properties("navigation_button")
-
-style hnavigation_button_text:
-    xalign 0.5
 
 
 ## Main Menu screen ############################################################
@@ -428,7 +460,7 @@ screen bg():
         pos (0, 0)
 
     add "gui/menu/clouds1.png" at cloud_loop1:
-        pos (0, -170)
+        pos (0, 0)
 
     add "gui/menu/grasshill.png":
         pos (0, 700)
@@ -442,7 +474,13 @@ screen bg():
 
     add "gui/menu/vigenette.png":
         zoom 1.5
-        yalign 0.5
+        yalign 0.25
+
+    if renpy.get_screen("main_menu"):
+        add "gui/menu/logo.png":
+            xalign 0.5
+            yalign 0.10
+            zoom 0.5
 
 screen main_menu():
 
@@ -519,26 +557,29 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     if main_menu:
         use bg
-        add "gui/overlay/confirm.png"
+        add "gui/overlay/confirm.png":
+            alpha 0.75
+        add "gui/phone/overlay/game_menu.png"
 
     else:
-        add "gui/overlay/confirm.png"
+        add "gui/overlay/menu_overlay.png":
+            alpha 0.65
+        add "gui/phone/overlay/game_menu.png"
 
     frame:
         style "game_menu_outer_frame"
-        background Frame("gui/frame.png", gui.frame_borders, tile=gui.frame_tile)
+        # background Frame("gui/frame.png", gui.frame_borders, tile=gui.frame_tile)
+        xalign 0.5
+        yalign 0.5
 
-        fixed:
-
+        vbox:
             ## Reserve space for the navigation section.
-            frame:
-                style "game_menu_navigation_frame"
-                background Frame("gui/frame.png", gui.frame_borders, tile=gui.frame_tile)
+            # frame:
+            #     style "game_menu_navigation_frame"
 
             frame:
                 style "game_menu_content_frame"
-                background Frame("gui/frame.png", gui.frame_borders, tile=gui.frame_tile)
-
+               
                 if scroll == "viewport":
 
                     viewport:
@@ -574,9 +615,10 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     use navigation
 
-    textbutton _("Return"):
-        style "return_button"
-
+    imagebutton:
+        auto "gui/navigation/return_%s.png"
+        xpos 10
+        yalign 0.985
         action Return()
 
     label title
@@ -595,13 +637,11 @@ style game_menu_scrollbar is gui_vscrollbar
 style game_menu_label is gui_label
 style game_menu_label_text is gui_label_text
 
+
 style return_button is navigation_button
 style return_button_text is navigation_button_text
 
-style game_menu_outer_frame:
-    bottom_padding 45
-    top_padding 180
-
+# style game_menu_outer_frame:
     # background "gui/overlay/game_menu.png"
 
 style game_menu_navigation_frame:
@@ -609,15 +649,15 @@ style game_menu_navigation_frame:
     yfill True
 
 style game_menu_content_frame:
-    # left_margin 60
-    # # right_margin 30
-    # top_margin 15
-    padding (50,50,50,50)
     xalign 0.5
     yalign 0.5
+    top_padding 0.15
+    bottom_padding 0.15
+
 
 style game_menu_viewport:
-    xsize 1380
+    # xsize 1380
+    xsize 1200
 
 style game_menu_vscrollbar:
     unscrollable gui.unscrollable
@@ -626,8 +666,8 @@ style game_menu_side:
     spacing 15
 
 style game_menu_label:
-    xpos 75
-    ysize 180
+    xpos 340
+    yalign 0.03
 
 style game_menu_label_text:
     size gui.title_text_size
@@ -687,32 +727,16 @@ style about_label_text:
 screen preferences():
     tag menu
 
-    use game_menu(_("Settings"), scroll="viewport"): 
+    use game_menu(_("Settings"), scroll="viewport"):
         vbox:
-            text _("Text Settings"):
+            label _("Text Settings"):
                 xalign 0.5
+                top_padding 25
             null height 25
             hbox:
                 spacing 50
-
-                # if renpy.variant("pc") or renpy.variant("web"):
-                
-                # if config.developer == True:
-                #     vbox:
-                #         style_prefix "radio"
-                #         label _("Display")
-                #         textbutton _("Window") action Preference("display", "window")
-                #         textbutton _("Fullscreen") action Preference("display", "fullscreen")
-
-                # vbox:
-                #     style_prefix "radio"
-                #     label _("Rollback Side")
-                #     textbutton _("Disable") action Preference("rollback side", "disable")
-                #     textbutton _("Left") action Preference("rollback side", "left")
-                #     textbutton _("Right") action Preference("rollback side", "right")
-
                 vbox:
-                    xsize 690
+                    xsize 600
                     style_prefix "check"
                     label _("Skip")
                     textbutton _("Unseen Text") action Preference("skip", "toggle"):
@@ -725,10 +749,12 @@ screen preferences():
                     xsize 500
                     label _("Text Speed")
                     bar value Preference("text speed"):
+                        style "bar"
                         tooltip "The speed of the in-game dialogue text."
 
                     label _("Auto-Forward Time")
                     bar value Preference("auto-forward time"):
+                        style "bar"
                         tooltip "The speed of the automation per dialogue.\n(The lower it is, the faster it gets.)"
 
                 ## Additional vboxes of type "radio_pref" or "check_pref" can be
@@ -738,36 +764,39 @@ screen preferences():
 
             # null height 400
 
-            text _("Music Settings"):
+            label _("Music Settings"):
                 xalign 0.5
             null height 25
             hbox:
                 style_prefix "slider"
                 spacing 50
-                
                 vbox:
-                    xsize 690
+                    xsize 600
                     if config.has_music:
                         label _("BGM Volume")
                         bar value Preference("music volume"):
+                            style "bar"
                             tooltip "The loudness of background music throughout the game."
-
-                        # label _("Ambient Volume")
-                        # bar value Preference("ambient volume"):
-                        #     tooltip "The loudness of ambient music throughout the game."
-                vbox:
-                    xsize 500
                     if config.has_sound:
 
                         label _("Sound Volume")
 
                         vbox:
                             bar value Preference("sound volume"):
+                                style "bar"
                                 tooltip "The loudness of sound effects throughout the game."
 
                             if config.sample_sound:
                                 textbutton _("Test") action Play("sound", config.sample_sound)
-                                
+                vbox:
+                    xsize 500
+                    if config.has_music or config.has_sound or config.has_voice:
+                        null height gui.pref_spacing
+
+                        textbutton _("Mute All"):
+                            action Preference("all mute", "toggle")
+                            tooltip "Mute all sounds."
+                            style "mute_all_button"
                     if config.has_voice:
                         label _("Voice Volume")
 
@@ -776,17 +805,7 @@ screen preferences():
 
                             if config.sample_voice:
                                 textbutton _("Test") action Play("voice", config.sample_voice)
-
-                    if config.has_music or config.has_sound or config.has_voice:
-                        null height gui.pref_spacing
-
-                        textbutton _("Mute All"):
-                            action Preference("all mute", "toggle")
-                            tooltip "Mute all sounds."
-                            style "mute_all_button"
-                
-            null height 25
-
+                    
     $ tooltip = GetTooltip()
 
     if tooltip:
@@ -794,12 +813,11 @@ screen preferences():
         nearrect:
             focus "tooltip"
             prefer_top True
-
+            style_prefix "tooltip"
             frame:
                 xalign 0.5
-                padding (30,20,20,20)
-                text tooltip style "tooltip_hover":
-                    size 45
+                text tooltip:
+                    size 35
 
 style pref_label is gui_label
 style pref_label_text is gui_label_text
@@ -887,7 +905,7 @@ screen history():
     ## Avoid predicting this screen, as it can be very large.
     predict False
 
-    use game_menu(_("History"), scroll=("vpgrid" if gui.history_height else "viewport"), yinitial=1.0):
+    use game_menu(_("History"), scroll=("viewport"), yinitial=1.0):
 
         style_prefix "history"
 
@@ -913,6 +931,8 @@ screen history():
                 $ what = renpy.filter_text_tags(h.what, allow=gui.history_allow_tags)
                 text what:
                     substitute False
+            
+            null height 20
 
         if not _history_list:
             label _("The dialogue history is empty.")
@@ -933,7 +953,7 @@ style history_label is gui_label
 style history_label_text is gui_label_text
 
 style history_window:
-    xfill True
+    # xfill True
     ysize gui.history_height
 
 style history_name:
@@ -945,21 +965,23 @@ style history_name:
 style history_name_text:
     min_width gui.history_name_width
     textalign gui.history_name_xalign
+    font gui.text_font
 
 style history_text:
     xpos gui.history_text_xpos
-    ypos gui.history_text_ypos
+    # ypos gui.history_text_ypos
     xanchor gui.history_text_xalign
-    xsize gui.history_text_width
+    xsize 900
     min_width gui.history_text_width
     textalign gui.history_text_xalign
     layout ("subtitle" if gui.history_text_xalign else "tex")
+    font gui.text_font
 
-style history_label:
-    xfill True
+# style history_label:
+#     xfill True
 
-style history_label_text:
-    xalign 0.5
+# style history_label_text:
+#     xalign 0.5
 
 
 ## Help screen #################################################################
@@ -1162,9 +1184,20 @@ screen confirm(message, yes_action, no_action):
             hbox:
                 xalign 0.5
                 spacing 150
-
-                textbutton _("Yes") action yes_action
-                textbutton _("No") action no_action
+                imagebutton:
+                    auto "gui/navigation/yes_%s.png"
+                    foreground Text(_("Yes"), style="navigation_btn")
+                    hover_foreground Text(_("Yes"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Yes"), style="navigation_btn_selected")
+                    action yes_action
+                imagebutton:
+                    auto "gui/navigation/quit_%s.png"
+                    foreground Text(_("No"), style="navigation_btn")
+                    hover_foreground Text(_("No"), style="navigation_btn_hover")
+                    selected_foreground Text(_("No"), style="navigation_btn_selected")
+                    action no_action
+                # textbutton _("Yes") action yes_action
+                # textbutton _("No") action no_action
 
     ## Right-click and escape answer "no".
     key "game_menu" action no_action
@@ -1537,31 +1570,36 @@ screen quick_menu():
         if quick_menu_frame:
             frame:
                 background None
-                xalign 0.70
-                yalign 0.765
-                vbox:
-                    hbox:
-                        if config.developer == True:
-                            textbutton _("Back") action Rollback()
-                        imagebutton auto _("gui/quickmenu/history_%s.png"):
-                            action ShowMenu('history')
-                            tooltip "History"
-                        imagebutton auto _("gui/quickmenu/hide_%s.png"):
-                            action HideInterface()
-                            tooltip "Hide"
-                        imagebutton auto _("gui/quickmenu/skip_%s.png"):
-                            action Skip() alternate Skip(fast=True, confirm=True)
-                            tooltip "Skip"
-                        imagebutton auto _("gui/quickmenu/load_%s.png"):
-                            action ShowMenu('load')
-                            tooltip "Load"
-                        imagebutton auto _("gui/quickmenu/save_%s.png"):
-                            action ShowMenu('save')
-                            tooltip "Save"
-                        imagebutton auto _("gui/quickmenu/settings_%s.png"):
-                            action ShowMenu('preferences')
-                            tooltip "Settings"
-    
+                xalign 0.7
+                yalign 0.775
+            
+                hbox:
+                    spacing 25
+                    if config.developer == True:
+                        textbutton _("Back") action Rollback()
+                        textbutton _("ach") action ShowMenu("achievements")
+                    imagebutton auto _("gui/quickmenu/history_%s.png"):
+                        action ShowMenu('history')
+                        tooltip "History"
+                    imagebutton auto _("gui/quickmenu/hide_%s.png"):
+                        action HideInterface()
+                        tooltip "Hide"
+                    imagebutton auto _("gui/quickmenu/auto_%s.png"):
+                        action Preference("auto-forward", "toggle")
+                        tooltip "Auto"
+                    imagebutton auto _("gui/quickmenu/skip_%s.png"):
+                        action Skip() alternate Skip(fast=True, confirm=True)
+                        tooltip "Skip"
+                    imagebutton auto _("gui/quickmenu/load_%s.png"):
+                        action ShowMenu('load')
+                        tooltip "Load"
+                    imagebutton auto _("gui/quickmenu/save_%s.png"):
+                        action ShowMenu('save')
+                        tooltip "Save"
+                    imagebutton auto _("gui/quickmenu/settings_%s.png"):
+                        action ShowMenu('preferences')
+                        tooltip "Settings"
+
 
     # This has to be the last thing shown in the screen.
 
@@ -1572,13 +1610,22 @@ screen quick_menu():
         nearrect:
             focus "tooltip"
             prefer_top True
-
+            style_prefix "tooltip"
             frame:
-                background None
                 xalign 0.5
-                text tooltip style "tooltip_hover":
+                text tooltip:
                     size 35
 
+style tooltip_frame is empty
+style tooltip_frame:
+    background Frame("gui/tooltip_frame.png", Borders(25,25,25,25), tile=gui.frame_tile)
+    padding(25,15,25,15)
+
+style tooltip_text:
+    xalign 0.5
+    color u'#fff'
+    yalign 0.5
+    # outlines [(3, "#1a1a1a", 2, 2)]
 
 style window:
     variant "mobile"
@@ -1610,7 +1657,7 @@ style game_menu_navigation_frame:
 
 style game_menu_content_frame:
     variant "mobile"
-    top_margin 0
+    # top_margin 0
 
 style pref_vbox:
     variant "mobile"
@@ -1659,9 +1706,3 @@ style slider_vbox:
 style slider_slider:
     variant "mobile"
     xsize 525
-
-style tooltip_hover:
-    xalign 0.5
-    color '#ffffff'
-    yalign 0.5
-    # outlines [(3, "#1a1a1a", 2, 2)]

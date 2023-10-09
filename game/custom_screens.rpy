@@ -5,15 +5,15 @@ screen chooseMC():
         yalign 0.25
     fixed at tcommon:
         imagebutton:
-            idle "lucy"
-            action Call("femaleMC")
+            idle "dhannica"
+            action Call("choseFemale")
             xalign -0.1
             yalign 1.0
             tooltip "girl"
             focus_mask True
         imagebutton:
-            idle "images/bg/nick.png"
-            action Call("maleMC")
+            idle "alec"
+            action Call("choseMale")
             xalign 0.9
             yalign 1.0
             tooltip "boy"
@@ -26,9 +26,8 @@ screen chooseMC():
         nearrect:
             focus "tooltip"
             prefer_top True
-
+            style_prefix "tooltip"
             frame:
                 xalign 0.5
-                padding (30,20,20,20)
-                text tooltip style "tooltip_hover":
-                    size 45
+                text tooltip:
+                    size 35

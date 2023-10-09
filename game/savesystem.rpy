@@ -46,9 +46,8 @@ screen file_slots(title):
     default page_name_value = FilePageNameInputValue(pattern=_("Page {}"), auto=_("Automatic saves"), quick=_("Quick saves"))
 
     use game_menu(title):
-
-        fixed:
-
+        
+        vbox:
             ## This ensures the input will get the enter event before any of the
             ## buttons do.
             order_reverse True
@@ -141,7 +140,7 @@ screen file_slots(title):
 
 style page_label is gui_label
 style page_label_text is gui_label_text
-style page_button is gui_button
+style page_button is empty
 style page_button_text is gui_button_text
 
 style slot_button is gui_button
@@ -162,6 +161,7 @@ style page_button:
     properties gui.button_properties("page_button")
 
 style page_button_text:
+    textalign 0.5
     properties gui.button_text_properties("page_button")
 
 style slot_button:
