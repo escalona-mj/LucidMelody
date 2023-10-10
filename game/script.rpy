@@ -16,6 +16,8 @@
     scene bg highway with long_dissolve
 
     play music merrygoround2
+    $ welcome.grant()
+    $ achievement2.grant()
     "Some the or and only meant bosoms. Nothing sought no that angels ashore being that the the, stood mortals quoth."
     "Tinkled pallas quaint not when bird there no by but. Tis of she respiterespite the, ah and and farther late."
     show paimon at tcommon
@@ -25,7 +27,6 @@
     menu:
         "Hide!":
             hide paimon at tcommon
-            $ achievement_get("start")
             p "Phew, that was close..."
         "Don't hide!":
             p "Screw you."

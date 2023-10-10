@@ -1,90 +1,191 @@
+##########################
+# NEW ACHIEVEMENT SYSTEM #
+##########################
+init -50 python:
+    import datetime, time
 
-############# achievement toast
-transform achievement_transform:
-    on show:
-        alpha 0.0
-        yoffset -150 alpha 0.0
-        easein 0.7 yoffset 0 alpha 1.0
-    on hide:
-        alpha 1.0
-        easeout 0.7 alpha 0.0
-        
+    TAG_ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+    def get_random_screen_tag(k=4): #generate a random k-letter word out of alphabet letters
 
-screen achievement_toast(title, description):
-    zorder 500
-    frame at achievement_transform:
-        xalign 0.0
-        yalign 0.0
-        padding (20,20,40,20)
-        background Frame("gui/achievements/achievement_frame.png", gui.confirm_frame_borders, tile=gui.frame_tile)
-        hbox:
-            yalign 0.5
-            add "unlocked_medal" size (150, 150) yalign 0.5
-
-            vbox:
-                yalign 0.5
-                label title style "achievements_label"
-                text description style "achievements_text"
-    timer 5.0 action Hide("achievement_toast")
-
-init python:
-    def achievement_get(ach_id):
-        ach = persistent.achievement_list[ach_id]
-        if not achievement.has(ach_id):
-            achievement.grant(ach_id)
-            persistent.unlocked_achievement += 1
-            renpy.show_screen(_screen_name='achievement_toast', title=ach[0], description=ach[1])
-            # renpy.play("audio/sfx/notify.ogg", channel="sound")
-        else:
-            pass
-        
-############# achievement list
-default persistent.unlocked_achievement = 0 #counts the unlocked achievements
-default locked_achievement = len(persistent.achievement_list)
-
-define persistent.achievement_list = {
-    # "ach_id": [
-        #_("ach[0]"),
-        #_("ach[1]"),
-        #],
-        
-    "start": [
-        _("New Beginnings"),
-        _("Start a new game for the very first time.")
-        ],
-
-    "end": [
-        _("Closure"),
-        _("The story ends here.")
-        ],
-
-    "dsvds": [
-        _("sds"),
-        _("The sts ends here.")
-        ],
+        # Shuffle the list and pop k items from the front
+        alphabet = list(store.TAG_ALPHABET)
+        renpy.random.shuffle(alphabet)
+        return ''.join(alphabet)
     
-    "dsvads": [
-        _("sds"),
-        _("Theasdss here.")
-        ],
+    class Achievement():
 
-    "dsvassds": [
-        _("sds"),
-        _("Thaaa ends here.")
-        ]
+        # list all achievements
+        all_achievements = []
+        achievement_dict = dict()
+        def __init__(self, name, id=None, description=None, unlocked_image=None, locked_image=None):
 
-    ,"dsvssads": [
-        _("sds"),
-        _("The stsdashere.")
-        ]
+            self._name = name
+            self.id = id
+            self._description = description
+            self.unlocked_image = unlocked_image or None #failsafe if the image isnt found
+            self.locked_image = locked_image or "locked_achievement" #failsafe if a specified locked image is not found
 
-    }
+            # Add to list of all achievements
+            self.all_achievements.append(self)
+            # Add to the dictionary for a quick lookup
+            self.achievement_dict[self.id] = self
+        
+        @property
+        def ach_img(self):
+            #returns the image based on its status whether it is unlocked or locked
 
-define lockaname = "Achievement Locked."
-define lockdesc = "???"
+            if self.has():
+                return self.unlocked_image
+            else:
+                return self.locked_image
 
-image unlocked_medal = "gui/achievements/medal.png"
-image locked_medal = "gui/achievements/locked_medal.png"
+        @property
+        def name(self):
+            #returns the name of the achievement
+
+            if self.has():
+                return self._name
+            else:
+                return "Achievement Locked."
+
+        @property
+        def description(self):
+            #returns the description of the achievement
+            
+            if self.has():
+                return self._description
+            else:
+                return "???"
+
+        def clear(self):
+            #remove the achievement from the persistent file
+            return achievement.clear(self.id)
+
+        def grant(self):
+            #grants the player the achievement
+
+            has_achievement = self.has()
+            x = achievement.grant(self.id)
+
+            #show a toast if this is the first time
+            if not has_achievement:
+                self.achievement_popup()
+
+            #double check achievement sync to avoid syncing issues
+            achievement.sync()
+            return x
+
+        def has(self):
+            #checks if player has achieved this achievement
+            return achievement.has(self.id)
+
+        def achievement_popup(self):
+            #show an achievement notification to indicate a granted achievement
+
+            if renpy.is_init_phase(): #this is init time; we don't show a popup screen
+                return
+            elif not self.has(): # if player doesn't yet have this achievement, no popup
+                return
+
+            #if all above is True, show the achievement toast in the onscreen_achievement dictionary every granted achievement
+            for i in range(6): #range is how many times the achievement toast will display on the y axis
+                if store.onscreen_achievements.get(i, None) is None:
+                    store.onscreen_achievements[i] = True
+                    break
+            # Generate a random tag for this screen
+            tag = get_random_screen_tag(6)
+            renpy.show_screen('achievement_popup', a=self, tag=tag, num=i, _tag=tag)
+
+        def Toggle(self):
+            #a toggle to easily test the status of an achievement
+            return [SelectedIf(self.has()),
+                If(self.has(),
+                    Function(self.clear),
+                    Function(self.grant))]
+        
+        def Grant(): #an action to easily achieve a particular achievement for buttons
+            return Function(self.grant)
+
+        @classmethod
+        def reset(self): #a class method which resets all achievements and clears all the current progress
+            for achievement in self.all_achievements:
+                achievement.clear()
+
+        @classmethod
+        def num_earned(self):#a class property which returns the number of unlocked achievements
+            return len([a for a in self.all_achievements if a.has()])
+
+        @classmethod
+        def num_total(self):#a class property which returns the total number of achievements
+            return len(self.all_achievements)
+
+## Tracks the number of achievement toasts, especially when multiple achievements are earned at once
+default onscreen_achievements = dict()
+
+screen finish_animating_achievement(num):
+    timer 1.0:
+        action [SetDict(onscreen_achievements, num, None), Hide()]
+
+image locked_achievement = "gui/achievements/icons/locked.png"
+
+################
+# ACHIEVEMENTS #
+################
+
+define welcome = Achievement(
+    name=_("Welcome to STI!"),
+    id="welcome",
+    description=_("Start a new game for the very first time."),
+    unlocked_image="gui/achievements/icons/start.png",
+    locked_image="locked_achievement",
+)
+
+define achievement2 = Achievement(
+    name=_("2nd Achievement"),
+    id="achievement2",
+    description=_("Testing for granting multiple achievements."),
+    unlocked_image="gui/achievements/icons/end.png",
+    locked_image="locked_achievement",
+)
+
+
+#####################
+# ACHIEVEMENT TOAST #
+#####################
+
+screen achievement_popup(a, tag, num):
+
+    zorder 500
+    #the offset that achievement should take vertically each granted achievement as to not overlap one another
+    #num gets increased each granted achievement
+    default achievement_yoffset = num*185
+
+    style_prefix 'achievement_toast'
+
+    frame:
+        at achievement_popout()
+        yoffset achievement_yoffset
+        has hbox
+        yalign 0.5
+        add a.unlocked_image fit "contain" ysize 150
+        vbox:
+            yalign 0.5
+            label a.name style "achievements_label"
+            text a.description style "achievements_text"
+
+    #hide the screen after 5 seconds
+    timer 5.0 action [Hide("achievement_popup"), Show('finish_animating_achievement', num=num, _tag=tag+"1")]
+
+transform achievement_popout():
+    on show:
+        xpos 0.0 xanchor 1.0
+        easein_back 1.0 xpos 0.0 xanchor 0.0
+    on hide, replaced:
+        easeout_back 1.0 xpos 0.0 xanchor 1.0
+
+style achievement_toast_frame:
+    background Frame("gui/achievements/achievement_toast.png", gui.achievement_frame_borders, tile=gui.frame_tile)
+    padding (20, 20, 50, 20)
 
 screen achievements():
     tag menu
@@ -93,36 +194,28 @@ screen achievements():
         alpha 0.75
     add "gui/phone/overlay/game_menu.png"
 
-    use game_menu(_("Achievements [persistent.unlocked_achievement]/[locked_achievement]"), scroll="viewport"):
+    use game_menu(__("Achievements: ") + "{earned}/{total}".format(earned=Achievement.num_earned(), total=Achievement.num_total()), scroll="viewport"):
 
         style_prefix "achievements"
         vbox:
             spacing 5
-            for k, v in persistent.achievement_list.items():
-                frame:
-                    if achievement.has(k):
-                        hbox:
-                            yalign 0.5
-                            add "unlocked_medal" yalign 0.5
+            for a in Achievement.all_achievements:
+                button:
+                    if config.developer:
+                        action a.Toggle()
+                    hbox:
+                        yalign 0.5
+                        spacing 15
+                        add a.ach_img yalign 0.5
 
-                            vbox:
-                                yalign 0.5
-                                label _(v[0])
-                                text _(v[1])
-                    else:
-                        hbox:
+                        vbox:
                             yalign 0.5
-                            add "locked_medal" yalign 0.5
-
-                            vbox:
-                                yalign 0.5
-                                style_prefix "locked"
-                                label _("[lockaname]")
-                                text _("[lockdesc]")
+                            label a.name
+                            text a.description
+                null height 10
             # text "You have unlocked [persistent.unlocked_achievement] out of [locked_achievement] achievements.":
             #     xalign 0.5
             #     size 45
-    use extras_navigation
         
 style achievements_vbox is vbox
 style achievements_frame is empty
@@ -145,80 +238,7 @@ style locked_text: #locked description
     color u'#b5b5b5'
     size 30
 
-
-
-style achievements_frame:
+style achievements_button:
     background Frame("gui/achievements/achievement_frame.png", gui.achievement_frame_borders, tile=gui.frame_tile)
     padding (20, 20, 20, 20)
     xfill True
-
-define dev_note = _p("""
-Your dedication to completing the game means the world to us. In our gratitude, please accept this small gift from us.
-""")
-
-screen secret_menu():
-    tag menu
-    if main_menu:
-        use bg
-        add "gui/phone/overlay/game_menu.png"
-    else:
-        add "gui/phone/overlay/game_menu.png"
-    use extras_navigation
-
-    label "Hall of Completionists" style "game_menu_label":
-        xalign 0.5
-        
-    viewport:
-        xsize 1200
-        ysize 750   
-        xalign 0.5
-        yalign 0.55 
-        scrollbars "vertical"
-        mousewheel True
-        draggable True
-        pagekeys True
-        vbox:
-            frame:
-                style_prefix "achievements"
-                xalign 0.5
-                # background Frame("gui/achievements/hidden_achievement_frame.png", gui.confirm_frame_borders, tile=gui.frame_tile)
-                xfill True
-                hbox:
-                    yalign 0.5
-                    xalign 0.5
-                    add "unlocked_medal" size (150, 150) yalign 0.5
-                    
-                    vbox:
-                        yalign 0.5
-                        xalign 0.5
-                        label _("Outstanding!"):
-                            xalign 0.5
-                        text _("You unlocked all achievements!"):
-                            xalign 0.5
-                    
-                    add "unlocked_medal" size (150, 150) yalign 0.5
-            text "[dev_note]":
-                xalign 0.5
-            text "{a=https://www.youtube.com/watch?v=dQw4w9WgXcQ}Click here to get your gift!{/a}":
-                xalign 0.5
-
-## Extras Navigation screen ############################################################
-##
-## This is the same as the Game Menu Navigation screen, but just for the Extras.
-screen extras_navigation():
-
-    hbox:
-        style_prefix "navigation"
-        xalign 0.5
-        yalign 0.95
-        spacing 70
-
-        textbutton _("Achievements") action ShowMenu("achievements") alt "Achievements"
-
-        #for completionists
-        # if persistent.unlocked_achievement == locked_achievement:
-        textbutton _("Hall of Completionists") action ShowMenu("secret_menu") alt "Hall of Completionist"
-
-        # else:
-
-        #     textbutton _("???") action None alt "Locked Option"

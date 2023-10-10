@@ -162,6 +162,7 @@ style page_button:
 
 style page_button_text:
     textalign 0.5
+    selected_color u'#a8a8a8'
     properties gui.button_text_properties("page_button")
 
 style slot_button:

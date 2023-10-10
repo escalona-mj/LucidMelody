@@ -932,7 +932,7 @@ screen history():
                 text what:
                     substitute False
             
-            null height 20
+            null height 40
 
         if not _history_list:
             label _("The dialogue history is empty.")
