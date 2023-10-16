@@ -211,7 +211,7 @@ define gui.choice_button_borders = Borders(150, 25, 150, 25)
 define gui.choice_button_text_font = gui.text_font
 define gui.choice_button_text_size = gui.text_size
 define gui.choice_button_text_xalign = 0.5
-define gui.choice_button_text_idle_color = u'#888888'
+define gui.choice_button_text_idle_color = gui.accent_color
 define gui.choice_button_text_hover_color = "#ffffff"
 define gui.choice_button_text_insensitive_color = u'#8888887f'
 
@@ -251,13 +251,13 @@ define gui.file_slot_rows = 2
 define gui.navigation_xpos = 60
 
 ## The vertical position of the skip indicator.
-define gui.skip_ypos = 15
+define gui.skip_ypos = 0
 
 ## The vertical position of the notify screen.
-define gui.notify_ypos = 68
+define gui.notify_ypos = 100
 
 ## The spacing between menu choices.
-define gui.choice_spacing = 33
+define gui.choice_spacing = 10 #33
 
 ## Buttons in the navigation section of the main and game menus.
 define gui.navigation_spacing = 6
@@ -290,10 +290,10 @@ define gui.frame_borders = Borders(6, 6, 6, 6)
 define gui.confirm_frame_borders = Borders(90, 90, 90, 90)
 
 ## The frame that is used as part of the skip screen.
-define gui.skip_frame_borders = Borders(24, 8, 75, 8)
+define gui.skip_frame_borders = Borders(25, 25, 75, 30)
 
 ## The frame that is used as part of the notify screen.
-define gui.notify_frame_borders = Borders(24, 8, 60, 8)
+define gui.notify_frame_borders = Borders(25, 25, 60, 25)
 
 define gui.achievement_frame_borders = Borders(25, 25, 25, 25)
 
@@ -451,7 +451,9 @@ init python:
         ## Change the size and spacing of various things.
         gui.slider_size = 54
 
-        gui.choice_button_width = 1214
+        gui.choice_button_width = 600
+        gui.choice_button_height = 125
+        gui.choice_button_borders = Borders(150, 25, 150, 25)
         gui.choice_button_text_size = 45
 
         gui.navigation_spacing = 30
@@ -481,8 +483,3 @@ init python:
 
         gui.nvl_button_width = 1860
         gui.nvl_button_xpos = 30
-
-
-#save indicator
-define gui.female = 'female'
-define gui.male = 'male'

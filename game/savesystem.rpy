@@ -1,3 +1,27 @@
+image save_dhannica_indicator:
+    "gui/save_indicator/save_dhannica_1.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "gui/save_indicator/save_dhannica_2.png"
+    .10
+    repeat
+
+image save_alec_indicator:
+    "gui/save_indicator/save_alec_1.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "gui/save_indicator/save_alec_2.png"
+    .10
+    repeat
+
 ## Load and Save screens #######################################################
 ##
 ## These screens are responsible for letting the player save the game and load
@@ -21,24 +45,9 @@ screen load():
     use file_slots(_("Load"))
 
 init python:
-    def my_save(data):
-        try:
-            data['femaleMC'] = femaleMC
-            data['maleMC'] = maleMC
-        except:
-            pass
-
-    def save_indicator(slot):
-        if FileJson(slot) is None:
-            pass
-        elif FileJson(slot, key='femaleMC'):
-            return gui.female
-        elif FileJson(slot, key='maleMC'):
-            return gui.male
-        else:
-            pass
-
-    config.save_json_callbacks = [my_save]            
+    def save_indicator(data):
+        data['route'] = current_route
+    config.save_json_callbacks = [save_indicator]            
 
 
 screen file_slots(title):
@@ -75,29 +84,30 @@ screen file_slots(title):
 
                 for i in range(gui.file_slot_cols * gui.file_slot_rows):
 
-                    python:
-                        slot = i + 1
-
-                        order = [gui.female, gui.male]
-                        currentPlayer = save_indicator(slot)
+                    $ slot = i + 1
 
                     button:
                         action FileAction(slot)
-
-                        if currentPlayer == gui.male:
-                            background Frame(Image(im.MatrixColor("gui/phone/button/slot_idle_background.png", im.matrix.colorize("#252e3b", "#7fb3c7"))))
-                        elif currentPlayer == gui.female:
-                            background Frame(Image(im.MatrixColor("gui/phone/button/slot_idle_background.png", im.matrix.colorize("#252e3b", "#ff6ff9"))))
 
                         has vbox
 
                         add FileScreenshot(slot) xalign 0.5
 
-                        text FileTime(slot, format=_("{#file_time}%A, %B %d %Y, %H:%M"), empty=_("empty slot")):
+                        null height 5
+
+                        text FileTime(slot, format=_("{#file_time}%A, %B %d %Y, %H:%M"), empty=_("unknown dream")):
                             style "slot_time_text"
 
                         text FileSaveName(slot):
                             style "slot_name_text"
+
+                        $ cur_route = FileJson(slot, key='route')
+                        if cur_route == 'common':
+                            pass
+                        elif cur_route == 'dhannica':
+                            add 'save_dhannica_indicator' xpos 215 ypos -280
+                        elif cur_route == 'alec':
+                            add 'save_alec_indicator' xpos 215 ypos -280
 
                         key "save_delete" action FileDelete(slot)
 
@@ -145,7 +155,9 @@ style page_button_text is gui_button_text
 
 style slot_button is gui_button
 style slot_button_text is gui_button_text
-style slot_time_text is slot_button_text
+style slot_time_text:
+    is slot_button_text
+    color u'#000000'
 style slot_name_text is slot_button_text
 
 style page_label:

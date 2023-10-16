@@ -2,9 +2,9 @@
 #     def callback_builder(character_sprite_basename):
 #         def char_callback(event, **kwargs):
 #             if event == "show_done":
-#                 renpy.show(character_sprite_basename + " l_talk")
+#                 renpy.show(character_sprite_basename + " talk")
 #             elif event == "slow_done":
-#                 renpy.show(character_sprite_basename + " -l_talk")
+#                 renpy.show(character_sprite_basename + " -talk")
 #                 renpy.restart_interaction()
 #         return char_callback
 
@@ -12,24 +12,26 @@
 #           CHARACTER       #
 #############################
 
-default mcName = ""
+default mcNameboy = ""
+default mcNamegirl = ""
+
 define dhannica = DynamicCharacter(
-    'mcName',
+    'mcNamegirl',
     what_prefix='"',
     what_suffix='"',
     ctc="ctc",
     ctc_position="fixed",
-    namebox_background=Frame("gui/namebox/lucy.png", gui.namebox_borders),
+    namebox_background=Frame("gui/namebox/dhannica.png", gui.namebox_borders),
     image="dhannica"
 )
 
 define alec = DynamicCharacter(
-    'mcName',
+    'mcNameboy',
     what_prefix='"',
     what_suffix='"',
     ctc="ctc",
     ctc_position="fixed",
-    namebox_background=Frame("gui/namebox/lucy.png", gui.namebox_borders),
+    namebox_background=Frame("gui/namebox/alec.png", gui.namebox_borders),
     image="alec"
 )
 
@@ -60,33 +62,36 @@ image bg highway:
 
 image paimon = ("images/bg/Paimon.webp")
 
-
 #############################
 #       TRANSITIONS         #
 #############################
 
 # Transform that blurs the background when opening screens.
 transform withBlur:
-    blur 10
-transform noBlur:
     blur 0
+    easein .25 blur 30
+transform noBlur:
+    blur 30
+    easein .25 blur 0
 
-transform tcommon:
+transform appear(x):
     yanchor 1.0 subpixel True
     on show:
-        ypos 1.03
-        zoom 0.95 alpha 0.0
-        xcenter 0.5 yoffset -20
-        easein .25 yoffset 0 zoom 1.00 alpha 1.0
+        ypos 1.03 zoom 0.95 alpha 0.0 xalign x
+        easein .25 zoom 1.0 alpha 1.0
     on replace:
-        alpha 1.00
+        alpha 1.0
         parallel:
-            easein .25 xcenter 0.5 zoom 1.00
-        parallel:
-            easein .15 yoffset 0 ypos 1.03
+            easein .25 xalign x zoom 1.0 ypos 1.03
     on hide:
-        easein .25 zoom 0.95 alpha 0.0 yoffset -20
+        easein .25 zoom 0.95 alpha 0.0
 
+transform appear_center:
+    appear(0.5)
+transform appear_left:
+    appear(0.25)
+transform appear_right:
+    appear(0.75)
 
 #############################
 #        TRANSITIONS        #
@@ -108,6 +113,10 @@ define long_dissolve = MultipleTransition([
     Solid("#000"), Pause(1.5),
     Solid("#000"), Dissolve(1.5),
     True])
+
+define eye_close = ImageDissolve("images/transitions/eyes.png", 0.5, ramplen=128, reverse=True, time_warp=eyewarp)
+
+define eye_open = ImageDissolve("images/transitions/eyes.png", 0.5 ,ramplen=128, time_warp=eyewarp)
 
 define eye_scene = MultipleTransition([
     False, ImageDissolve("images/transitions/eyes.png", .5, ramplen=128, reverse=True, time_warp=eyewarp),
@@ -132,6 +141,13 @@ image camera_flash:
 #           AUDIO           #
 #############################
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
+
+
+#############################
+#      LAYERED IMAGES       #
+#############################
+
+###### DHANNICA ######
 
 image dhannica_blink:
     "images/characters/dhannica/face/eyes_normal.png"
@@ -164,6 +180,8 @@ layeredimage dhannica:
     group accesories:
         attribute glasses default:
             "images/characters/dhannica/face/glasses.png"
+
+###### ALEC ######
 
 image alec_blink:
     "images/characters/alec/face/eyes_normal.png"

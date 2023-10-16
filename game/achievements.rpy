@@ -22,7 +22,7 @@ init -50 python:
             self._name = name
             self.id = id
             self._description = description
-            self.unlocked_image = unlocked_image or None #failsafe if the image isnt found
+            self.unlocked_image = unlocked_image or None #alternate way if the achievement does not need to have an image
             self.locked_image = locked_image or "locked_achievement" #failsafe if a specified locked image is not found
 
             # Add to list of all achievements
@@ -70,6 +70,7 @@ init -50 python:
             #show a toast if this is the first time
             if not has_achievement:
                 self.achievement_popup()
+                renpy.play("audio/sfx/notify.ogg", channel="sound")
 
             #double check achievement sync to avoid syncing issues
             achievement.sync()
@@ -84,7 +85,7 @@ init -50 python:
 
             if renpy.is_init_phase(): #this is init time; we don't show a popup screen
                 return
-            elif not self.has(): # if player doesn't yet have this achievement, no popup
+            elif not self.has(): # if player doesn't have this achievement yet, no popup
                 return
 
             #if all above is True, show the achievement toast in the onscreen_achievement dictionary every granted achievement
@@ -94,7 +95,7 @@ init -50 python:
                     break
             # Generate a random tag for this screen
             tag = get_random_screen_tag(6)
-            renpy.show_screen('achievement_popup', a=self, tag=tag, num=i, _tag=tag)
+            renpy.show_screen('achievement_toast', a=self, tag=tag, num=i, _tag=tag)
 
         def Toggle(self):
             #a toggle to easily test the status of an achievement
@@ -103,20 +104,15 @@ init -50 python:
                     Function(self.clear),
                     Function(self.grant))]
         
-        def Grant(): #an action to easily achieve a particular achievement for buttons
+        def Grant(): #grant an achievement for buttons
             return Function(self.grant)
 
         @classmethod
-        def reset(self): #a class method which resets all achievements and clears all the current progress
-            for achievement in self.all_achievements:
-                achievement.clear()
-
-        @classmethod
-        def num_earned(self):#a class property which returns the number of unlocked achievements
+        def num_earned(self): #a class property which returns the number of unlocked achievements
             return len([a for a in self.all_achievements if a.has()])
 
         @classmethod
-        def num_total(self):#a class property which returns the total number of achievements
+        def num_total(self): #a class property which returns the total number of achievements
             return len(self.all_achievements)
 
 ## Tracks the number of achievement toasts, especially when multiple achievements are earned at once
@@ -148,12 +144,34 @@ define achievement2 = Achievement(
     locked_image="locked_achievement",
 )
 
+define erol_ach = Achievement(
+    name=_("Erol Corwyn"),
+    id="erol_ach",
+    description=_("Manalo"),
+    unlocked_image="gui/achievements/icons/start.png",
+    locked_image="locked_achievement",
+)
+
+define kaia_ach = Achievement(
+    name=_("Kaia"),
+    id="kaia_ach",
+    description=_("Buenafe"),
+    unlocked_image="gui/achievements/icons/start.png",
+    locked_image="locked_achievement",
+)
 
 #####################
 # ACHIEVEMENT TOAST #
 #####################
 
-screen achievement_popup(a, tag, num):
+transform achievement_transform():
+    on show:
+        xpos 1.0 xanchor 0.0
+        easein_back 1.0 xpos 1.0 xanchor 1.0
+    on hide, replaced:
+        easeout_back 1.0 xpos 1.0 xanchor 0.0
+
+screen achievement_toast(a, tag, num):
 
     zorder 500
     #the offset that achievement should take vertically each granted achievement as to not overlap one another
@@ -163,7 +181,7 @@ screen achievement_popup(a, tag, num):
     style_prefix 'achievement_toast'
 
     frame:
-        at achievement_popout()
+        at achievement_transform
         yoffset achievement_yoffset
         has hbox
         yalign 0.5
@@ -174,25 +192,18 @@ screen achievement_popup(a, tag, num):
             text a.description style "achievements_text"
 
     #hide the screen after 5 seconds
-    timer 5.0 action [Hide("achievement_popup"), Show('finish_animating_achievement', num=num, _tag=tag+"1")]
-
-transform achievement_popout():
-    on show:
-        xpos 0.0 xanchor 1.0
-        easein_back 1.0 xpos 0.0 xanchor 0.0
-    on hide, replaced:
-        easeout_back 1.0 xpos 0.0 xanchor 1.0
+    timer 5.0 action [Hide("achievement_toast"), Show('finish_animating_achievement', num=num, _tag=tag+"1")]
 
 style achievement_toast_frame:
     background Frame("gui/achievements/achievement_toast.png", gui.achievement_frame_borders, tile=gui.frame_tile)
     padding (20, 20, 50, 20)
 
+#######################
+# ACHIEVEMENT GALLERY #
+#######################
+
 screen achievements():
     tag menu
-    use bg
-    add "gui/overlay/confirm.png":
-        alpha 0.75
-    add "gui/phone/overlay/game_menu.png"
 
     use game_menu(__("Achievements: ") + "{earned}/{total}".format(earned=Achievement.num_earned(), total=Achievement.num_total()), scroll="viewport"):
 
@@ -210,12 +221,14 @@ screen achievements():
 
                         vbox:
                             yalign 0.5
-                            label a.name
-                            text a.description
-                null height 10
-            # text "You have unlocked [persistent.unlocked_achievement] out of [locked_achievement] achievements.":
-            #     xalign 0.5
-            #     size 45
+                            if not a.has():
+                                style_prefix "locked"
+                                label a.name
+                                text a.description
+                            else:
+                                label a.name
+                                text a.description
+                # null height 10
         
 style achievements_vbox is vbox
 style achievements_frame is empty

@@ -192,27 +192,39 @@ image ctc:
 
 screen input(prompt):
     style_prefix "input"
-
+    
     window:
-
+        background Frame("gui/frame.png", gui.confirm_frame_borders, tile=gui.frame_tile)
+        yalign 0.5
+        at screen_appear
         vbox:
-            xanchor gui.dialogue_text_xalign
-            xpos gui.dialogue_xpos
-            xsize gui.dialogue_width
-            ypos gui.dialogue_ypos
+            xalign 0.5
+            yalign 0.5
+            # xanchor gui.dialogue_text_xalign
+            # xpos gui.dialogue_xpos
+            # xsize gui.dialogue_width
+            # ypos gui.dialogue_ypos
 
             text prompt style "input_prompt"
+            null height 40
             input id "input"
 
 style input_prompt is default
 
 style input_prompt:
-    xalign gui.dialogue_text_xalign
+    color u'#000'
+    size 25
+    # xalign gui.dialogue_text_xalign
+    xalign 0.5
     properties gui.text_properties("input_prompt")
 
 style input:
-    xalign gui.dialogue_text_xalign
+    color u'#000'
+    # xalign gui.dialogue_text_xalign
+    xalign 0.5
+    size 69
     xmaximum gui.dialogue_width
+
 
 
 ## Choice screen ###############################################################
@@ -223,19 +235,32 @@ style input:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#choice
 
+transform screen_appear:
+    subpixel True
+    xalign 0.5
+    # yalign 0.5
+    on show:
+        zoom 0.95 alpha 0.0
+        easein .25 zoom 1.0 alpha 1.0
+    on hide:
+        easein .25 zoom 0.95 alpha 0.0
+
 screen choice(items):
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
     style_prefix "choice"
 
     vbox:
+        at screen_appear
         for i in items:
             textbutton i.caption action i.action
 
 
 style choice_vbox is vbox
 style choice_button is button
-style choice_button_text is button_text
+style choice_button_text:
+    is button_text
+    yalign 0.5
 
 style choice_vbox:
     xalign 0.5
@@ -281,8 +306,8 @@ screen quick_menu():
 
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
 ## the player has not explicitly hidden the interface.
-# init python:
-#     config.overlay_screens.append("quick_menu")
+# # init python:
+# #     config.overlay_screens.append("quick_menu")
 
 default quick_menu = True
 
@@ -406,19 +431,19 @@ style navigation_button_text is gui_button_text
 
 style navigation_btn_hover:
     color u"#fff"
-    xoffset 100
-    yoffset 31
+    yalign 0.5
+    xpos 95
     font gui.interface_text_font
 
 style navigation_btn_selected:
     color u"#fff"
-    xoffset 100
-    yoffset 31
+    yalign 0.5
+    xpos 95
     font gui.interface_text_font
 
 style navigation_btn:
-    xoffset 100
-    yoffset 31
+    yalign 0.5
+    xpos 95
     font gui.interface_text_font
 
 style navigation_button:
@@ -549,6 +574,30 @@ style main_menu_version:
 ## This screen is intended to be used with one or more children, which are
 ## transcluded (placed) inside it.
 
+image overlay_dhannica:
+    "gui/overlay/game_menu_dhannica_1.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "gui/overlay/game_menu_dhannica_2.png"
+    .10
+    repeat
+
+image overlay_alec:
+    "gui/overlay/game_menu_alec_1.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "gui/overlay/game_menu_alec_2.png"
+    .10
+    repeat
+
 screen game_menu(title, scroll=None, yinitial=0.0):
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
@@ -559,12 +608,17 @@ screen game_menu(title, scroll=None, yinitial=0.0):
         use bg
         add "gui/overlay/confirm.png":
             alpha 0.75
-        add "gui/phone/overlay/game_menu.png"
+        add "gui/overlay/game_menu.png"
 
     else:
         add "gui/overlay/menu_overlay.png":
             alpha 0.65
-        add "gui/phone/overlay/game_menu.png"
+        if current_route == "alec":
+            add "overlay_alec"
+        if current_route == "dhannica":
+            add "overlay_dhannica"
+        elif current_route == "common":
+            add "gui/overlay/game_menu.png"
 
     frame:
         style "game_menu_outer_frame"
@@ -635,6 +689,11 @@ style game_menu_side is gui_side
 style game_menu_scrollbar is gui_vscrollbar
 
 style game_menu_label is gui_label
+
+# if current_route == "dhannica":
+#     style game_menu_label_text:
+#         is gui_label_text
+# elif current_route == "alec":
 style game_menu_label_text is gui_label_text
 
 
@@ -797,6 +856,8 @@ screen preferences():
                             action Preference("all mute", "toggle")
                             tooltip "Mute all sounds."
                             style "mute_all_button"
+                            foreground "gui/phone/button/sound_[prefix_]foreground.png"
+                            padding (75, 6, 6, 6)
                     if config.has_voice:
                         label _("Voice Volume")
 
@@ -809,15 +870,23 @@ screen preferences():
     $ tooltip = GetTooltip()
 
     if tooltip:
+        frame:
+            # style_prefix "tooltip"
+            background None
+            xalign 1.0
+            yalign 0.85
+            text tooltip:
+                size 35
+                textalign 1.0
 
-        nearrect:
-            focus "tooltip"
-            prefer_top True
-            style_prefix "tooltip"
-            frame:
-                xalign 0.5
-                text tooltip:
-                    size 35
+        # nearrect:
+        #     focus "tooltip"
+        #     prefer_top True
+        #     style_prefix "tooltip"
+        #     frame:
+        #         xalign 0.5
+        #         text tooltip:
+        #             size 35
 
 style pref_label is gui_label
 style pref_label_text is gui_label_text
@@ -1160,6 +1229,7 @@ style help_label_text:
 ## https://www.renpy.org/doc/html/screen_special.html#confirm
 
 screen confirm(message, yes_action, no_action):
+    
     ## Ensure other screens do not get input while this screen is displayed.
     modal True
 
@@ -1171,6 +1241,7 @@ screen confirm(message, yes_action, no_action):
         alpha 0.5
 
     frame:
+        at screen_appear
 
         vbox:
             xalign .5
@@ -1185,16 +1256,16 @@ screen confirm(message, yes_action, no_action):
                 xalign 0.5
                 spacing 150
                 imagebutton:
-                    auto "gui/navigation/yes_%s.png"
-                    foreground Text(_("Yes"), style="navigation_btn")
-                    hover_foreground Text(_("Yes"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Yes"), style="navigation_btn_selected")
+                    auto "gui/navigation/confirm_btn_%s.png"
+                    foreground Text(_("Yes"), style="confirm_btn")
+                    hover_foreground Text(_("Yes"), style="confirm_btn_hover")
+                    selected_foreground Text(_("Yes"), style="confirm_btn_selected")
                     action yes_action
                 imagebutton:
-                    auto "gui/navigation/quit_%s.png"
-                    foreground Text(_("No"), style="navigation_btn")
-                    hover_foreground Text(_("No"), style="navigation_btn_hover")
-                    selected_foreground Text(_("No"), style="navigation_btn_selected")
+                    auto "gui/navigation/confirm_btn_%s.png"
+                    foreground Text(_("No"), style="confirm_btn")
+                    hover_foreground Text(_("No"), style="confirm_btn_hover")
+                    selected_foreground Text(_("No"), style="confirm_btn_selected")
                     action no_action
                 # textbutton _("Yes") action yes_action
                 # textbutton _("No") action no_action
@@ -1202,6 +1273,23 @@ screen confirm(message, yes_action, no_action):
     ## Right-click and escape answer "no".
     key "game_menu" action no_action
 
+style confirm_btn_hover:
+    color u"#fff"
+    xalign 0.5
+    yalign 0.5
+    font gui.interface_text_font
+
+style confirm_btn_selected:
+    color u"#fff"
+    xalign 0.5
+    yalign 0.5
+    font gui.interface_text_font
+
+style confirm_btn:
+    color gui.accent_color
+    xalign 0.5
+    yalign 0.5
+    font gui.interface_text_font
 
 style confirm_frame is gui_frame
 style confirm_prompt is gui_prompt
@@ -1218,6 +1306,7 @@ style confirm_frame:
 style confirm_prompt_text:
     textalign 0.5
     layout "subtitle"
+    color gui.accent_color
 
 style confirm_button:
     properties gui.button_properties("confirm_button")
@@ -1237,6 +1326,8 @@ screen skip_indicator():
 
     zorder 100
     style_prefix "skip"
+    add "gui/overlay/confirm.png":
+        alpha 0.25
 
     frame:
 
@@ -1265,7 +1356,9 @@ transform delayed_blink(delay, cycle):
 
 
 style skip_frame is empty
-style skip_text is gui_text
+style skip_text:
+    is gui_text
+    color gui.accent_color
 style skip_triangle is skip_text
 
 style skip_frame:
@@ -1296,20 +1389,31 @@ screen notify(message):
 
     frame at notify_appear:
         text "[message!tq]"
+        # xalign 0.5
+        # yalign 0.1
 
     timer 3.25 action Hide('notify')
 
 
+# transform notify_appear:
+#     on show:
+#         alpha 0 yoffset 50 zoom 0.95
+#         easein .5 alpha 1.0 yoffset 0 zoom 1.0
+#     on hide:
+#         easein .5 alpha 0.0 yoffset 50 zoom 0.95
+
 transform notify_appear:
     on show:
-        alpha 0
-        linear .25 alpha 1.0
+        alpha 0 xoffset -100
+        easein .5 alpha 1.0 xoffset 0
     on hide:
-        linear .5 alpha 0.0
+        easein .5 alpha 0.0 xoffset -100
 
 
 style notify_frame is empty
-style notify_text is gui_text
+style notify_text:
+    is gui_text
+    color gui.accent_color
 
 style notify_frame:
     ypos gui.notify_ypos
@@ -1539,24 +1643,6 @@ style pref_vbox:
 
 ## Since a mouse may not be present, we replace the quick menu with a version
 ## that uses fewer and bigger buttons that are easier to touch.
-# screen quick_menu():
-#     variant "mobile"
-
-#     zorder 100
-
-#     if quick_menu:
-
-#         hbox:
-#             style_prefix "quick"
-
-#             xalign 0.5
-#             yalign 1.0
-
-#             textbutton _("Back") action Rollback()
-#             textbutton _("Hide") action HideInterface()
-#             textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-#             textbutton _("Auto") action Preference("auto-forward", "toggle")
-#             textbutton _("Menu") action ShowMenu()
 
 screen quick_menu():
     variant "mobile"
