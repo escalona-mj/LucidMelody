@@ -27,12 +27,80 @@
 
 #             imagebutton:
 #                 auto "gui/navigation/confirm_btn_%s.png"
-#                 foreground Text(_("Yes"), style="confirm_btn")
-#                 hover_foreground Text(_("Yes"), style="confirm_btn_hover")
-#                 selected_foreground Text(_("Yes"), style="confirm_btn_selected")
+#                 foreground Text(_("OK"), style="confirm_btn")
+#                 hover_foreground Text(_("OK"), style="confirm_btn_hover")
+#                 selected_foreground Text(_("OK"), style="confirm_btn_selected")
 #                 action ok_action
 
-################    CHOOSE MC     ######################
+############################
+# CUSTOM NAME INPUT SCREEN #
+############################
+
+default Main = persistent.playername
+define persistent.playername = ''
+
+#custom name input
+screen name_input(message, ok_action, back_action):
+    modal True
+    zorder 200
+    style_prefix "confirm"
+    key "K_RETURN" action [ok_action]
+    
+    frame:
+        at screen_appear
+        has vbox:
+            xalign 0.5
+            yalign 0.5
+            spacing 30
+
+        text "What is your name?\n(Press Enter without typing your name to use default name.)":
+            style "confirm_prompt"
+            xalign 0.5
+            yalign 0.5
+            color u'#000'
+            text_align 0.5
+            size 30
+
+        input default "" value VariableInputValue("Main") length 12 allow "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
+            color u'#000'
+            xalign 0.5
+            yalign 0.5
+            size 69
+    
+    hbox:
+        at screen_appear
+        xalign 0.5
+        yalign 0.3
+        textbutton "{i}\"Wait, I've changed my mind.\"":
+            text_style "tx_button"
+            action back_action
+
+style tx_button:
+    color u'#fff'
+    hover_color u'#333'
+    size 35
+
+        # imagebutton:
+        #     auto "gui/navigation/confirm_btn_%s.png"
+        #     foreground Text(_("OK"), style="confirm_btn")
+        #     hover_foreground Text(_("OK"), style="confirm_btn_hover")
+        #     selected_foreground Text(_("OK"), style="confirm_btn_selected")
+        #     action ok_action
+        # imagebutton:
+        #     auto "gui/navigation/confirm_btn_%s.png"
+        #     foreground Text(_("X"), style="confirm_btn")
+        #     hover_foreground Text(_("X"), style="confirm_btn_hover")
+        #     selected_foreground Text(_("X"), style="confirm_btn_selected")
+        #     action back_action
+
+init python:
+    def SavePlayerName():
+        persistent.playername = Main
+
+####################
+# CHOOSE MC SCREEN #
+####################
+
 transform blur_img:
     alpha 0
     choice:
@@ -89,36 +157,62 @@ screen chooseMC():
     add "fireflies"
     if persistent.first_gameplay == False:
         text "Please choose your gender.":
+            color u"#fff"
             xalign 0.5
             yalign 0.25
-    else:
-        pass
+            at transform:
+                alpha 1.0
+                5.0
+                ease 1.0 alpha 0.0
     fixed:
         spacing 10
         imagebutton:
             xalign 0.0
             yalign 1.0
             idle "girlMC"
-            action Hide("chooseMC", transition=eye_scene), Call("chooseFemale")
+            action (Show(screen='name_input', message="What is your name?", ok_action=(Hide(screen='name_input', transition=fade),Call("chooseFemale")), back_action=Hide(screen='name_input')))
             tooltip "I'm a girl."
             focus_mask True
+            at showButtons(-0.5, 0.0)
         imagebutton:
             xalign 1.0
             yalign 1.0
             idle "boyMC"
-            action Hide("chooseMC", transition=eye_scene), Call("chooseMale")
+            action (Show(screen='name_input', message="What is your name?", ok_action=(Hide(screen='name_input', transition=fade),Call("chooseMale")), back_action=Hide(screen='name_input')))
             tooltip "I'm a boy."
             focus_mask True
+            at showButtons(1.5, 1.0)
 
-    $ tooltip = GetTooltip()
+    $ tooltip = GetTooltip(screen="chooseMC")
 
     if tooltip:
+        # style_prefix "tooltip"
         frame:
+            background None
             xalign 0.5
             yalign 0.35
-            style_prefix "tooltip"
             text tooltip:
+                color u'#fff'
                 size 50
 
-style text:
-    color u'#fff'
+transform showButtons(x1, x2):
+    xalign x1
+    easein_back 2.0 xalign x2
+
+#setting the correct variables before starting the route
+
+label chooseFemale:
+    $ current_route = 'dhannica'
+    $ mcNameboy = 'Alec'
+    if not Main:
+        $ Main = "Dhannica"
+    $ mcNamegirl = "[Main]"
+    return
+
+label chooseMale:
+    $ current_route = 'alec'
+    $ mcNamegirl = 'Dhannica'
+    if not Main:
+        $ Main = "Alec"
+    $ mcNameboy = "[Main]"
+    return

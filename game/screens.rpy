@@ -192,37 +192,26 @@ image ctc:
 
 screen input(prompt):
     style_prefix "input"
-    
+
     window:
-        background Frame("gui/frame.png", gui.confirm_frame_borders, tile=gui.frame_tile)
-        yalign 0.5
-        at screen_appear
+
         vbox:
-            xalign 0.5
-            yalign 0.5
-            # xanchor gui.dialogue_text_xalign
-            # xpos gui.dialogue_xpos
-            # xsize gui.dialogue_width
-            # ypos gui.dialogue_ypos
+            xanchor gui.dialogue_text_xalign
+            xpos gui.dialogue_xpos
+            xsize gui.dialogue_width
+            ypos gui.dialogue_ypos
 
             text prompt style "input_prompt"
-            null height 40
             input id "input"
 
 style input_prompt is default
 
 style input_prompt:
-    color u'#000'
-    size 25
-    # xalign gui.dialogue_text_xalign
-    xalign 0.5
+    xalign gui.dialogue_text_xalign
     properties gui.text_properties("input_prompt")
 
 style input:
-    color u'#000'
-    # xalign gui.dialogue_text_xalign
-    xalign 0.5
-    size 69
+    xalign gui.dialogue_text_xalign
     xmaximum gui.dialogue_width
 
 
@@ -306,8 +295,8 @@ screen quick_menu():
 
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
 ## the player has not explicitly hidden the interface.
-# # init python:
-# #     config.overlay_screens.append("quick_menu")
+# init python:
+#     config.overlay_screens.append("quick_menu")
 
 default quick_menu = True
 
@@ -837,9 +826,7 @@ screen preferences():
                             style "bar"
                             tooltip "The loudness of background music throughout the game."
                     if config.has_sound:
-
                         label _("Sound Volume")
-
                         vbox:
                             bar value Preference("sound volume"):
                                 style "bar"
@@ -849,6 +836,16 @@ screen preferences():
                                 textbutton _("Test") action Play("sound", config.sample_sound)
                 vbox:
                     xsize 500
+                    if config.has_voice:
+                        label _("Voice Volume")
+                        hbox:
+                            bar value Preference("voice volume"):
+                                style "bar"
+                                tooltip "The loudness of voice throughout the game."
+
+                            if config.sample_voice:
+                                textbutton _("Test") action Play("voice", config.sample_voice)
+                    null height 35
                     if config.has_music or config.has_sound or config.has_voice:
                         null height gui.pref_spacing
 
@@ -858,14 +855,7 @@ screen preferences():
                             style "mute_all_button"
                             foreground "gui/phone/button/sound_[prefix_]foreground.png"
                             padding (75, 6, 6, 6)
-                    if config.has_voice:
-                        label _("Voice Volume")
 
-                        hbox:
-                            bar value Preference("voice volume")
-
-                            if config.sample_voice:
-                                textbutton _("Test") action Play("voice", config.sample_voice)
                     
     $ tooltip = GetTooltip()
 
@@ -878,15 +868,7 @@ screen preferences():
             text tooltip:
                 size 35
                 textalign 1.0
-
-        # nearrect:
-        #     focus "tooltip"
-        #     prefer_top True
-        #     style_prefix "tooltip"
-        #     frame:
-        #         xalign 0.5
-        #         text tooltip:
-        #             size 35
+                color u'#fff'
 
 style pref_label is gui_label
 style pref_label_text is gui_label_text

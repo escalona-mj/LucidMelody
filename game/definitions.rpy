@@ -8,13 +8,22 @@
 #                 renpy.restart_interaction()
 #         return char_callback
 
+init python:
+    class DisableSkip():
+        def start():
+            _skipping = False #disable skip
+            config.skipping = False # if skipping, stop it
+            config.allow_skipping = False #prevents from skipping
+        def stop():
+            _skipping = True
+            config.allow_skipping = True
+
+
 #############################
 #           CHARACTER       #
 #############################
 
-default mcNameboy = ""
 default mcNamegirl = ""
-
 define dhannica = DynamicCharacter(
     'mcNamegirl',
     what_prefix='"',
@@ -25,6 +34,7 @@ define dhannica = DynamicCharacter(
     image="dhannica"
 )
 
+default mcNameboy = ""
 define alec = DynamicCharacter(
     'mcNameboy',
     what_prefix='"',
@@ -96,6 +106,7 @@ transform appear_right:
 #############################
 #        TRANSITIONS        #
 #############################
+
 # define config.say_attribute_transition = Dissolve(.25, alpha=True)
 # define config.say_attribute_transition_layer = "master"
 # init:
@@ -140,6 +151,7 @@ image camera_flash:
 #############################
 #           AUDIO           #
 #############################
+define audio.titlescreen = "audio/bgm/titlescreen.mp3"
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
 
 

@@ -61,7 +61,7 @@ define build.name = "LucidMelody"
 
 define config.has_sound = True
 define config.has_music = True
-define config.has_voice = False
+define config.has_voice = True
 
 
 ## To allow the user to play a test sound on the sound or voice channel,
@@ -75,7 +75,7 @@ define config.has_voice = False
 ## the player is at the main menu. This file will continue playing into the
 ## game, until it is stopped or another file is played.
 
-# define config.main_menu_music = "main-menu-theme.ogg"
+define config.main_menu_music = audio.titlescreen
 
 
 ## Transitions #################################################################
@@ -93,7 +93,7 @@ define config.end_splash_transition = fade
 
 define config.enter_yesno_transition = Dissolve(0.2)
 define config.exit_yesno_transition = Dissolve(0.2)
-define config.game_main_transition = eye_scene
+define config.game_main_transition = fade
 
 ## Between screens of the game menu.
 
