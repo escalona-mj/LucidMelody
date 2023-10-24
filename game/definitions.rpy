@@ -23,46 +23,70 @@ init python:
 #           CHARACTER       #
 #############################
 
-default mcNamegirl = ""
-define dhannica = DynamicCharacter(
-    'mcNamegirl',
+define dhannica_i = Character(
+    '[Main]',
+    ctc="ctc",
+    ctc_position="nestled",
+    what_prefix='{i}',
+    what_suffix='{/i}',
+    color='#ff9b9b'
+)
+
+define alec_i = Character(
+    '[Main]',
+    ctc="ctc",
+    ctc_position="nestled",
+    what_prefix='{i}',
+    what_suffix='{/i}',
+    color='#21a733'
+)
+
+define speak = Character(
     what_prefix='"',
     what_suffix='"',
     ctc="ctc",
-    ctc_position="fixed",
-    namebox_background=Frame("gui/namebox/dhannica.png", gui.namebox_borders),
+    ctc_position="nestled"
+)
+
+default mcNamegirl = ""
+define dhannica = DynamicCharacter(
+    'mcNamegirl',
+    kind=speak,
+    color='#ff9b9b',
     image="dhannica"
+)
+
+define girlMom = Character(
+    'Mom',
+    kind=speak,
 )
 
 default mcNameboy = ""
 define alec = DynamicCharacter(
     'mcNameboy',
-    what_prefix='"',
-    what_suffix='"',
-    ctc="ctc",
-    ctc_position="fixed",
-    namebox_background=Frame("gui/namebox/alec.png", gui.namebox_borders),
+    kind=speak,
+    color='#21a733',
     image="alec"
 )
 
-default p_name = "Paimon"
-define p = DynamicCharacter(
-    'p_name',
-    what_prefix='"',
-    what_suffix='"',
-    image='paimon',
-    namebox_background=Frame("gui/namebox/paimon.png", gui.namebox_borders),
-    ctc="ctc",
-    ctc_position="fixed"
+default n_name = "Nick"
+define n = DynamicCharacter(
+    'n_name',
+    kind=speak,
+    color='#4076ff',
+    image='nick'
 )
 
 define narrator = Character(
     ctc="ctc",
-    ctc_position="fixed")
+    ctc_position='nestled'
+)
 
-init python:
-    def eyewarp(x):
-        return x**1.33
+define d_singer = Character(
+    'Singer',
+    kind=speak,
+    color='#fff'
+    )
 
 #############################
 #           IMAGES          #
@@ -70,10 +94,19 @@ init python:
 image bg highway:
     im.Blur("images/bg/highway.jpg", 2.5)
 
-image paimon = ("images/bg/Paimon.webp")
+image bg dhannica room:
+    im.Blur("images/bg/dhannica_room.png", 2.5)
 
+image bg stage:
+    im.Blur("images/bg/stage.jpg", 2.5)
+
+image bg living room:
+    im.Blur("images/bg/livingroom.jpg", 2.5)
+
+image bg school:
+    im.Blur("images/bg/school.jpg", 2.5)
 #############################
-#       TRANSITIONS         #
+#       TRANSFORMS          #
 #############################
 
 # Transform that blurs the background when opening screens.
@@ -103,9 +136,53 @@ transform appear_left:
 transform appear_right:
     appear(0.75)
 
+transform dizzy:
+    subpixel True
+    truecenter
+    ease 0.2 zoom 1.2
+    parallel:
+        choice:
+            ease_quad 1.0 xoffset 5 yoffset 10
+        choice:
+            ease_quad 1.0 xoffset -5 yoffset 10
+        choice:
+            ease_quad 1.0 xoffset 5 yoffset -10
+        choice:
+            ease_quad 1.0 xoffset -5 yoffset -10
+        repeat
+    parallel:
+        choice:
+            ease_quad 5.0 rotate 2
+        choice:
+            ease_quad 5.0 rotate 4
+        choice:
+            ease_quad 5.0 rotate -2
+        choice:
+            ease_quad 5.0 rotate -4
+        repeat
+    parallel:
+        choice:
+            ease 0.3 zoom 1.15
+            ease 1.0 zoom 1.2
+        choice:
+            ease 0.2 zoom 1.15
+            ease 1.0 zoom 1.2
+        choice:
+            ease 0.9 zoom 1.15
+            ease 1.0 zoom 1.2
+        repeat
+    parallel:
+        ease_quad 1.0 blur 0
+        ease_quad 1.0 blur 10
+        repeat
+
 #############################
 #        TRANSITIONS        #
 #############################
+
+init python:
+    def eyewarp(x):
+        return x**1.33
 
 # define config.say_attribute_transition = Dissolve(.25, alpha=True)
 # define config.say_attribute_transition_layer = "master"
@@ -125,14 +202,14 @@ define long_dissolve = MultipleTransition([
     Solid("#000"), Dissolve(1.5),
     True])
 
-define eye_close = ImageDissolve("images/transitions/eyes.png", 0.5, ramplen=128, reverse=True, time_warp=eyewarp)
+define eye_close = ImageDissolve("images/transitions/eyes.png", 0.25, ramplen=128, reverse=True, time_warp=eyewarp)
 
-define eye_open = ImageDissolve("images/transitions/eyes.png", 0.5 ,ramplen=128, time_warp=eyewarp)
+define eye_open = ImageDissolve("images/transitions/eyes.png", 0.25 ,ramplen=128, time_warp=eyewarp)
 
 define eye_scene = MultipleTransition([
-    False, ImageDissolve("images/transitions/eyes.png", .5, ramplen=128, reverse=True, time_warp=eyewarp),
-    Solid("#000"), Pause(1),
-    Solid("#000"), ImageDissolve("images/transitions/eyes.png", .5 ,ramplen=128, time_warp=eyewarp),
+    False, ImageDissolve("images/transitions/eyes.png", 0.25, ramplen=128, reverse=True),
+    Solid("#000"), Pause(0.5),
+    Solid("#000"), ImageDissolve("images/transitions/eyes.png", 0.25 ,ramplen=128),
     True])
 
 define wipeleft_menu = ImageDissolve("images/transitions/wipeleft.png", 0.10, ramplen=64)
@@ -180,13 +257,13 @@ layeredimage dhannica:
             "images/characters/dhannica/base.png"
 
     group eyes:
-        attribute d_blink default:
+        attribute blink default:
             "dhannica_blink"
-        attribute d_eyeclose:
+        attribute eyeclose:
             "images/characters/dhannica/face/eyes_closed.png"
 
     group brows:
-        attribute d_brow default:
+        attribute brow default:
             "images/characters/dhannica/face/brow_normal.png"
 
     group accesories:
@@ -214,14 +291,44 @@ layeredimage alec:
             "images/characters/alec/base.png"
 
     group eyes:
-        attribute a_blink default:
+        attribute blink default:
             "alec_blink"
-        attribute a_eyeclose:
+        attribute eyeclose:
             "images/characters/alec/face/eyes_closed.png"
 
     group brows:
-        attribute a_brow default:
+        attribute brow default:
             "images/characters/alec/face/brow_normal.png"
+
+###### NICK ######
+
+image nick_blink:
+    "images/characters/nick/face/eyes_normal.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "images/characters/nick/face/eyes_closed.png"
+    .10
+    repeat
+
+layeredimage nick:
+
+    group base: #body
+        attribute base default:
+            "images/characters/nick/base.png"
+
+    group eyes:
+        attribute blink default:
+            "nick_blink"
+        attribute eyeclose:
+            "images/characters/nick/face/eyes_closed.png"
+
+    group brows:
+        attribute brow default:
+            "images/characters/nick/face/brow_normal.png"
 
 #blue 014d81
 #pantone 6463b1

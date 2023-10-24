@@ -1,98 +1,83 @@
-# screen dialog(message, ok_action):
-#     on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
-#     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
-#     modal True
+screen dialog(message, ok_action):
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
+    on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
+    modal True
 
-#     zorder 200
+    zorder 200
 
-#     style_prefix "confirm"
+    style_prefix "confirm"
 
-#     add "gui/overlay/confirm.png"
-#     key "K_RETURN" action [ok_action]
+    add "gui/overlay/confirm.png":
+        at transform:
+            alpha 0.0
+            easein .25 alpha 1.0
+            
+    key "K_RETURN" action [ok_action]
 
-#     frame:
+    frame at screen_appear:
+        has vbox:
+            xalign .5
+            yalign .5
+            spacing 30
+        label _(message):
+            style "confirm_prompt"
+            xalign 0.5
+        hbox:
+            xalign 0.5
+            spacing 100
 
-#         has vbox:
-#             xalign .5
-#             yalign .5
-#             spacing 30
-
-#         label _(message):
-#             style "confirm_prompt"
-#             xalign 0.5
-
-#         hbox:
-#             xalign 0.5
-#             spacing 100
-
-#             imagebutton:
-#                 auto "gui/navigation/confirm_btn_%s.png"
-#                 foreground Text(_("OK"), style="confirm_btn")
-#                 hover_foreground Text(_("OK"), style="confirm_btn_hover")
-#                 selected_foreground Text(_("OK"), style="confirm_btn_selected")
-#                 action ok_action
+            imagebutton:
+                auto "gui/navigation/confirm_btn_%s.png"
+                foreground Text(_("OK"), style="confirm_btn")
+                hover_foreground Text(_("OK"), style="confirm_btn_hover")
+                selected_foreground Text(_("OK"), style="confirm_btn_selected")
+                action ok_action
 
 ############################
 # CUSTOM NAME INPUT SCREEN #
 ############################
 
 default Main = persistent.playername
-define persistent.playername = ''
 
 #custom name input
-screen name_input(message, ok_action, back_action):
-    modal True
+screen name_input(ok_action, back_action):
+    dismiss action back_action
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="screens")
+    on "hide" action Function(renpy.show_layer_at, noBlur, layer="screens")
     zorder 200
     style_prefix "confirm"
     key "K_RETURN" action [ok_action]
     
     frame:
+        modal True
         at screen_appear
         has vbox:
             xalign 0.5
             yalign 0.5
             spacing 30
 
-        text "What is your name?\n(Press Enter without typing your name to use default name.)":
-            style "confirm_prompt"
-            xalign 0.5
-            yalign 0.5
-            color u'#000'
-            text_align 0.5
-            size 30
+        vbox:
+            # spacing 10
+            text "What is your name?":
+                style "confirm_prompt"
+                xalign 0.5
+                yalign 0.5
+                color u'#000'
+                text_align 0.5
+                # size 30
+            text "(Press Enter without typing your name to use default name.)":
+                xalign 0.5
+                yalign 0.5
+                color u'#000'
+                text_align 0.5
+                size 30
 
         input default "" value VariableInputValue("Main") length 12 allow "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
             color u'#000'
             xalign 0.5
             yalign 0.5
             size 69
-    
-    hbox:
-        at screen_appear
-        xalign 0.5
-        yalign 0.3
-        textbutton "{i}\"Wait, I've changed my mind.\"":
-            text_style "tx_button"
-            action back_action
-
-style tx_button:
-    color u'#fff'
-    hover_color u'#333'
-    size 35
-
-        # imagebutton:
-        #     auto "gui/navigation/confirm_btn_%s.png"
-        #     foreground Text(_("OK"), style="confirm_btn")
-        #     hover_foreground Text(_("OK"), style="confirm_btn_hover")
-        #     selected_foreground Text(_("OK"), style="confirm_btn_selected")
-        #     action ok_action
-        # imagebutton:
-        #     auto "gui/navigation/confirm_btn_%s.png"
-        #     foreground Text(_("X"), style="confirm_btn")
-        #     hover_foreground Text(_("X"), style="confirm_btn_hover")
-        #     selected_foreground Text(_("X"), style="confirm_btn_selected")
-        #     action back_action
-
+            
 init python:
     def SavePlayerName():
         persistent.playername = Main
@@ -165,28 +150,33 @@ screen chooseMC():
                 5.0
                 ease 1.0 alpha 0.0
     fixed:
+        at transform:
+            zoom 1.0 xalign 0.5 yalign 1.0
+            on hide:
+                easein .25 zoom 0.95 alpha 0.0
         spacing 10
         imagebutton:
             xalign 0.0
             yalign 1.0
             idle "girlMC"
-            action (Show(screen='name_input', message="What is your name?", ok_action=(Hide(screen='name_input', transition=fade),Call("chooseFemale")), back_action=Hide(screen='name_input')))
+            action (Show(screen='name_input',_layer="front", ok_action=(Hide(screen='name_input',_layer="front"),Call("chooseFemale")), back_action=Hide(screen='name_input',_layer="front")))
             tooltip "I'm a girl."
             focus_mask True
+            activate_sound "audio/sfx/click.ogg"
             at showButtons(-0.5, 0.0)
         imagebutton:
             xalign 1.0
             yalign 1.0
             idle "boyMC"
-            action (Show(screen='name_input', message="What is your name?", ok_action=(Hide(screen='name_input', transition=fade),Call("chooseMale")), back_action=Hide(screen='name_input')))
+            action (Show(screen='name_input',_layer="front", ok_action=(Hide(screen='name_input',_layer="front"),Call("chooseMale")), back_action=Hide(screen='name_input',_layer="front")))
             tooltip "I'm a boy."
             focus_mask True
+            activate_sound "audio/sfx/click.ogg"
             at showButtons(1.5, 1.0)
 
     $ tooltip = GetTooltip(screen="chooseMC")
 
     if tooltip:
-        # style_prefix "tooltip"
         frame:
             background None
             xalign 0.5
@@ -196,8 +186,8 @@ screen chooseMC():
                 size 50
 
 transform showButtons(x1, x2):
-    xalign x1
-    easein_back 2.0 xalign x2
+    xalign x1 zoom 1.0
+    easein_back 1.0 xalign x2
 
 #setting the correct variables before starting the route
 

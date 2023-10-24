@@ -56,11 +56,13 @@ define gui.interface_text_color = u'#ffffff'
 
 ## Fonts and Font Sizes ########################################################
 
+define gui.game_menu_label_font = "fonts/MyPrettyCutie.ttf"
+
 ## The font used for in-game text.
 define gui.text_font = "fonts/QuinnGothic.ttf"
 
 ## The font used for character names.
-define gui.name_text_font = "fonts/QuinnGothic.ttf"
+define gui.name_text_font = "fonts/MyPrettyCutie.ttf"
 
 ## The font used for out-of-game text.
 define gui.interface_text_font = "fonts/QuinnGothic.ttf"
@@ -116,11 +118,11 @@ define gui.name_xalign = 0.0
 ## The width, height, and borders of the box containing the character's name, or
 ## None to automatically size it.
 define gui.namebox_width = None
-define gui.namebox_height = 118
+define gui.namebox_height = 41
 
 ## The borders of the box containing the character's name, in left, top, right,
 ## bottom order.
-define gui.namebox_borders = Borders(110, 5, 100, 5)
+define gui.namebox_borders = Borders(35, 5, 35, 5)
 
 ## If True, the background of the namebox will be tiled, if False, the
 ## background of the namebox will be scaled.
@@ -211,8 +213,8 @@ define gui.choice_button_borders = Borders(150, 25, 150, 25)
 define gui.choice_button_text_font = gui.text_font
 define gui.choice_button_text_size = gui.text_size
 define gui.choice_button_text_xalign = 0.5
-define gui.choice_button_text_idle_color = gui.accent_color
-define gui.choice_button_text_hover_color = "#ffffff"
+define gui.choice_button_text_idle_color = "#ffffff" #gui.accent_color
+define gui.choice_button_text_hover_color = "#989898"
 define gui.choice_button_text_insensitive_color = u'#8888887f'
 
 
@@ -257,7 +259,7 @@ define gui.skip_ypos = 0
 define gui.notify_ypos = 100
 
 ## The spacing between menu choices.
-define gui.choice_spacing = 10 #33
+define gui.choice_spacing = 33
 
 ## Buttons in the navigation section of the main and game menus.
 define gui.navigation_spacing = 6
@@ -432,29 +434,30 @@ init python:
     def mobile():
 
         ## Font sizes.
-        gui.text_size = 38
-        gui.name_text_size = 50
+        gui.text_size = 45
+        gui.name_text_size = 75
         gui.notify_text_size = 38
         gui.interface_text_size = 40
         gui.button_text_size = 40
         gui.label_text_size = 40
+        gui.title_text_size = 90
 
         ## Adjust the location of the textbox.
         gui.textbox_height = 360
         # gui.name_xpos = 120
-        gui.name_xpos = 350
-        gui.name_ypos = 0
-        gui.dialogue_xpos = 450
+        gui.name_xpos = 250
+        gui.name_ypos = 50
+        gui.dialogue_xpos = 250
         gui.dialogue_ypos = 110
-        gui.dialogue_width = 1000
+        gui.dialogue_width = 1450
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54
 
-        gui.choice_button_width = 600
-        gui.choice_button_height = 125
-        gui.choice_button_borders = Borders(150, 25, 150, 25)
-        gui.choice_button_text_size = 45
+        gui.choice_button_width = 1000
+        gui.choice_button_height = None
+        gui.choice_button_text_size = 75
+        gui.choice_spacing = 10
 
         gui.navigation_spacing = 30
         gui.pref_button_spacing = 15

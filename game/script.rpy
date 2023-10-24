@@ -11,14 +11,13 @@ image intro_text = ParameterizedText(
 
 init python:
     new_game_messages = [
-    "You know the drill.",
     "Did you want to take a different path?",
-    "It's just a game, mostly.",
     "Something tells me you're curious about the other.",
     "Trying to change something?"
     ]
 
 label start:
+    $ _game_menu_screen = None
     $ DisableSkip.start()
     scene black
     with fade

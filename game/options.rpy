@@ -4,6 +4,11 @@
 ## them. Lines beginning with a single '#' mark are commented-out code, and you
 ## may want to uncomment them when appropriate.
 
+init python:
+    config.auto_voice = "audio/voice/{id}.ogg"
+
+default preferences.voice_after_game_menu = True
+default preferences.voice_sustain = True
 
 ## Basics ######################################################################
 
@@ -13,7 +18,7 @@
 ## The _() surrounding the string marks it as eligible for translation.
 
 define config.name = _("Lucid Melody")
-define config.rollback_enabled = config.developer
+define config.rollback_enabled = True
 define config.developer = "auto"
 define config.has_autosave = False
 define config.autosave_on_quit = False
@@ -26,6 +31,7 @@ define config.gl2 = True
 define config.has_sync = False
 
 define config.layers = [ 'master', 'transient', 'screens', 'overlay', 'front' ]
+define config.menu_clear_layers = ["front"]
 
 
 ## Determines if the title given above is shown on the main menu screen. Set

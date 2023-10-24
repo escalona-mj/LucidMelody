@@ -22,6 +22,18 @@ image save_alec_indicator:
     .10
     repeat
 
+image save_nick_indicator:
+    "gui/save_indicator/save_nick_1.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "gui/save_indicator/save_nick_2.png"
+    .10
+    repeat
+
 ## Load and Save screens #######################################################
 ##
 ## These screens are responsible for letting the player save the game and load
@@ -108,6 +120,8 @@ screen file_slots(title):
                             add 'save_dhannica_indicator' xpos 215 ypos -280
                         elif cur_route == 'alec':
                             add 'save_alec_indicator' xpos 215 ypos -280
+                        elif cur_route == 'nick':
+                            add 'save_nick_indicator' xpos 215 ypos -280
 
                         key "save_delete" action FileDelete(slot)
 
