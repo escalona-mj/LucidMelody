@@ -2,15 +2,16 @@ screen dialog(message, ok_action):
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
     modal True
-
     zorder 200
-
     style_prefix "confirm"
-
     add "gui/overlay/confirm.png":
         at transform:
-            alpha 0.0
-            easein .25 alpha 1.0
+            on show:
+                alpha 0.0
+                easein .25 alpha 0.5
+            on hide:
+                alpha 0.5
+                easein .25 alpha 0.0
             
     key "K_RETURN" action [ok_action]
 
@@ -206,3 +207,7 @@ label chooseMale:
         $ Main = "Alec"
     $ mcNameboy = "[Main]"
     return
+
+label after_load:
+    play sound "audio/sfx/phone_notif.ogg"
+    call screen dialog(message="Hint: You can touch the left side of the\nscreen to go back once.", ok_action=Return())

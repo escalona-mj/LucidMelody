@@ -19,7 +19,8 @@ label dhannica_chap1:
             easeout_bounce 1.0 yalign 0.55
             easeout_bounce 1.0 yalign 0.45
             repeat
-    play sound "audio/sfx/cheer.ogg" fadein 5.0 volume 0.2 loop
+    play sound cheer fadein 3.0 volume 0.2 loop
+    
     "The audience roars."
     "You find yourself in an opulent concert hall, with golden chandeliers casting a warm glow above you."
     "The crowd's anticipation is palpable."
@@ -51,33 +52,43 @@ label dhannica_chap1:
     "They were green..."
     "You were lost in the song, in his eyes, having caught a milisecond of his identity."
     "You wonder and think, will this last forever?"
+    play sfx2 alarmloop volume 0.25 loop
     "Maybe..."
+    play sfx2 alarmloop volume 0.5 loop
     "Maybe.."
-    "Maybe.{nw}"
+    play sfx2 alarmloop volume 0.75 loop
+    "{cps=15}Mayb{nw}"
+    stop sfx2
     $ config.skipping = False
     if not config.developer:
         $ renpy.block_rollback()
     window hide(None)
     camera
-    play sound "audio/sfx/alarm.mp3"
+    play sound alarm
     scene black
     pause 4.0
     window auto
     menu:
-        "Get up":
+        "Get up and turn off the alarm":
             scene bg dhannica room with eye_open
             dhannica_i "Ugh... That was such a dream."
             dhannica_i "Why did I set this alarm so early?"
-            play sound "audio/sfx/phone_notif.ogg"
+            play sound stomachgrowl
+            window hide(None)
+            pause 1.25
+            window auto
+            dhannica_i "Oh shoot, I forgot! I never really had dinner last night."
+            play sound phone_notif
             dhannica_i "Huh?"
             menu:
                 "Check my phone":
                     $ usePhone = True
+                    $ beLate = True
                     "You extended your hand to grab your phone."
                     dhannica_i "Eh, it's still early."
                     dhannica_i "I'll go watch something first to pass the time."
                     scene bg dhannica room with long_dissolve
-                    dhannica_i "Wow, this TokTok is really funny~"
+                    dhannica_i "Wow, this short video is really funny~"
                     pause 1.5
                     dhannica_i "Lol, cute kitty."
                     pause 1.5
@@ -87,7 +98,7 @@ label dhannica_chap1:
 
                 "Go eat breakfast":
                     $ eatBreakfast = True
-                    dhannica_i "Nah, I think I've had enough with TokTok."
+                    dhannica_i "Nah, I think I've had enough with social media."
                     "Since it was still early, you made your bed before leaving your bedroom. Once you were done, you changed into your uniform and head downstairs."
 
         "Snooze for another 5 minutes":
@@ -102,7 +113,7 @@ label dhannica_chap1:
             "Slowly forgetting it..."
             "Till there's nothing to remember."
             "Just the empty feeling of loosing something you never had."
-            play sound "audio/sfx/alarm.mp3" fadein 3.0 loop volume 0.6
+            play sound alarm fadein 3.0 loop volume 0.6
             window hide(None)
             pause 3.0
             scene bg dhannica room with eye_open
@@ -112,7 +123,7 @@ label dhannica_chap1:
             "Feeling somewhat disoriented, you extended your hand to grab your phone and checked the time."
             stop sound fadeout 0.2
 
-    if beLate or usePhone:
+    if beLate:
         dhannica "IT'S 7:55?!" with vpunch
         dhannica "SHOOT!"
         if usePhone:
@@ -121,15 +132,15 @@ label dhannica_chap1:
             "You jumped out of bed, changed into your uniform, rushed out the door and head downstairs."
 
     scene black with eye_close
-    play sound "audio/sfx/thump.mp3"
+    play sound thump
     pause 0.5
     scene bg living room with eye_open
     dhannica "Ow!" with vpunch
 
-    if beLate:
+    if beLate or usePhone:
         "Out of the rush, you accidentally bumped your toe on the baluster."
         dhannica "Arrrrgh....!"
-        "You hold your poor pinky toe, checking if you've lost your toenail to the star rail."
+        "You hold your poor pinky toe, checking if you've lost your toenail to the stair rail."
         dhannica_i "Thank God it's still intact."
         dhannica_i "It looks swollen though, and it hurts like hell..."
         "A mental reminder went off in your mind that you realized you're late."
@@ -143,7 +154,7 @@ label dhannica_chap1:
         dhannica "Too late mom."
         girlMom "At least bring an ice pack!"
         dhannica "I'm going, bye~"
-    else:
+    elif eatBreakfast:
         "You accidentally bumped your toe on the baluster."
         dhannica "Arrrrgh...this sucks, what the hell."
         dhannica_i "Why did it have to be on the first day of school?"
@@ -165,19 +176,44 @@ label dhannica_chap1:
     
     "You rushed outside."
     scene black with eye_close
-    play sound "audio/sfx/doorclose.mp3"
+    play sound doorclose
     pause 0.5
     scene bg highway with eye_open
-    "The air around you was chilly, and the birds were all up and singing."
-    "Not sure what the time was, you checked your phone. You just needed to make sure you had time before the class started."
     if beLate:
-        dhannica_i "Dang it, I don't have enough time if I strut around. And as if this toe would get any better. I should just run and endure the pain."
-        dhannica_i "And hopefully I can make it before the class starts."
-        jump school
+        "Running frantically on a Monday morning with nothing to eat and an injured toe can surely do something to you."
+        "You felt weak and drained, when you've barely even started the day."
+        dhannica_i "Hopefully the milk is enough to heal my toe..."
+        "You saw the bus drive right pass you while you're barely catching up because of your current situation."
+        dhannica_i "Oh crap!"
+        "You tried to keep up with the bus as much as you could."
+        "You started to look like a zombie from an apocalypse movie, just limping as fast to get there in time."
+        "As the bus took its momentary halt at the bus stop, tons of people were also waiting to get on."
+        "People who were trying to get out of the bus were even struggling to get out because the people who want to get in are obstructing their path."
+        "Which meant more time for you to be able to '{i}limp{/i}' your way to the bus stop."
+        dhannica_i "Almost there...!"
+        "You're quite confident that you would get there in time, despite the fact that you look like an absolute ninny."
+        "But you started to notice the bus was reaching its capacity, and people were getting fewer by the second."
+        "You started to feel left out."
+        dhannica_i "Wait, please!"
+        "You had to do something..."
+        menu:
+            dhannica_i "Should I just run for it?"
+            "Yes":
+                "#block of code to run"
+            "No":
+                "#block of code to run"
+            
     else:
-        dhannica_i "Guess I should hurry up."
-        dhannica_i "As if this stupid toe would make it easier for me."
-        jump school
+        "The air around you was chilly, and the birds were all up and singing."
+        "Not sure what the time was, you checked your phone. You just needed to make sure you had time before the class started."
+        if beLate:
+            dhannica_i "Dang it, I don't have enough time if I strut around. And as if this toe would get any better. I should just run and endure the pain."
+            dhannica_i "And hopefully I can make it before the class starts."
+            jump school
+        else:
+            dhannica_i "Guess I should hurry up."
+            dhannica_i "As if this stupid toe would make it easier for me."
+            jump school
     
     label school:
         scene bg school with eye_scene

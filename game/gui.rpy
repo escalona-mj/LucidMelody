@@ -228,7 +228,7 @@ define gui.choice_button_text_insensitive_color = u'#8888887f'
 define gui.slot_button_width = 414
 define gui.slot_button_height = 309
 define gui.slot_button_borders = Borders(45, 35, 45, 45)
-define gui.slot_button_text_size = 21
+define gui.slot_button_text_size = 19
 define gui.slot_button_text_xalign = 0.5
 define gui.slot_button_text_idle_color = gui.idle_small_color
 define gui.slot_button_text_selected_idle_color = gui.selected_color
@@ -454,7 +454,7 @@ init python:
         ## Change the size and spacing of various things.
         gui.slider_size = 54
 
-        gui.choice_button_width = 1000
+        gui.choice_button_width = 900
         gui.choice_button_height = None
         gui.choice_button_text_size = 75
         gui.choice_spacing = 10

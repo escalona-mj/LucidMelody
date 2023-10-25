@@ -5,6 +5,7 @@
 ## may want to uncomment them when appropriate.
 
 init python:
+    renpy.music.register_channel("sfx2", mixer="sfx", loop=False, tight=True)
     config.auto_voice = "audio/voice/{id}.ogg"
 
 default preferences.voice_after_game_menu = True
@@ -29,6 +30,8 @@ define _dismiss_pause = config.developer
 define config.menu_include_disabled = False
 define config.gl2 = True
 define config.has_sync = False
+
+default preferences.mobile_rollback_side = "left"
 
 define config.layers = [ 'master', 'transient', 'screens', 'overlay', 'front' ]
 define config.menu_clear_layers = ["front"]

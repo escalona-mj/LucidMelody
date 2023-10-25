@@ -71,6 +71,7 @@ init -50 python:
             if not has_achievement:
                 self.achievement_popup()
                 renpy.play("audio/sfx/notify.ogg", channel="sound")
+                config.skipping = False
 
             #double check achievement sync to avoid syncing issues
             achievement.sync()

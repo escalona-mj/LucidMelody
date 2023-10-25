@@ -162,7 +162,7 @@ style say_label:
     xalign 0.5
     yalign 0.5
     color u"#fff"
-    outlines [(5, "#16161d", 2, 2)]
+    outlines [(10, "#16161d", 2, 2)]
 
 style say_dialogue:
     properties gui.text_properties("dialogue")
@@ -241,20 +241,25 @@ screen choice(items):
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
 
-    add "gui/overlay/menu_overlay.png":
-        at transform:
-            alpha 0.0
-            on show:
-                easein .25 alpha 0.5
-            on hide:
-                easein .25 alpha 0.0
+    # add "gui/overlay/menu_overlay.png":
+    #     at transform:
+    #         alpha 0.0
+    #         on show:
+    #             easein .25 alpha 0.5
+    #         on hide:
+    #             easein .25 alpha 0.0
 
     style_prefix "choice"
 
     hbox:
         at screen_appear
         for i in items:
-            textbutton i.caption action i.action
+            textbutton i.caption action i.action:
+                at transform:
+                    on idle:
+                        easein .25 zoom 1.0
+                    on hover:
+                        easein .25 zoom 1.25
 
 style choice_hbox is hbox
 style choice_button is button
@@ -264,8 +269,9 @@ style choice_button_text:
 
 style choice_hbox:
     xalign 0.5
-    ypos 405
-    yanchor 0.5
+    # ypos 405
+    yalign 0.5
+    # yanchor 0.5
 
     spacing gui.choice_spacing
 
@@ -370,84 +376,89 @@ screen navigation():
         hbox:
             style_prefix "navigation"
             # xpos gui.navigation_xpos
-            xalign 0.5
-            yalign 0.985
 
-            spacing 0
+            if renpy.get_screen("main_menu"):
+                xalign 0.5
+                yalign 0.95
+                spacing 50
+                textbutton "START" action Start()
+                textbutton "LOAD GAME" action ShowMenu("load")
+                textbutton "SETTINGS" action ShowMenu("preferences")
+                textbutton "EXTRAS" action ShowMenu("achievements")
+                textbutton "ABOUT" action ShowMenu("about")
+                textbutton "QUIT" action Quit(confirm=True)
 
-            if main_menu:
-                imagebutton:
-                    auto "gui/navigation/start_%s.png"
-                    foreground Text(_("Start"), style="navigation_btn")
-                    hover_foreground Text(_("Start"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Start"), style="navigation_btn_selected")
-                    action Start()
+            else:
+                xalign 0.5
+                yalign 0.985
 
-            if not main_menu:
-                imagebutton:
-                    auto "gui/navigation/history_%s.png"
-                    foreground Text(_("History"), style="navigation_btn")
-                    hover_foreground Text(_("History"), style="navigation_btn_hover")
-                    selected_foreground Text(_("History"), style="navigation_btn_selected")
-                    action ShowMenu("history")
-                    
-                imagebutton:
-                    auto "gui/navigation/save_%s.png"
-                    foreground Text(_("Save"), style="navigation_btn")
-                    hover_foreground Text(_("Save"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Save"), style="navigation_btn_selected")
-                    action ShowMenu("save")
+                spacing 0
 
-            imagebutton:
-                auto "gui/navigation/load_%s.png"
-                foreground Text(_("Load"), style="navigation_btn")
-                hover_foreground Text(_("Load"), style="navigation_btn_hover")
-                selected_foreground Text(_("Load"), style="navigation_btn_selected")
-                action ShowMenu("load")
-
-            imagebutton:
-                auto "gui/navigation/preferences_%s.png"
-                foreground Text(_("Settings"), style="navigation_btn")
-                hover_foreground Text(_("Settings"), style="navigation_btn_hover")
-                selected_foreground Text(_("Settings"), style="navigation_btn_selected")
-                action ShowMenu("preferences")
-
-            if main_menu:
-                imagebutton:
-                    auto "gui/navigation/extras_%s.png"
-                    foreground Text(_("Extras"), style="navigation_btn")
-                    hover_foreground Text(_("Extras"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Extras"), style="navigation_btn_selected")
-                    action ShowMenu("achievements")
+                if not main_menu:
+                    imagebutton:
+                        auto "gui/navigation/history_%s.png"
+                        foreground Text(_("History"), style="navigation_btn")
+                        hover_foreground Text(_("History"), style="navigation_btn_hover")
+                        selected_foreground Text(_("History"), style="navigation_btn_selected")
+                        action ShowMenu("history")
+                        
+                    imagebutton:
+                        auto "gui/navigation/save_%s.png"
+                        foreground Text(_("Save"), style="navigation_btn")
+                        hover_foreground Text(_("Save"), style="navigation_btn_hover")
+                        selected_foreground Text(_("Save"), style="navigation_btn_selected")
+                        action ShowMenu("save")
 
                 imagebutton:
-                    auto "gui/navigation/about_%s.png"
-                    foreground Text(_("About"), style="navigation_btn")
-                    hover_foreground Text(_("About"), style="navigation_btn_hover")
-                    selected_foreground Text(_("About"), style="navigation_btn_selected")
-                    action ShowMenu("about")
+                    auto "gui/navigation/load_%s.png"
+                    foreground Text(_("Load"), style="navigation_btn")
+                    hover_foreground Text(_("Load"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Load"), style="navigation_btn_selected")
+                    action ShowMenu("load")
 
-            if not main_menu:
                 imagebutton:
-                    auto "gui/navigation/mainmenu_%s.png"
-                    foreground Text(_("Title"), style="navigation_btn")
-                    hover_foreground Text(_("Title"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Title"), style="navigation_btn_selected")
-                    action MainMenu()
+                    auto "gui/navigation/preferences_%s.png"
+                    foreground Text(_("Settings"), style="navigation_btn")
+                    hover_foreground Text(_("Settings"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Settings"), style="navigation_btn_selected")
+                    action ShowMenu("preferences")
 
-            imagebutton:
-                auto "gui/navigation/quit_%s.png"
-                foreground Text(_("Quit"), style="navigation_btn")
-                hover_foreground Text(_("Quit"), style="navigation_btn_hover")
-                selected_foreground Text(_("Quit"), style="navigation_btn_selected")
-                action Quit(confirm=True)
+                if main_menu:
+                    imagebutton:
+                        auto "gui/navigation/extras_%s.png"
+                        foreground Text(_("Extras"), style="navigation_btn")
+                        hover_foreground Text(_("Extras"), style="navigation_btn_hover")
+                        selected_foreground Text(_("Extras"), style="navigation_btn_selected")
+                        action ShowMenu("achievements")
 
-            if _in_replay:
+                    imagebutton:
+                        auto "gui/navigation/about_%s.png"
+                        foreground Text(_("About"), style="navigation_btn")
+                        hover_foreground Text(_("About"), style="navigation_btn_hover")
+                        selected_foreground Text(_("About"), style="navigation_btn_selected")
+                        action ShowMenu("about")
+
+                if not main_menu:
+                    imagebutton:
+                        auto "gui/navigation/mainmenu_%s.png"
+                        foreground Text(_("Title"), style="navigation_btn")
+                        hover_foreground Text(_("Title"), style="navigation_btn_hover")
+                        selected_foreground Text(_("Title"), style="navigation_btn_selected")
+                        action MainMenu()
+
                 imagebutton:
-                    auto "gui/navigation/gallery_%s.png"
-                    foreground Text(_("End Replay"), style="navigation_btn")
-                    hover_foreground Text(_("End Replay"), style="navigation_btn_hover")
-                    action EndReplay(confirm=True)
+                    auto "gui/navigation/quit_%s.png"
+                    foreground Text(_("Quit"), style="navigation_btn")
+                    hover_foreground Text(_("Quit"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Quit"), style="navigation_btn_selected")
+                    action Quit(confirm=True)
+
+                if _in_replay:
+                    imagebutton:
+                        auto "gui/navigation/gallery_%s.png"
+                        foreground Text(_("End Replay"), style="navigation_btn")
+                        hover_foreground Text(_("End Replay"), style="navigation_btn_hover")
+                        action EndReplay(confirm=True)
 
 
     #if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
@@ -459,7 +470,12 @@ style navigation_image_button:
     activate_sound "audio/sfx/click.ogg"
 
 style navigation_button is gui_button
-style navigation_button_text is gui_button_text
+style navigation_button_text:
+    is gui_button_text
+    xalign 0.5
+    font gui.interface_text_font
+    text_align 0.5
+    outlines [(5, "#16161d", 2, 2)]
 
 
 style navigation_btn_hover:
@@ -496,16 +512,6 @@ style navigation_button_text:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#main-menu
 
-transform cloud_loop1:
-        xalign 1.0
-        linear 50 xalign 0.0
-        repeat
-
-transform cloud_loop2:
-        xalign 1.0
-        linear 200 xalign 0.0
-        repeat
-
 transform dandelion_spin:
     xpos 0.5
     ypos 0.5
@@ -515,13 +521,26 @@ transform dandelion_spin:
 
 image dandelions = SnowBlossom(At("gui/menu/dandelion.png", dandelion_spin), count=10, xspeed=(100,250), yspeed=(-150,-90), fast=True, horizontal=False)
 
+init python:
+    def dynamicMCMenu():
+        last_save = renpy.slot_json(renpy.newest_slot())
+        if last_save['route'] == 'dhannica':
+            return "gui/menu/menu_dhannica.png"
+        elif last_save['route'] == 'alec':
+            return "gui/menu/menu_alec.png"
+        elif last_save['route'] == 'common':
+            return
+
+
 screen bg():
     add "gui/menu/sky1.png"
-    add "gui/menu/clouds2.png" at cloud_loop2:
-        pos (0, 0)
+    add "gui/menu/clouds2.png" at Pan((0, 0), (1920, 0), 200, repeat=True)
+    add "gui/menu/clouds1.png" at Pan((0, 0), (1920, 0), 50, repeat=True)
 
-    add "gui/menu/clouds1.png" at cloud_loop1:
-        pos (0, 0)
+    default last_character = dynamicMCMenu()
+    add last_character:
+        xalign 0.875
+        yalign 0.65
 
     add "gui/menu/grasshill.png":
         pos (0, 700)
@@ -534,13 +553,20 @@ screen bg():
         zoom 1.5
 
     if renpy.get_screen("main_menu"):
-        add "gui/menu/vigenette.png":
-            zoom 1.5
-            yalign 0.25
+        # add "gui/menu/vigenette.png":
+        #     zoom 1.5
+        #     yalign 0.5
         add "gui/menu/logo.png":
             xalign 0.5
-            yalign 0.10
-            zoom 0.5
+            yalign 0.5
+            zoom 0.75
+    else:
+        add "gui/menu/logo_white.png":
+            xalign 0.5
+            yalign 0.5
+            zoom 0.75
+            alpha 0.5
+            
 
 screen main_menu():
 
@@ -653,31 +679,22 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     if main_menu:
         use bg
-        add "gui/overlay/confirm.png":
-            alpha 0.65
-        add "gui/menu/logo.png":
-            xalign 0.5
-            yalign 0.5
-            zoom 0.5
-            alpha 0.05
-        add "gui/overlay/game_menu.png"
 
-    else:
-        add "gui/overlay/confirm.png":
-            alpha 0.65
-        add "gui/menu/logo.png":
+    add "gui/overlay/confirm.png":
+        alpha 0.65
+    add "gui/menu/logo_white.png":
             xalign 0.5
             yalign 0.5
-            zoom 0.5
+            zoom 0.75
             alpha 0.05
-        if current_route == "alec":
-            add "overlay_alec"
-        elif current_route == "nick":
-            add "overlay_nick"
-        elif current_route == "dhannica":
-            add "overlay_dhannica"
-        elif current_route == "common":
-            add "gui/overlay/game_menu.png"
+    if current_route == "alec":
+        add "overlay_alec"
+    elif current_route == "nick":
+        add "overlay_nick"
+    elif current_route == "dhannica":
+        add "overlay_dhannica"
+    elif current_route == "common":
+        add "gui/overlay/game_menu.png"
 
     frame:
         style "game_menu_outer_frame"

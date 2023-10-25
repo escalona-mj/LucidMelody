@@ -231,6 +231,15 @@ image camera_flash:
 define audio.titlescreen = "audio/bgm/titlescreen.mp3"
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
 
+define audio.alarm = "audio/sfx/alarm.mp3"
+define audio.alarmloop = "<from 0.160 to 1.113>audio/sfx/alarm.mp3"
+define audio.cheer = "audio/sfx/cheer.ogg"
+define audio.doorclose = "audio/sfx/doorclose.mp3"
+define audio.phone_notif = "audio/sfx/phone_notif.ogg"
+define audio.stomachgrowl = "audio/sfx/stomachgrowl.ogg"
+define audio.thump = "audio/sfx/thump.mp3"
+
+
 
 #############################
 #      LAYERED IMAGES       #
