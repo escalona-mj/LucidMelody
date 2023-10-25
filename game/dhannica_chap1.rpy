@@ -1,9 +1,13 @@
 default beLate = False
 default usePhone = False
 default eatBreakfast = False
+
+default takeIcedTea = False
 default clinic = False
+default refuseTake = False
 
 default alec_likePoints = 0
+default nick_likePoints = 0
 
 label dhannica_chap1:
     call chapter_transition
@@ -148,10 +152,12 @@ label dhannica_chap1:
         girlMom "Honey, aren't you going to eat your breakfast?"
         dhannica "I'm late mom, I have to go!"
         "As soon as you're off, your mother stepped towards you and noticed your groggy appearance."
+        show mom at appear_center
         girlMom "Why are you limping? What's wrong with your foot?"
         dhannica "I stubbed my toe but it's fine, it'll go away in a few minutes."
         girlMom "I don't think you should go to school today, that might get worse if you force yourself to school."
         dhannica "Too late mom."
+        hide mom at appear_center
         girlMom "At least bring an ice pack!"
         dhannica "I'm going, bye~"
     elif eatBreakfast:
@@ -162,6 +168,7 @@ label dhannica_chap1:
         dhannica "This day just started in a bad note. Let's hope it doesn't get worse for the rest of the day."
         "You came down the stairs limping on your one leg, while checking your phone for the notification that had rung a few moments ago."
         "Suddenly, your mother swiftly came through the scene and noticed your groggy appearance."
+        show mom at appear_center
         girlMom "What happened hon?!"
         dhannica "I'm fine mom, I just stubbed my toe on the way down the stairs. I'm fine."
         girlMom "You don't seem fine. I don't think you'd have a pretty good day at school limping like that."
@@ -171,6 +178,7 @@ label dhannica_chap1:
         girlMom "You sure? I can send your teacher a note."
         dhannica "I'd rather go limping to school than be the weird kid who misses the first day, and ends up having no friends for the rest of the school year."
         girlMom "Well, if you say so. Just make sure not to overexert yourself. We don't wanna spend money to the doctors now, do we?"
+        hide mom at appear_center
         dhannica "Yes mom, I won't~"
         dhannica_i "My foot still hurts..."
     
@@ -199,21 +207,202 @@ label dhannica_chap1:
         menu:
             dhannica_i "Should I just run for it?"
             "Yes":
-                "#block of code to run"
+                "You mustered up the courage to suck up the pain and just run for it, and that's exactly what you did."
+                "You didn't care about your appearance, because at that moment, you felt people were staring at you, wondering if you were okay or if they should help you."
+                "However, as you were about to reach the door, it immediately closed, which could only mean one thing: it was already full and the bus had already left."
+                dhannica_i "No..."
+                "A sudden pang of pain rushed through me."
+                dhannica_i "Aaargh!" with vpunch
+                dhannica_i "I forgot about my injury."
+                dhannica_i "Wait, it's been 10 minutes since this happened. Why hasn't it gone away?"
+                "The pain wasn't getting any better. Your decision to overwork myself and recklessly run had only made it worse."
+                "You couldn't even move your foot without feeling like it was being twisted 180 degrees."
+                "You sat down on a nearby bench, contemplating if you could still manage to walk to school."
+                "Glancing to your right, you checked the time for the next bus."
+                dhannica_i "...the next 15 minutes, huh? That's better than walking 30 minutes to school."
+                dhannica_i  "But, good heavens, it still hurt."
+                "As you kept your gaze fixed on the bus schedule, you noticed a presence beside you."
+                "If you hadn't looked up, you might not have even noticed him."
+                "His head appeared to be facing the street, as if he paid no attention to his surroundings, but you caught a glimpse of his eyes directed at your feet."
+                "It's as if he was trying to discreetly assess what was wrong with you."
+                "You decided not to pay him any mind and sat uncomfortably, trying to remain calm and not draw attention to yourself."
+                "Suddenly, a cold sensation touched your skin."
+                "The guy sitting beside you handed something. It appeared harmless at first glance."
+                menu:
+                    "Accept it":
+                        $ nick_likePoints += 5
+                        $ takeIcedTea = True
+                    "Refuse":
+                        pass
+
+                dhannica "Umm... what's this?"
+                nick "Put this on your foot."
+                dhannica "Excuse me?"
+
+                if takeIcedTea:
+                    nick "You sprained yourself?"
+                    dhannica "I uh, stubbed my toe."
+                    "Nick let out a small laugh, but it sounded more like he was mocking."
+                    dhannica_i "Did he just laugh at my situation?"
+                    dhannica "What's so funny?"
+                    nick "Nothing. Here, take it."
+                    "He offers you a cold cylinder."
+                    nick "It's iced tea, the cold will help your foot."
+                    "He applies the cold side of his iced tea drink to the bruised area."
+                    dhannica "H-hey, isn't this a bit too much?"
+                    nick "Just take it, or it'll get worse."
+                    dhannica "But it'll get dirty!"
+                    
+                else:
+                    nick "Something for your foot."
+                    dhannica_i "What the heck is this guy's problem?"
+                    nick "It's just iced tea."
+                    dhannica "I'm not gonna drink that."
+                    nick "Didn't I say it was for your foot?"
+                    "He responded, in a tone of pushiness and arrogance."
+                    dhannica_i "Pushy and arrogant? I can play that game."
+                    dhannica "I barely know you."
+                    "You replied back with dominance."
+                    nick "You soon will."
+                    "He rose from his seat and knelt down to your level, leaving you confused."
+                    dhannica "W-what are you doing?"
+                    nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
+                    "You feel embarassed, after hearing his intentions."
+                    dhannica "A-actually, it was my toe..."
+                    nick "What?"
+                    dhannica "I stubbed my toe because I was running late."
+                    "You explained with a hint of annoyance, which made Nick chuckled. But this only frustrated you even further."
+                    dhannica "What's so funny?"
+                    "He didn't answer. Instead, he removed your shoe and held the tumbler close to your foot."
+                    dhannica "Wait!" with vpunch
+                    nick "What is it?"
+                    dhannica "I-it'll get dirty."
+
+                dhannica "Aren't you bothered that I'm going to get your drink dirty from my foot?"
+
+                if takeIcedTea:
+                    nick "I'm not going to drink it from the side anyway. As long as the mouth of the tumbler isn't soiled, then it's fine."
+                    dhannica_i "Why is he so pushy?"
+                    "Nick retrieved a hand towel from his bag that looked like it could cover the entire surface of a tumbler."
+                    "He took the tumbler from your hands and started wrapping around it."
+                    "You looked at him for a moment, convincing yourself that it was okay as you took it and applied it."
+                    "At first, it hurt, but the pain had subsided."
+                    "As you knelt down, tending to your swollen toe, you couldn't help but notice his shoes."
+                    
+                else:
+                    nick "You have socks on. It's fine."
+                    dhannica "It's not! It'll be gross!"
+                    "With a sigh, Nick seemed to give in and took out a hand towel from his bag. He wrapped it around the tumbler, not too thick that it would insulate the cold, but not too thin that it would hurt."
+                    "Gently, he handled your foot with caution, trying not to cause any pain, and positioned it on his knee."
+                    "He then began patting the cold tumbler to your foot. At first, it hurt, but you soon felt immense relief."
+                    dhannica_i "This is weird."
+                    "He gave you a quick glance, checking if you were alright and if he'd done a good job."
+                    "In that moment, you saw them clearly: his eyes, one blue and the other green. Something about him felt peculiar to you."
+                    "As he tended to your foot, you couldn't help but notice his shoes."
+                    
             "No":
-                "#block of code to run"
+                dhannica_i "I think it's safest to just keep my pace; I know I'll get there anyways."
+                "You continued walking at the same limping pace, enduring the persistent pain in your foot."
+                "As you approached the bus stop, you noticed a commotion between five people rushing onto the bus."
+                "The crowd dwindled to four, then three, then two, until only one person remained."
+                "The last person tried to board, but was rejected by the conductor informing that the bus was already full."
+                "You stood there, observing the commotion, unintentionally fixating on a man berating the driver."
+                "You didn't realize you'd been standing there for 20 seconds, nor did you know why you had."
+                "He finally looked in your direction, and when both of your eyes met, you instinctively glanced at the ground, as if you hadn't already been caught staring."
+                nick "It's rude to stare, what's wrong with you?"
+                "You tried your best not to appear obvious and began to slowly make your way to a nearby bench, attempting not to limp to hide your injury."
+                "The man continued to stand there, waiting for the next bus to arrive."
+                ".{w=1.0}.{w=1.0}.{w=1.0}"
+                dhannica "You can sit down if you'd like. The next bus comes in about 15 minutes anyway."
+                dhannica_i "DID I JUST SAY THAT, [Main!u]?!" with vpunch
+                "Dumbfounded, he joined you on the bench after a few moments."
+                "The rest of the wait was quiet. You didn't pay him much attention, your primary concern being your throbbing toe."
+                "It was becoming increasingly worrisome that such a minor incident was causing so much pain."
+                ".{w=1.0}.{w=1.0}.{w=1.0}"
+                dhannica_i "Sometimes, I don't even know why I hit the snooze button."
+                dhannica "{size=-20}How does anyone wake up after the first ring?{/size}"
+                "As you sat there contemplating your life choices, the next bus had already arrived."
+                "It appeared to be full, but you needed to check if you could squeeze in."
+                "You glanced to see if the man next to you had departed, and it seemed he had. You spotted him boarding the bus."
+                "Upon entering, you quickly realized there were no available seats."
+                dhannica_i "No seats. Great, more fun."
+                "By this point, you had grown accustomed to discomfort. Getting comfortable with it seemed like the only way to endure."
+                dhannica_i "Dang, this sucks. I never should've rushed."
+                "Thank goodness for these handrails as you could barely maintain your balance."
+                "To alleviate your pain, you decided to entertain yourself by gazing out the window, watching people going about their lives without a care in the world."
+                "Sighing, you eventually turned your gaze downward."
+                dhannica_i "It's that guy from the bus stop!"
+                "Your eyes met him, and the only thought that entered your mind was about his eyes."
+                "His gaze lingered for a moment before drifting to the ground."
+                "You hadn't even realized you were staring until you watched him rise from his seat, towering over you."
+                nick "Sit down."
+                "He commanded with a strong yet mellow voice, which your body obeyed, and took a seat."
+                dhannica "U-uhm, okay."
+                "You were quite embarrassed but dared not look at his face."
+                "You draped your hair over your features as you bent down, attempting to conceal your current expression, which was one of complete embarrassment."
+                dhannica "{size=-20}Thank you...{/size}"
+                "He handed you a tumbler, with its exterior dripping wet with pebbles of moist water sliding off of it."
+                nick "Here."
+                nick "Put this on your foot. The cold will help with any swelling."
+                menu:
+                    "Take the tumbler":
+                        $ nick_likePoints += 5
+                        dhannica "Are you sure?"
+                        nick "Just do it."
+                        "You wrapped the bottle with his hand towel, mindful of the fact that a complete stranger had just offered you his personal belonging to alleviate your discomfort."
+                        "He doesn't look like the helping type."
+                        "In fact, he appears as though he doesn't want to interact with anyone."
+                        "You gently applied the cold tumbler to the side of your foot and instantly began to experience relief. Your pinky toe had swelled and grown warm, but this remedy appeared to be reducing the discomfort."
+                        "Leaning down as you tended your injury, you couldn't help but notice his shoes."
+                    "Refuse to take it":
+                        $ refuseTake = True
+                        dhannica "You wouldn't want to let me do that."
+                        nick "Why not?"
+                        dhannica "I mean, you drink from that. Wouldn't you be bothered if I put it on my foot?"
+                        "In response, he retrieved a hand towel from his shoulder bag."
+                        nick "Here, wrap this around the bottle. That'll keep it cleaner, if that's your concern."
+                        dhannica "Please, you don't have to. I'm fine."
+                        "You plead in the most convincing way you could."
+                        "However, your efforts were in vain, as he knelt down and took matters into his own hands."
+                        dhannica "W-what are you doing?"
+                        nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
+                        "As he glanced at you, you saw his eyes clearly."
+                        "Blue and green, a peculiar and intriguing combination."
+                        nick "Remove the shoe."
+                        dhannica "O-oh, right."
+                        "He carefully wrapped the bottle in his hand towel and gently placed your foot on his knee, applying the cold bottle to the sore area."
+                        "You winced at the pain."
+                        dhannica_i "Ow...!" with vpunch
+                        dhannica_i "No wait, that's actually not bad."
+                        "You watched as he continued to gently pat the cool towel on your foot. Your gaze wandered to his features."
+                        "You scrutinized him and couldn't help but notice his shoes."
+
+        if not refuseTake or refuseTake:
+            "They were quite rugged, classic black and white high-top Chuck Taylors."
+            dhannica_i "Hmm...cute."
+            dhannica_i "There are little cute spiderhero webs drawn all over the tips of his shoes." 
+            if refuseTake:
+                $ nick_likePoints += 10
+                "After a few minutes, you began to feel better, albeit only slightly."
+                "Part of you felt embarrassed by how conspicuous your situation with him must have appeared, considering that he had been kneeling for a while."
+                "With the bus being so crowded, you both stood out for sure."
+                "And he seemed to notice it too. It's obvious because of how he promptly stood up, maintaining his composure."
+                nick "Keep that until the cold is gone. Just give it back to me when you're done."
+                window hide
+                pause 4.0
+                window auto
+                "Then, silence came after."
+                "Pretty soon, he disembarked at the next bus stop, leaving me all alone."
+
+
+
             
     else:
         "The air around you was chilly, and the birds were all up and singing."
         "Not sure what the time was, you checked your phone. You just needed to make sure you had time before the class started."
-        if beLate:
-            dhannica_i "Dang it, I don't have enough time if I strut around. And as if this toe would get any better. I should just run and endure the pain."
-            dhannica_i "And hopefully I can make it before the class starts."
-            jump school
-        else:
-            dhannica_i "Guess I should hurry up."
-            dhannica_i "As if this stupid toe would make it easier for me."
-            jump school
+        dhannica_i "Guess I should hurry up."
+        dhannica_i "As if this stupid toe would make it easier for me."
+        jump school
     
     label school:
         scene bg school with eye_scene

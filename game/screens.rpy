@@ -910,6 +910,7 @@ screen preferences():
                         bar value Preference("music volume"):
                             style "bar"
                             tooltip "The loudness of background music throughout the game."
+
                     if config.has_sound:
                         label _("Sound Volume")
                         vbox:
@@ -928,18 +929,26 @@ screen preferences():
                                 style "bar"
                                 tooltip "The loudness of voice throughout the game."
 
+
                             if config.sample_voice:
                                 textbutton _("Test") action Play("voice", config.sample_voice)
-                    null height 35
-                    if config.has_music or config.has_sound or config.has_voice:
-                        null height gui.pref_spacing
 
-                        textbutton _("Mute All"):
-                            action Preference("all mute", "toggle")
-                            tooltip "Mute all sounds."
-                            style "mute_all_button"
-                            foreground "gui/phone/button/sound_[prefix_]foreground.png"
-                            padding (75, 6, 6, 6)
+                    label _("Ambient Volume")
+                    bar value Preference("ambient volume"):
+                        style "bar"
+                        tooltip "The loudness of ambience effects throughout the game."
+
+                    # null height 35
+
+                    # if config.has_music or config.has_sound or config.has_voice:
+                    #     null height gui.pref_spacing
+
+                    textbutton _("Mute All"):
+                        action Preference("all mute", "toggle")
+                        tooltip "Mute all sounds."
+                        style "mute_all_button"
+                        foreground "gui/phone/button/sound_[prefix_]foreground.png"
+                        padding (75, 6, 6, 6)
 
                     
     $ tooltip = GetTooltip()

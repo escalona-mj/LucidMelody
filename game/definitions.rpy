@@ -70,7 +70,7 @@ define alec = DynamicCharacter(
 )
 
 default n_name = "Nick"
-define n = DynamicCharacter(
+define nick = DynamicCharacter(
     'n_name',
     kind=speak,
     color='#4076ff',
