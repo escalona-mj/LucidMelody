@@ -11,10 +11,12 @@ default nick_likePoints = 0
 
 label dhannica_chap1:
     call chapter_transition
+    $ n_name = "???"
+    $ mcNameboy = "???"
     if config.developer == False:
         $ renpy.block_rollback()
     pause 2.0
-    scene bg stage with dissolve
+    scene bg stage with scenefade
     camera:
         subpixel True
         truecenter
@@ -135,10 +137,9 @@ label dhannica_chap1:
         else:
             "You jumped out of bed, changed into your uniform, rushed out the door and head downstairs."
 
-    scene black with eye_close
+    scene black with scenedissolve
     play sound thump
-    pause 0.5
-    scene bg living room with eye_open
+    scene bg living room with scenedissolve
     dhannica "Ow!" with vpunch
 
     if beLate or usePhone:
@@ -183,10 +184,10 @@ label dhannica_chap1:
         dhannica_i "My foot still hurts..."
     
     "You rushed outside."
-    scene black with eye_close
+    scene black with scenedissolve
     play sound doorclose
-    pause 0.5
-    scene bg highway with eye_open
+    scene bg highway with scenedissolve
+    play ambient birds
     if beLate:
         "Running frantically on a Monday morning with nothing to eat and an injured toe can surely do something to you."
         "You felt weak and drained, when you've barely even started the day."
@@ -196,12 +197,12 @@ label dhannica_chap1:
         "You tried to keep up with the bus as much as you could."
         "You started to look like a zombie from an apocalypse movie, just limping as fast to get there in time."
         "As the bus took its momentary halt at the bus stop, tons of people were also waiting to get on."
-        "People who were trying to get out of the bus were even struggling to get out because the people who want to get in are obstructing their path."
         "Which meant more time for you to be able to '{i}limp{/i}' your way to the bus stop."
+        scene bg busstop with scenefade
+        play ambient2 busengine fadein 1.0
         dhannica_i "Almost there...!"
         "You're quite confident that you would get there in time, despite the fact that you look like an absolute ninny."
         "But you started to notice the bus was reaching its capacity, and people were getting fewer by the second."
-        "You started to feel left out."
         dhannica_i "Wait, please!"
         "You had to do something..."
         menu:
@@ -209,6 +210,8 @@ label dhannica_chap1:
             "Yes":
                 "You mustered up the courage to suck up the pain and just run for it, and that's exactly what you did."
                 "You didn't care about your appearance, because at that moment, you felt people were staring at you, wondering if you were okay or if they should help you."
+                play sound bus_open fadeout 3.0
+                stop ambient2 fadeout 3.0
                 "However, as you were about to reach the door, it immediately closed, which could only mean one thing: it was already full and the bus had already left."
                 dhannica_i "No..."
                 "A sudden pang of pain rushed through me."
@@ -301,15 +304,17 @@ label dhannica_chap1:
                     "As he tended to your foot, you couldn't help but notice his shoes."
                     
             "No":
-                dhannica_i "I think it's safest to just keep my pace; I know I'll get there anyways."
+                dhannica_i "You know what? I think it's safest to just keep my pace; I know I'll get there anyways."
                 "You continued walking at the same limping pace, enduring the persistent pain in your foot."
-                "As you approached the bus stop, you noticed a commotion between five people rushing onto the bus."
+                "As you approached the bus stop, you noticed a commotion of people rushing onto the bus."
                 "The crowd dwindled to four, then three, then two, until only one person remained."
+                play sound bus_open fadeout 3.0
                 "The last person tried to board, but was rejected by the conductor informing that the bus was already full."
                 "You stood there, observing the commotion, unintentionally fixating on a man berating the driver."
+                stop ambient2 fadeout 3.0
                 "You didn't realize you'd been standing there for 20 seconds, nor did you know why you had."
                 "He finally looked in your direction, and when both of your eyes met, you instinctively glanced at the ground, as if you hadn't already been caught staring."
-                nick "It's rude to stare, what's wrong with you?"
+                nick "Why are you looking at me like that?"
                 "You tried your best not to appear obvious and began to slowly make your way to a nearby bench, attempting not to limp to hide your injury."
                 "The man continued to stand there, waiting for the next bus to arrive."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
@@ -320,30 +325,37 @@ label dhannica_chap1:
                 "It was becoming increasingly worrisome that such a minor incident was causing so much pain."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
                 dhannica_i "Sometimes, I don't even know why I hit the snooze button."
-                dhannica "{size=-20}How does anyone wake up after the first ring?{/size}"
+                dhannica "{size=-20}How does anyone wake up after the first alarm?{/size}"
+                play ambient2 busengine fadein 2.0
                 "As you sat there contemplating your life choices, the next bus had already arrived."
+                play sound busopen
                 "It appeared to be full, but you needed to check if you could squeeze in."
-                "You glanced to see if the man next to you had departed, and it seemed he had. You spotted him boarding the bus."
-                "Upon entering, you quickly realized there were no available seats."
+                "You glanced to see if the person next to you had departed, and it seemed he had. You spotted him boarding the bus."
+                stop ambient fadeout 1.0
+                stop ambient2 fadeout 1.0
+                scene bg bus with scenefade
+                "Upon entering, you scanned the area for seats."
+                "Unfortunately, all the seats were taken."
                 dhannica_i "No seats. Great, more fun."
+                dhannica_i "Guess I'll be standing then."
                 "By this point, you had grown accustomed to discomfort. Getting comfortable with it seemed like the only way to endure."
                 dhannica_i "Dang, this sucks. I never should've rushed."
-                "Thank goodness for these handrails as you could barely maintain your balance."
+                dhannica_i "Thank goodness for these handrails. I could barely maintain my balance."
                 "To alleviate your pain, you decided to entertain yourself by gazing out the window, watching people going about their lives without a care in the world."
                 "Sighing, you eventually turned your gaze downward."
-                dhannica_i "It's that guy from the bus stop!"
+                dhannica_i "It's that guy before from the bus stop!"
                 "Your eyes met him, and the only thought that entered your mind was about his eyes."
-                "His gaze lingered for a moment before drifting to the ground."
+                "He was gazing at you, with his laid back posture and his bleak expression before drifting his eyes to the ground."
                 "You hadn't even realized you were staring until you watched him rise from his seat, towering over you."
                 nick "Sit down."
                 "He commanded with a strong yet mellow voice, which your body obeyed, and took a seat."
                 dhannica "U-uhm, okay."
                 "You were quite embarrassed but dared not look at his face."
-                "You draped your hair over your features as you bent down, attempting to conceal your current expression, which was one of complete embarrassment."
+                "You draped your hair over your features as you bent down, concealing your expression, which was complete utter embarrassment."
                 dhannica "{size=-20}Thank you...{/size}"
                 "He handed you a tumbler, with its exterior dripping wet with pebbles of moist water sliding off of it."
                 nick "Here."
-                nick "Put this on your foot. The cold will help with any swelling."
+                nick "Put this on your foot. The cold will help your swelling."
                 menu:
                     "Take the tumbler":
                         $ nick_likePoints += 5
@@ -356,7 +368,7 @@ label dhannica_chap1:
                         "Leaning down as you tended your injury, you couldn't help but notice his shoes."
                     "Refuse to take it":
                         $ refuseTake = True
-                        dhannica "You wouldn't want to let me do that."
+                        dhannica "You wouldn't want me to do that."
                         nick "Why not?"
                         dhannica "I mean, you drink from that. Wouldn't you be bothered if I put it on my foot?"
                         "In response, he retrieved a hand towel from his shoulder bag."
@@ -392,11 +404,8 @@ label dhannica_chap1:
                 pause 4.0
                 window auto
                 "Then, silence came after."
-                "Pretty soon, he disembarked at the next bus stop, leaving me all alone."
+                "Pretty soon, he disembarked at the next bus stop, and I never saw him again."
 
-
-
-            
     else:
         "The air around you was chilly, and the birds were all up and singing."
         "Not sure what the time was, you checked your phone. You just needed to make sure you had time before the class started."
@@ -405,7 +414,7 @@ label dhannica_chap1:
         jump school
     
     label school:
-        scene bg school with eye_scene
+        scene bg school with scenefade
         $ welcome.grant()
         "You finally reached the school, walking through the gates limping on your other foot."
         dhannica_i "I look like a loser. That's just great."

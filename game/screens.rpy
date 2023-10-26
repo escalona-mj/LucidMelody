@@ -116,7 +116,7 @@ screen say(who, what):
                 style "namebox"
                 text who id "who"
 
-        text what id "what" at textdissolve
+        text what id "what" #at textdissolve
 
     use quick_menu
     ## If there's a side image, display it above the text. Do not display on the
@@ -268,6 +268,7 @@ style choice_button_text:
     yalign 0.5
 
 style choice_hbox:
+    xanchor 0.5
     xalign 0.5
     # ypos 405
     yalign 0.5
@@ -282,7 +283,7 @@ style choice_button is default:
 
 style choice_button_text is default:
     properties gui.button_text_properties("choice_button")
-    outlines [(10, "#16161d", 2, 2)]
+    # outlines [(10, "#16161d", 2, 2)]
 
 #     style_prefix "choice"
 
@@ -528,14 +529,14 @@ init python:
             return "gui/menu/menu_dhannica.png"
         elif last_save['route'] == 'alec':
             return "gui/menu/menu_alec.png"
-        elif last_save['route'] == 'common':
-            return
+        elif last_save['route'] == 'common' or last_save['route'] == None:
+            pass
 
 
 screen bg():
     add "gui/menu/sky1.png"
-    add "gui/menu/clouds2.png" at Pan((0, 0), (1920, 0), 200, repeat=True)
-    add "gui/menu/clouds1.png" at Pan((0, 0), (1920, 0), 50, repeat=True)
+    add "gui/menu/clouds2.png" at Pan((1920, 0), (0, 0), 200, repeat=True)
+    add "gui/menu/clouds1.png" at Pan((1920, 0), (0, 0), 50, repeat=True)
 
     default last_character = dynamicMCMenu()
     add last_character:
@@ -804,7 +805,8 @@ style game_menu_label:
 style game_menu_label_text:
     font gui.game_menu_label_font
     size gui.title_text_size
-    color gui.accent_color
+    outlines [(10, "#6667ab", 2, 2)]
+    # color gui.accent_color
     yalign 0.5
 
 style return_button:

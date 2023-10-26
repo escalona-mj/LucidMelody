@@ -38,7 +38,7 @@ screen dialog(message, ok_action):
 # CUSTOM NAME INPUT SCREEN #
 ############################
 
-default Main = persistent.playername
+default Main = ''
 
 #custom name input
 screen name_input(ok_action, back_action):
@@ -208,6 +208,6 @@ label chooseMale:
     $ mcNameboy = "[Main]"
     return
 
-label after_load:
-    play sound "audio/sfx/phone_notif.ogg"
-    call screen dialog(message="Hint: You can touch the left side of the\nscreen to go back once.", ok_action=Return())
+# label after_load:
+#     play sound "audio/sfx/phone_notif.ogg"
+#     call screen dialog(message="Hint: You can touch the left side of the\nscreen to go back once.", ok_action=Return())

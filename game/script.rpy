@@ -20,7 +20,7 @@ label start:
     $ _game_menu_screen = None
     $ DisableSkip.start()
     scene black
-    with fade
+    with scenefade
 
     if persistent.first_gameplay == False:
         show intro_text "Before you start, the game would like to clarify some things." with dissolve
@@ -32,7 +32,7 @@ label start:
         pause 3.0
         hide intro_text with dissolve
 
-    call screen chooseMC with fade
+    call screen chooseMC
     $ persistent.first_gameplay = True
 
     pause 1.0

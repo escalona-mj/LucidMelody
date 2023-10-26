@@ -105,6 +105,14 @@ image bg living room:
 
 image bg school:
     im.Blur("images/bg/school.jpg", 2.5)
+
+image bg busstop:
+    im.Blur("images/bg/busstop.jpg", 2.5)
+
+image bg bus:
+    im.Blur("images/bg/bus.jpg", 2.5)
+
+image mom = "images/characters/mom.png"
 #############################
 #       TRANSFORMS          #
 #############################
@@ -176,6 +184,61 @@ transform dizzy:
         ease_quad 1.0 blur 10
         repeat
 
+transform scenefade(new_widget, old_widget):
+    delay 1.5
+
+    contains:
+        pause 0.5
+        new_widget
+        subpixel True
+        truecenter
+        zoom 1.03 alpha 0.0
+        easein 1.0 alpha 1.0 zoom 1.0
+
+    contains:
+        old_widget
+        subpixel True
+        truecenter
+        zoom 1.0 alpha 1.0
+        easein 0.5 zoom 1.03 alpha 0.0
+        pause 1.0
+
+transform scenefadehold(new_widget, old_widget):
+    delay 2.5
+
+    contains:
+        pause 1.5
+        new_widget
+        subpixel True
+        truecenter
+        zoom 1.03 alpha 0.0
+        ease 1.0 alpha 1.0 zoom 1.0
+
+    contains:
+        old_widget
+        subpixel True
+        truecenter
+        zoom 1.0 alpha 1.0
+        ease 0.5 zoom 1.03 alpha 0.0
+        pause 1.5
+
+transform scenedissolve(new_widget, old_widget):
+    delay 0.8
+
+    contains:
+        new_widget
+        subpixel True
+        truecenter
+        zoom 1.03 alpha 0.0
+        ease 0.7 alpha 1.0 zoom 1.0
+
+    contains:
+        old_widget
+        subpixel True
+        truecenter
+        zoom 1.0 alpha 1.0
+        ease 0.7 alpha 0.0 zoom 1.03
+
 #############################
 #        TRANSITIONS        #
 #############################
@@ -228,9 +291,12 @@ image camera_flash:
 #############################
 #           AUDIO           #
 #############################
+#BGM
 define audio.titlescreen = "audio/bgm/titlescreen.mp3"
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
+define audio.bgm1 = "audio/bgm/bgm1.mp3"
 
+#SFX
 define audio.alarm = "audio/sfx/alarm.mp3"
 define audio.alarmloop = "<from 0.160 to 1.113>audio/sfx/alarm.mp3"
 define audio.cheer = "audio/sfx/cheer.ogg"
@@ -238,6 +304,11 @@ define audio.doorclose = "audio/sfx/doorclose.mp3"
 define audio.phone_notif = "audio/sfx/phone_notif.ogg"
 define audio.stomachgrowl = "audio/sfx/stomachgrowl.ogg"
 define audio.thump = "audio/sfx/thump.mp3"
+define audio.busopen = "audio/sfx/bus_open.ogg"
+
+#AMBIENT
+define audio.birds = "audio/ambient/birds.ogg"
+define audio.busengine = "audio/ambient/bus_engine.ogg" 
 
 
 

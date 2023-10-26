@@ -132,7 +132,7 @@ image locked_achievement = "gui/achievements/icons/locked.png"
 define welcome = Achievement(
     name=_("Welcome to STI!"),
     id="welcome",
-    description=_("Start a new game for the very first time."),
+    description=_("amogus"),
     unlocked_image="gui/achievements/icons/start.png",
     locked_image="locked_achievement",
 )
