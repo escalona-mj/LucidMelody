@@ -1,5 +1,4 @@
 ﻿default current_route = 'common'
-default chapter = 0
 default persistent.first_gameplay = False
 
 image intro_text = ParameterizedText(
@@ -32,13 +31,14 @@ label start:
         pause 3.0
         hide intro_text with dissolve
 
-    call screen chooseMC
+    call screen chooseMC with fade
     $ persistent.first_gameplay = True
 
     pause 1.0
 
     stop music fadeout 3.0
- 
+    if not config.developer:
+        $ renpy.block_rollback()
     show intro_text "The story adapts on the choices you make.\nIt is tailored by how you play." with dissolve
     pause 5.0
     hide intro_text with dissolve

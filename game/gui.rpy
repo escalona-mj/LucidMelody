@@ -299,9 +299,6 @@ define gui.skip_frame_borders = Borders(25, 25, 75, 30)
 ## The frame that is used as part of the notify screen.
 define gui.notify_frame_borders = Borders(25, 25, 60, 25)
 
-define gui.achievement_frame_borders = Borders(25, 25, 25, 25)
-
-
 ## Should frame backgrounds be tiled?
 define gui.frame_tile = False
 
@@ -436,8 +433,8 @@ init python:
     def mobile():
 
         ## Font sizes.
-        gui.text_size = 45
-        gui.name_text_size = 75
+        gui.text_size = 40
+        gui.name_text_size = 60
         gui.notify_text_size = 38
         gui.interface_text_size = 40
         gui.button_text_size = 40
@@ -446,12 +443,11 @@ init python:
 
         ## Adjust the location of the textbox.
         gui.textbox_height = 360
-        # gui.name_xpos = 120
-        gui.name_xpos = 250
-        gui.name_ypos = 50
-        gui.dialogue_xpos = 250
-        gui.dialogue_ypos = 110
-        gui.dialogue_width = 1450
+        gui.name_xpos = 350
+        gui.name_ypos = 110
+        gui.dialogue_xpos = 350
+        gui.dialogue_ypos = 160
+        gui.dialogue_width = 1500
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54

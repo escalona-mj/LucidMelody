@@ -4,6 +4,13 @@
 ## them. Lines beginning with a single '#' mark are commented-out code, and you
 ## may want to uncomment them when appropriate.
 
+## This code ensures that the quick_menu screen is displayed in-game, whenever
+## the player has not explicitly hidden the interface.
+# init python:
+    # if config.developer:
+    #     config.overlay_screens.append("quick_menu")
+
+
 init python:
     renpy.music.register_channel("ambient", mixer="ambient", loop=True, tight=True)
     renpy.music.register_channel("ambient2", mixer="ambient", loop=True, tight=True)
@@ -12,6 +19,32 @@ init python:
 
 default preferences.voice_after_game_menu = True
 default preferences.voice_sustain = True
+
+# init python:
+#     def replace_text(s):
+#         s = s.replace("Fuck", u'F***') # apostrophe
+#         s = s.replace('--', u'\u2014') # em dash
+#         s = s.replace('...', u'\u2026') # ellipsis
+#         return s
+#     config.replace_text = replace_text
+
+# define config.replace_text = replace_text
+
+
+default persistent.comma_pause = False
+
+init python:
+    import re
+    def comma_pause(s):
+        if persistent.comma_pause:
+            s = s.replace(", ",", {w=0.3}")
+            return s
+        else:
+            return s
+    
+define config.say_menu_text_filter = comma_pause
+
+define config.transparent_tile = False
 
 ## Basics ######################################################################
 
@@ -22,22 +55,29 @@ default preferences.voice_sustain = True
 
 define config.name = _("Lucid Melody")
 define config.rollback_enabled = True
-define config.developer = "auto"
+define config.developer = True #DEV BUILD
 define config.has_autosave = False
 define config.autosave_on_quit = False
 define config.autosave_slots = 0
 define config.has_quicksave = False
 define config.quicksave_slots = 0
 define _dismiss_pause = config.developer
+define _game_menu_screen = 'emptymenu'
 define config.menu_include_disabled = False
+define config.minimum_presplash_time = 0.0
 define config.gl2 = True
+define config.gl_resize = False
 define config.has_sync = False
 
-default preferences.mobile_rollback_side = "left"
+define config.gestures = {
+    "e" : "rollback",
+    "s" : "game_menu"}
+define config.dispatch_gesture = None
 
-define config.layers = [ 'master', 'transient', 'screens', 'overlay', 'front' ]
-define config.menu_clear_layers = ["front"]
+define config.layers = [ 'master', 'choice_menu', 'transient', 'screens', 'overlay', 'front' ]
+# define config.menu_clear_layers = ["front"]
 
+define config.choice_layer = "choice_menu"
 
 ## Determines if the title given above is shown on the main menu screen. Set
 ## this to False to hide the title.
@@ -54,6 +94,8 @@ define config.version = "1.0"
 ## triple-quotes, and leave a blank line between paragraphs.
 
 define gui.about = _p("""
+Luigi more like lugi ako :C
+
 """)
 
 
@@ -100,7 +142,7 @@ define config.main_menu_music = audio.titlescreen
 define config.enter_transition = Dissolve(0.2)
 define config.exit_transition = Dissolve(0.2)
 
-define config.end_splash_transition = scenefade
+define config.end_splash_transition = scenedissolve
 
 define config.enter_yesno_transition = Dissolve(0.2)
 define config.exit_yesno_transition = Dissolve(0.2)
@@ -118,7 +160,7 @@ define config.after_load_transition = Dissolve(0.2)
 
 ## Used when entering the main menu after the game has ended.
 
-define config.end_game_transition = scenefade
+define config.end_game_transition = scenedissolve
 
 
 ## A variable to set the transition used when the game starts does not exist.
@@ -142,7 +184,6 @@ define config.window = "auto"
 
 define config.window_show_transition = Dissolve(.2)
 define config.window_hide_transition = Dissolve(.2)
-
 
 ## Preference defaults #########################################################
 

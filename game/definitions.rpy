@@ -26,7 +26,7 @@ init python:
 define dhannica_i = Character(
     '[Main]',
     ctc="ctc",
-    ctc_position="nestled",
+    ctc_position="fixed",
     what_prefix='{i}',
     what_suffix='{/i}',
     color='#ff9b9b'
@@ -35,7 +35,7 @@ define dhannica_i = Character(
 define alec_i = Character(
     '[Main]',
     ctc="ctc",
-    ctc_position="nestled",
+    ctc_position="fixed",
     what_prefix='{i}',
     what_suffix='{/i}',
     color='#21a733'
@@ -45,7 +45,7 @@ define speak = Character(
     what_prefix='"',
     what_suffix='"',
     ctc="ctc",
-    ctc_position="nestled"
+    ctc_position="fixed"
 )
 
 default mcNamegirl = ""
@@ -79,13 +79,12 @@ define nick = DynamicCharacter(
 
 define narrator = Character(
     ctc="ctc",
-    ctc_position='nestled'
+    ctc_position='fixed'
 )
 
 define d_singer = Character(
     'Singer',
-    kind=speak,
-    color='#fff'
+    kind=speak
     )
 
 #############################
@@ -120,8 +119,15 @@ image mom = "images/characters/mom.png"
 # Transform that blurs the background when opening screens.
 transform withBlur:
     blur 0
-    easein .25 blur 30
+    blur 30
 transform noBlur:
+    blur 30
+    blur 0
+
+transform dialogue_withBlur:
+    blur 0
+    easein .25 blur 30
+transform dialogue_noBlur:
     blur 30
     easein .25 blur 0
 
@@ -183,6 +189,18 @@ transform dizzy:
         ease_quad 1.0 blur 0
         ease_quad 1.0 blur 10
         repeat
+
+transform reset_dizzy:
+    parallel:
+        ease_quad 1.0 xoffset 0
+    parallel:
+        ease_quad 1.0 yoffset 0
+    parallel:
+        ease_quad 1.0 blur 0
+    parallel:
+        ease_quad 1.0 rotate 0
+    parallel:
+        ease_quad 1.0 zoom 1.0
 
 transform scenefade(new_widget, old_widget):
     delay 1.5
@@ -251,13 +269,6 @@ init python:
 # define config.say_attribute_transition_layer = "master"
 # init:
 #     $ fastdiv = {"master" : wipeleft}
-
-define wipeleft = ImageDissolve("images/transitions/wipeleft.png", 0.5, ramplen=64)
-define wipeleft_scene = MultipleTransition([
-    False, ImageDissolve("images/transitions/wipeleft.png", 0.5, ramplen=64),
-    Solid("#000"), Pause(0.25),
-    Solid("#000"), ImageDissolve("images/transitions/wipeleft.png", 0.5, ramplen=64),
-    True])
     
 define long_dissolve = MultipleTransition([
     False, Dissolve(1.5),
@@ -273,14 +284,6 @@ define eye_scene = MultipleTransition([
     False, ImageDissolve("images/transitions/eyes.png", 0.25, ramplen=128, reverse=True),
     Solid("#000"), Pause(0.5),
     Solid("#000"), ImageDissolve("images/transitions/eyes.png", 0.25 ,ramplen=128),
-    True])
-
-define wipeleft_menu = ImageDissolve("images/transitions/wipeleft.png", 0.10, ramplen=64)
-define wipeleft_menu_reverse = ImageDissolve("images/transitions/wipeleft.png", 0.10, reverse=True, ramplen=64)
-define wipeleft_menu_afterLoad = MultipleTransition([
-    False, ImageDissolve("images/transitions/wipeleft.png", 0.10, ramplen=64),
-    Solid("#000"), Pause(0.25),
-    Solid("#000"), ImageDissolve("images/transitions/wipeleft.png", 0.10, ramplen=64),
     True])
 
 image camera_flash:
@@ -299,7 +302,6 @@ define audio.bgm1 = "audio/bgm/bgm1.mp3"
 #SFX
 define audio.alarm = "audio/sfx/alarm.mp3"
 define audio.alarmloop = "<from 0.160 to 1.113>audio/sfx/alarm.mp3"
-define audio.cheer = "audio/sfx/cheer.ogg"
 define audio.doorclose = "audio/sfx/doorclose.mp3"
 define audio.phone_notif = "audio/sfx/phone_notif.ogg"
 define audio.stomachgrowl = "audio/sfx/stomachgrowl.ogg"
@@ -307,16 +309,34 @@ define audio.thump = "audio/sfx/thump.mp3"
 define audio.busopen = "audio/sfx/bus_open.ogg"
 
 #AMBIENT
+define audio.cheer = "audio/sfx/cheer.ogg"
 define audio.birds = "audio/ambient/birds.ogg"
 define audio.busengine = "audio/ambient/bus_engine.ogg" 
-
-
 
 #############################
 #      LAYERED IMAGES       #
 #############################
 
 ###### DHANNICA ######
+
+image side alec = LayeredImageMask("alec",
+    Transform(crop=(365, 80, 300, 300)),
+    background="gui/side_image/alec_bg_sideImage.png",
+    mask="gui/side_image/mask_sideImage.png",
+    foreground="gui/side_image/fg_sideImage.png")
+
+image side dhannica = LayeredImageMask("dhannica",
+    Transform(crop=(310, 120, 300, 300)),
+    background="gui/side_image/dhannica_bg_sideImage.png",
+    mask="gui/side_image/mask_sideImage.png",
+    foreground="gui/side_image/fg_sideImage.png")
+
+image side nick = LayeredImageMask("nick",
+    Transform(crop=(340, 25, 330, 300)),
+    background="gui/side_image/nick_bg_sideImage.png",
+    mask="gui/side_image/mask_sideImage.png",
+    foreground="gui/side_image/fg_sideImage.png")
+
 
 image dhannica_blink:
     "images/characters/dhannica/face/eyes_normal.png"

@@ -1,6 +1,6 @@
 screen dialog(message, ok_action):
-    on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
-    on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
+    on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="master")
+    on "hide" action Function(renpy.show_layer_at, dialogue_noBlur, layer="master")
     modal True
     zorder 200
     style_prefix "confirm"
@@ -12,7 +12,7 @@ screen dialog(message, ok_action):
             on hide:
                 alpha 0.5
                 easein .25 alpha 0.0
-            
+
     key "K_RETURN" action [ok_action]
 
     frame at screen_appear:
@@ -43,12 +43,12 @@ default Main = ''
 #custom name input
 screen name_input(ok_action, back_action):
     dismiss action back_action
-    on "show" action Function(renpy.show_layer_at, withBlur, layer="screens")
-    on "hide" action Function(renpy.show_layer_at, noBlur, layer="screens")
+    on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="screens")
+    on "hide" action Function(renpy.show_layer_at, dialogue_noBlur, layer="screens")
     zorder 200
     style_prefix "confirm"
     key "K_RETURN" action [ok_action]
-    
+
     frame:
         modal True
         at screen_appear
@@ -78,7 +78,7 @@ screen name_input(ok_action, back_action):
             xalign 0.5
             yalign 0.5
             size 69
-            
+
 init python:
     def SavePlayerName():
         persistent.playername = Main
@@ -163,7 +163,7 @@ screen chooseMC():
             action (Show(screen='name_input',_layer="front", ok_action=(Hide(screen='name_input',_layer="front"),Call("chooseFemale")), back_action=Hide(screen='name_input',_layer="front")))
             tooltip "I'm a girl."
             focus_mask True
-            activate_sound "audio/sfx/click.ogg"
+            activate_sound "audio/sfx/click.mp3"
             at showButtons(-0.5, 0.0)
         imagebutton:
             xalign 1.0
@@ -172,7 +172,7 @@ screen chooseMC():
             action (Show(screen='name_input',_layer="front", ok_action=(Hide(screen='name_input',_layer="front"),Call("chooseMale")), back_action=Hide(screen='name_input',_layer="front")))
             tooltip "I'm a boy."
             focus_mask True
-            activate_sound "audio/sfx/click.ogg"
+            activate_sound "audio/sfx/click.mp3"
             at showButtons(1.5, 1.0)
 
     $ tooltip = GetTooltip(screen="chooseMC")
@@ -207,6 +207,97 @@ label chooseMale:
         $ Main = "Alec"
     $ mcNameboy = "[Main]"
     return
+
+screen emptymenu:
+    tag menu
+
+    use game_menu(""):
+        vbox:
+            xalign 0.5
+            yalign 0.5
+            text "Chapter [chapter]":
+                size 90
+                xalign 0.5
+                color '#fff'
+                outlines [(3, "#000", 2, 2)]
+            text "{0}".format(chapter_list[current_chapter]):
+                size 70
+                xalign 0.5
+                color '#fff'
+                outlines [(3, "#000", 2, 2)]
+
+screen controls_modal():
+    dismiss action Hide("controls_modal")
+
+    style_prefix "controls"
+
+    add "gui/overlay/confirm.png":
+        at transform:
+            on show:
+                alpha 0.0
+                easein .25 alpha 0.5
+            on hide:
+                alpha 0.5
+                easein .25 alpha 0.0
+
+    frame at screen_appear:
+        modal True
+        xalign 0.5
+        yalign 0.5
+        vbox:
+            spacing 25
+            text "Help" style_prefix "controls_title"
+
+            hbox:
+                spacing 25
+                hbox:
+                    label "Tap"
+                    add "gui/tap.png":
+                        yalign 0.5
+                text "Advances dialogue."
+
+            hbox:
+                spacing 25
+                hbox:
+                    label "Swipe Right"
+                    add "gui/swipe_right.png"
+                text "Rolls back to earlier dialogue."
+
+            hbox:
+                spacing 25
+                hbox:
+                    label "Swipe Down"
+                    add "gui/swipe_down.png":
+                        yalign 0.5
+                text "Accesses the game menu\nwhile in-game."
+
+            null height 25
+
+            hbox:
+                xalign 0.5
+                text "{i}Tip: Touching the small ":
+                    size 30
+                add "gui/purple_ctc.png":
+                    yalign 0.5
+                text "{i} will toggle the quick menu.":
+                    size 30
+
+style controls_frame:
+    padding gui.confirm_frame_borders.padding
+
+style controls_title_text:
+    is game_menu_label_text
+    size 60
+
+style controls_label:
+    is help_label
+
+style controls_label_text:
+    is help_label_text
+    color gui.accent_color
+    font gui.name_text_font
+
+
 
 # label after_load:
 #     play sound "audio/sfx/phone_notif.ogg"

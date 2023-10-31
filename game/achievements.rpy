@@ -70,7 +70,7 @@ init -50 python:
             #show a toast if this is the first time
             if not has_achievement:
                 self.achievement_popup()
-                renpy.play("audio/sfx/notify.ogg", channel="sound")
+                renpy.play("audio/sfx/notify.mp3", channel="sfx2")
                 config.skipping = False
 
             #double check achievement sync to avoid syncing issues
@@ -129,34 +129,58 @@ image locked_achievement = "gui/achievements/icons/locked.png"
 # ACHIEVEMENTS #
 ################
 
+define dream = Achievement(
+    name=_("Lucid Melody"),
+    id="dream",
+    description=_("Complete dreaming."),
+    unlocked_image="gui/achievements/icons/start.png",
+    locked_image="locked_achievement",
+)
+
 define welcome = Achievement(
     name=_("Welcome to STI!"),
     id="welcome",
-    description=_("amogus"),
+    description=_("Get to the school."),
     unlocked_image="gui/achievements/icons/start.png",
     locked_image="locked_achievement",
 )
 
-define achievement2 = Achievement(
-    name=_("2nd Achievement"),
-    id="achievement2",
-    description=_("Testing for granting multiple achievements."),
-    unlocked_image="gui/achievements/icons/end.png",
-    locked_image="locked_achievement",
-)
-
-define erol_ach = Achievement(
-    name=_("Erol Corwyn"),
-    id="erol_ach",
-    description=_("Manalo"),
+define mainMenu_ach = Achievement(
+    name=_("Scenery Lover"),
+    id="mainMenu_ach",
+    description=_("Stay on the main menu screen for quite some time."),
     unlocked_image="gui/achievements/icons/start.png",
     locked_image="locked_achievement",
 )
 
-define kaia_ach = Achievement(
-    name=_("Kaia"),
-    id="kaia_ach",
-    description=_("Buenafe"),
+define independent = Achievement(
+    name=_("Independent"),
+    id="independent",
+    description=_("Get through the game without dating either of the love interests."),
+    unlocked_image="gui/achievements/icons/start.png",
+    locked_image="locked_achievement",
+)
+
+define girlArc = Achievement(
+    name=_("Dhannica's Tribute"),
+    id="girlArc",
+    description=_("Finish the game during her route."),
+    unlocked_image="gui/achievements/icons/start.png",
+    locked_image="locked_achievement",
+)
+
+define boyArc = Achievement(
+    name=_("Alec's Tribute"),
+    id="boyArc",
+    description=_("Finish the game during his route."),
+    unlocked_image="gui/achievements/icons/start.png",
+    locked_image="locked_achievement",
+)
+
+define nickArc = Achievement(
+    name=_("Nick's Intervention"),
+    id="nickArc",
+    description=_("Finish the game by choosing Nick over Alec during Dhannica's route."),
     unlocked_image="gui/achievements/icons/start.png",
     locked_image="locked_achievement",
 )
@@ -168,29 +192,33 @@ define kaia_ach = Achievement(
 transform achievement_transform():
     on show:
         xpos 1.0 xanchor 0.0
-        easein_back 1.0 xpos 1.0 xanchor 1.0
+        easein .5 xpos 1.0 xanchor 1.0
     on hide, replaced:
-        easeout_back 1.0 xpos 1.0 xanchor 0.0
+        xpos 1.0 xanchor 1.0 yoffset 0 alpha 1.0
+        easein 0.5 yoffset -100 alpha 0.0
 
 screen achievement_toast(a, tag, num):
 
     zorder 500
     #the offset that achievement should take vertically each granted achievement as to not overlap one another
     #num gets increased each granted achievement
-    default achievement_yoffset = num*185
+    default achievement_yoffset = num*130
 
     style_prefix 'achievement_toast'
 
     frame:
         at achievement_transform
         yoffset achievement_yoffset
-        has hbox
-        yalign 0.5
-        add a.unlocked_image fit "contain" ysize 150
-        vbox:
-            yalign 0.5
-            label a.name style "achievements_label"
-            text a.description style "achievements_text"
+
+        hbox:
+            spacing 15
+            vbox:
+                yalign 0.5
+                add a.unlocked_image fit "contain" ysize 100
+            vbox:
+                yalign 0.5
+                label a.name
+                text a.description
 
     #hide the screen after 5 seconds
     timer 5.0 action [Hide("achievement_toast"), Show('finish_animating_achievement', num=num, _tag=tag+"1")]
@@ -198,6 +226,16 @@ screen achievement_toast(a, tag, num):
 style achievement_toast_frame:
     background Frame("gui/achievements/achievement_toast.png", gui.achievement_frame_borders, tile=gui.frame_tile)
     padding (20, 20, 50, 20)
+
+style achievement_toast_label_text:
+    is achievements_label_text
+    color '#fff'
+    outlines [(0, "#000", 0, 0)]
+    
+
+style achievement_toast_text:
+    is achievements_text
+    color '#fff'
 
 #######################
 # ACHIEVEMENT GALLERY #
@@ -213,12 +251,16 @@ screen achievements():
             spacing 5
             for a in Achievement.all_achievements:
                 button:
+                    if a.has():
+                        background Frame("gui/achievements/unlocked_achievement_frame.png", gui.achievement_frame_borders, tile=gui.frame_tile)
+                    else:
+                        pass
                     if config.developer:
                         action a.Toggle()
                     hbox:
                         yalign 0.5
-                        spacing 15
-                        add a.ach_img yalign 0.5
+                        spacing 30
+                        add a.ach_img yalign 0.5 fit "contain" ysize 125
 
                         vbox:
                             yalign 0.5
@@ -232,15 +274,15 @@ screen achievements():
                 # null height 10
         
 style achievements_vbox is vbox
-style achievements_frame is empty
 
 style achievements_label_text: #unlocked achievement name
     yalign 0.5
-    color u'#fff'
+    outlines [(5, "#6667ab", 2, 2)]
+    color '#fff'
 
 style achievements_text: #unlocked achievement description
     yalign 0.5
-    color u'#fff'
+    color gui.accent_color
     size 30
 
 style locked_label_text: #locked achievement name
@@ -256,3 +298,5 @@ style achievements_button:
     background Frame("gui/achievements/achievement_frame.png", gui.achievement_frame_borders, tile=gui.frame_tile)
     padding (20, 20, 20, 20)
     xfill True
+
+define gui.achievement_frame_borders = Borders(115, 25, 25, 25)

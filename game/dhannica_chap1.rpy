@@ -1,40 +1,42 @@
+#####   DEFAULT VARIABLES  #####
 default beLate = False
 default usePhone = False
 default eatBreakfast = False
 
-default takeIcedTea = False
-default clinic = False
-default refuseTake = False
+#NICK VARIABLES
+default n_takeIcedTea = False
+default n_refuseTake = False
 
-default alec_likePoints = 0
-default nick_likePoints = 0
+#ALEC VARIABLES
+default a_clinic = False
+
 
 label dhannica_chap1:
     call chapter_transition
     $ n_name = "???"
     $ mcNameboy = "???"
-    if config.developer == False:
+
+    if not config.developer:
         $ renpy.block_rollback()
+        
     pause 2.0
-    scene bg stage with scenefade
-    camera:
-        subpixel True
+    scene bg stage:
         truecenter
-        ease 0.1 zoom 1.05
-        choice:
-            easeout_bounce 1.0 yalign 0.55
-            easeout_bounce 1.0 yalign 0.45
-            repeat
-    play sound cheer fadein 3.0 volume 0.2 loop
+        zoom 1.03
+    with scenefade
+    camera:
+        easeout 1.0 yoffset 10
+        easein 1.0 yoffset -10
+        repeat
+    play ambient cheer fadein 3.0 volume 0.2
     
     "The audience roars."
     "You find yourself in an opulent concert hall, with golden chandeliers casting a warm glow above you."
     "The crowd's anticipation is palpable."
-    "There lies a singer on stage, his face obscured by a quirky lunchbox bag, decided to hide his face from the world and remain unknown."
+    "There lies a singer on stage, his face obscured by a quirky lunchbox bag, hidden from the world and remain unknown."
     "His mystery has always captivated you."
     "The atmosphere is almost too electric, with fans waving glow sticks in rhythm."
-    "You are in the front of the stage, shouting your deepest exaggeration of support to the singer."
-    "So happy that tears started to fall from your eyes."
+    "Being close to the front of the stage, you shout your deepest exaggeration of support to the band that tears started to fall from your eyes."
     dhannica_i "I never thought I got to be on front stage..."
     dhannica_i "Now I get to observe him closer!"
     dhannica_i "This is all making me teary...!"
@@ -53,8 +55,8 @@ label dhannica_chap1:
     "You whisper to him discreetly the song."
     d_singer "Ah, I see. Alright, get yourself ready, as this crowd's about to get hectic!"
     "Both of you started singing, and the crowd goes even wilder as headlights were spotted to both of you."
-    "But you don't care of that. Your eyes only focused on him as you sang, trying hard not to cry as you look at his masked face."
-    "But the harsh light gleamed against to you so strongly that you caught a glimpse of his eyes."
+    "But you don't care about that. Your eyes only focused on him as you sang, trying hard not to cry as you look at his masked face."
+    "But the harsh light gleamed against to him so strongly that you caught a glimpse of his eyes."
     "They were green..."
     "You were lost in the song, in his eyes, having caught a milisecond of his identity."
     "You wonder and think, will this last forever?"
@@ -65,6 +67,7 @@ label dhannica_chap1:
     play sfx2 alarmloop volume 0.75 loop
     "{cps=15}Mayb{nw}"
     stop sfx2
+    stop ambient
     $ config.skipping = False
     if not config.developer:
         $ renpy.block_rollback()
@@ -73,9 +76,11 @@ label dhannica_chap1:
     play sound alarm
     scene black
     pause 4.0
+    $ dream.grant()
     window auto
     menu:
-        "Get up and turn off the alarm":
+        "Get up and turn off the alarm.":
+            camera at dizzy
             scene bg dhannica room with eye_open
             dhannica_i "Ugh... That was such a dream."
             dhannica_i "Why did I set this alarm so early?"
@@ -84,10 +89,11 @@ label dhannica_chap1:
             pause 1.25
             window auto
             dhannica_i "Oh shoot, I forgot! I never really had dinner last night."
+            camera at reset_dizzy
             play sound phone_notif
-            dhannica_i "Huh?"
+            dhannica_i "Huh? My phone..."
             menu:
-                "Check my phone":
+                "Check my phone.":
                     $ usePhone = True
                     $ beLate = True
                     "You extended your hand to grab your phone."
@@ -102,12 +108,12 @@ label dhannica_chap1:
                     pause 1.5
                     "It didn't take long for you to finally remember something."
 
-                "Go eat breakfast":
+                "Go eat breakfast.":
                     $ eatBreakfast = True
                     dhannica_i "Nah, I think I've had enough with social media."
                     "Since it was still early, you made your bed before leaving your bedroom. Once you were done, you changed into your uniform and head downstairs."
 
-        "Snooze for another 5 minutes":
+        "Snooze for another 5 minutes.":
             $ beLate = True
             dhannica_i "Nooo, I need to remember..."
             dhannica_i "I don't wanna wake up..."
@@ -117,7 +123,7 @@ label dhannica_chap1:
             "Like it's trying to run away from you." 
             "And the feeling of having found something so surreal, and slowly losing it."
             "Slowly forgetting it..."
-            "Till there's nothing to remember."
+            "Until there's nothing to remember."
             "Just the empty feeling of loosing something you never had."
             play sound alarm fadein 3.0 loop volume 0.6
             window hide(None)
@@ -130,8 +136,8 @@ label dhannica_chap1:
             stop sound fadeout 0.2
 
     if beLate:
-        dhannica "IT'S 7:55?!" with vpunch
-        dhannica "SHOOT!"
+        dhannica_i "IT'S 7:55?!" with vpunch
+        dhannica_i "SHOOT!"
         if usePhone:
             "You jumped out of bed after spending a good 45 minutes scrolling on your phone and head downstairs."
         else:
@@ -207,51 +213,71 @@ label dhannica_chap1:
         "You had to do something..."
         menu:
             dhannica_i "Should I just run for it?"
-            "Yes":
+            "Yes.":
                 "You mustered up the courage to suck up the pain and just run for it, and that's exactly what you did."
-                "You didn't care about your appearance, because at that moment, you felt people were staring at you, wondering if you were okay or if they should help you."
-                play sound bus_open fadeout 3.0
-                stop ambient2 fadeout 3.0
+                "You didn't care about your appearance, even if you felt people were staring at you, wondering if you were okay or if they should help you."
+                play sound bus_open fadeout 0.5
+                stop ambient2 fadeout 10.0
                 "However, as you were about to reach the door, it immediately closed, which could only mean one thing: it was already full and the bus had already left."
                 dhannica_i "No..."
                 "A sudden pang of pain rushed through me."
                 dhannica_i "Aaargh!" with vpunch
                 dhannica_i "I forgot about my injury."
                 dhannica_i "Wait, it's been 10 minutes since this happened. Why hasn't it gone away?"
-                "The pain wasn't getting any better. Your decision to overwork myself and recklessly run had only made it worse."
+                "The pain wasn't getting any better. Your decision to overwork yourself and recklessly run had only made it worse."
                 "You couldn't even move your foot without feeling like it was being twisted 180 degrees."
                 "You sat down on a nearby bench, contemplating if you could still manage to walk to school."
                 "Glancing to your right, you checked the time for the next bus."
+                camera:
+                    truecenter
+                    ease 1.0 zoom 1.5 xalign 0.3 yalign 0.6
                 dhannica_i "...the next 15 minutes, huh? That's better than walking 30 minutes to school."
                 dhannica_i  "But, good heavens, it still hurt."
+                camera:
+                    ease 2.0 xalign 0.5
+                show nick:
+                    offscreenleft
+                    ease 2.0 xalign 0.5 ypos 1.03
                 "As you kept your gaze fixed on the bus schedule, you noticed a presence beside you."
                 "If you hadn't looked up, you might not have even noticed him."
+                camera:
+                    ease 1.0 yalign 0.55
                 "His head appeared to be facing the street, as if he paid no attention to his surroundings, but you caught a glimpse of his eyes directed at your feet."
                 "It's as if he was trying to discreetly assess what was wrong with you."
+                camera:
+                    ease 1.0 yalign 0.6
+                show flask:
+                    alpha 0.0
+                    zoom 0.7
+                    blur 10
+                    xalign 0.5
+                    yalign 0.9
+                    parallel:
+                        ease 3.0 alpha 1.0
                 "You decided not to pay him any mind and sat uncomfortably, trying to remain calm and not draw attention to yourself."
                 "Suddenly, a cold sensation touched your skin."
-                "The guy sitting beside you handed something. It appeared harmless at first glance."
                 menu:
                     "Accept it":
-                        $ nick_likePoints += 5
-                        $ takeIcedTea = True
+                        $ NickLoveMeter.add(5)
+                        $ n_takeIcedTea = True
                     "Refuse":
                         pass
-
+                camera:
+                    ease 1.0 zoom 1.5 truecenter
+                hide flask with Dissolve(0.2)
                 dhannica "Umm... what's this?"
                 nick "Put this on your foot."
                 dhannica "Excuse me?"
 
-                if takeIcedTea:
-                    nick "You sprained yourself?"
+                if n_takeIcedTea:
+                    nick "You sprained yourself, right?"
                     dhannica "I uh, stubbed my toe."
-                    "Nick let out a small laugh, but it sounded more like he was mocking."
+                    "Nick let out a small chuckle, but it sounded more like he was mocking."
                     dhannica_i "Did he just laugh at my situation?"
                     dhannica "What's so funny?"
                     nick "Nothing. Here, take it."
-                    "He offers you a cold cylinder."
                     nick "It's iced tea, the cold will help your foot."
-                    "He applies the cold side of his iced tea drink to the bruised area."
+                    "He applies the cold side of his flask to the affected area."
                     dhannica "H-hey, isn't this a bit too much?"
                     nick "Just take it, or it'll get worse."
                     dhannica "But it'll get dirty!"
@@ -276,34 +302,37 @@ label dhannica_chap1:
                     dhannica "I stubbed my toe because I was running late."
                     "You explained with a hint of annoyance, which made Nick chuckled. But this only frustrated you even further."
                     dhannica "What's so funny?"
-                    "He didn't answer. Instead, he removed your shoe and held the tumbler close to your foot."
+                    "He didn't answer. Instead, he removed your shoe and held the flask close to your foot."
                     dhannica "Wait!" with vpunch
                     nick "What is it?"
                     dhannica "I-it'll get dirty."
 
                 dhannica "Aren't you bothered that I'm going to get your drink dirty from my foot?"
 
-                if takeIcedTea:
-                    nick "I'm not going to drink it from the side anyway. As long as the mouth of the tumbler isn't soiled, then it's fine."
+                if n_takeIcedTea:
+                    nick "I'm not going to drink it from the side anyway. As long as the mouth of the flask isn't soiled, then it's fine."
                     dhannica_i "Why is he so pushy?"
-                    "Nick retrieved a hand towel from his bag that looked like it could cover the entire surface of a tumbler."
-                    "He took the tumbler from your hands and started wrapping around it."
+                    "Nick retrieved a hand towel from his bag that looked like it could cover the entire surface of a flask."
+                    "He took the flask from your hands and started wrapping around it."
                     "You looked at him for a moment, convincing yourself that it was okay as you took it and applied it."
                     "At first, it hurt, but the pain had subsided."
+                    camera:
+                        ease 1.0 yalign 0.6
+
                     "As you knelt down, tending to your swollen toe, you couldn't help but notice his shoes."
                     
                 else:
                     nick "You have socks on. It's fine."
                     dhannica "It's not! It'll be gross!"
-                    "With a sigh, Nick seemed to give in and took out a hand towel from his bag. He wrapped it around the tumbler, not too thick that it would insulate the cold, but not too thin that it would hurt."
+                    "With a sigh, Nick seemed to give in and took out a hand towel from his bag. He wrapped it around the flask, not too thick that it would insulate the cold, but not too thin that it would hurt."
                     "Gently, he handled your foot with caution, trying not to cause any pain, and positioned it on his knee."
-                    "He then began patting the cold tumbler to your foot. At first, it hurt, but you soon felt immense relief."
+                    "He then began patting the cold flask to your foot. At first, it hurt, but you soon felt immense relief."
                     dhannica_i "This is weird."
                     "He gave you a quick glance, checking if you were alright and if he'd done a good job."
                     "In that moment, you saw them clearly: his eyes, one blue and the other green. Something about him felt peculiar to you."
                     "As he tended to your foot, you couldn't help but notice his shoes."
                     
-            "No":
+            "No.":
                 dhannica_i "You know what? I think it's safest to just keep my pace; I know I'll get there anyways."
                 "You continued walking at the same limping pace, enduring the persistent pain in your foot."
                 "As you approached the bus stop, you noticed a commotion of people rushing onto the bus."
@@ -325,7 +354,7 @@ label dhannica_chap1:
                 "It was becoming increasingly worrisome that such a minor incident was causing so much pain."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
                 dhannica_i "Sometimes, I don't even know why I hit the snooze button."
-                dhannica "{size=-20}How does anyone wake up after the first alarm?{/size}"
+                dhannica "{size=-10}How does anyone wake up after the first alarm?{/size}"
                 play ambient2 busengine fadein 2.0
                 "As you sat there contemplating your life choices, the next bus had already arrived."
                 play sound busopen
@@ -350,24 +379,24 @@ label dhannica_chap1:
                 nick "Sit down."
                 "He commanded with a strong yet mellow voice, which your body obeyed, and took a seat."
                 dhannica "U-uhm, okay."
-                "You were quite embarrassed but dared not look at his face."
-                "You draped your hair over your features as you bent down, concealing your expression, which was complete utter embarrassment."
-                dhannica "{size=-20}Thank you...{/size}"
-                "He handed you a tumbler, with its exterior dripping wet with pebbles of moist water sliding off of it."
+                "You were quite embarrassed and dared not look at his face."
+                "You draped your hair over your features as you bent down, concealing your expression, which was in complete utter embarrassment."
+                dhannica "{size=-10}Thank you...{/size}"
+                "He handed you a flask, with its exterior dripping wet with pebbles of moist water sliding off of it."
                 nick "Here."
                 nick "Put this on your foot. The cold will help your swelling."
                 menu:
-                    "Take the tumbler":
-                        $ nick_likePoints += 5
+                    "Take the flask":
+                        $ NickLoveMeter.add(5)
                         dhannica "Are you sure?"
                         nick "Just do it."
                         "You wrapped the bottle with his hand towel, mindful of the fact that a complete stranger had just offered you his personal belonging to alleviate your discomfort."
                         "He doesn't look like the helping type."
                         "In fact, he appears as though he doesn't want to interact with anyone."
-                        "You gently applied the cold tumbler to the side of your foot and instantly began to experience relief. Your pinky toe had swelled and grown warm, but this remedy appeared to be reducing the discomfort."
+                        "You gently applied the cold flask to the side of your foot and instantly began to experience relief. Your pinky toe had swelled and grown warm, but this remedy appeared to be reducing the discomfort."
                         "Leaning down as you tended your injury, you couldn't help but notice his shoes."
                     "Refuse to take it":
-                        $ refuseTake = True
+                        $ n_refuseTake = True
                         dhannica "You wouldn't want me to do that."
                         nick "Why not?"
                         dhannica "I mean, you drink from that. Wouldn't you be bothered if I put it on my foot?"
@@ -389,22 +418,28 @@ label dhannica_chap1:
                         "You watched as he continued to gently pat the cool towel on your foot. Your gaze wandered to his features."
                         "You scrutinized him and couldn't help but notice his shoes."
 
-        if not refuseTake or refuseTake:
-            "They were quite rugged, classic black and white high-top Chuck Taylors."
-            dhannica_i "Hmm...cute."
-            dhannica_i "There are little cute spiderhero webs drawn all over the tips of his shoes." 
-            if refuseTake:
-                $ nick_likePoints += 10
-                "After a few minutes, you began to feel better, albeit only slightly."
-                "Part of you felt embarrassed by how conspicuous your situation with him must have appeared, considering that he had been kneeling for a while."
-                "With the bus being so crowded, you both stood out for sure."
-                "And he seemed to notice it too. It's obvious because of how he promptly stood up, maintaining his composure."
-                nick "Keep that until the cold is gone. Just give it back to me when you're done."
-                window hide
-                pause 4.0
-                window auto
-                "Then, silence came after."
-                "Pretty soon, he disembarked at the next bus stop, and I never saw him again."
+        "They were quite rugged, classic black and white high-top Chuck Taylors."
+        dhannica_i "Hmm...cute."
+        dhannica_i "There are little cute spiderhero webs drawn all over the tips of his shoes." 
+        if n_refuseTake:
+            $ NickLoveMeter.add(10)
+            "After a few minutes, you began to feel better, albeit only slightly."
+            "Part of you felt embarrassed by how conspicuous your situation with him must have appeared, considering that he had been kneeling for a while."
+            "With the bus being so crowded, you both stood out for sure."
+            "He seemed to notice it too. It's obvious because of how he promptly stood up, maintaining his composure."
+            nick "Keep that until the cold is gone. Just give it back to me when you're done."
+            window hide
+            pause 1.0
+            play sound busopen
+            pause 1.2
+            play ambient busengine fadein 0.7
+            pause 1.6
+            play sound busopen
+            pause 1.0
+            stop ambient fadeout 1.2
+            window auto
+            "He disembarked at the next bus stop, and you never saw him again."
+            "Silence came after, for the rest of the ride."
 
     else:
         "The air around you was chilly, and the birds were all up and singing."
@@ -414,7 +449,9 @@ label dhannica_chap1:
         jump school
     
     label school:
-        scene bg school with scenefade
+        camera:
+            ease 1.0 truecenter zoom 1.0
+        scene bg school with scenefadehold
         $ welcome.grant()
         "You finally reached the school, walking through the gates limping on your other foot."
         dhannica_i "I look like a loser. That's just great."
@@ -435,7 +472,7 @@ label dhannica_chap1:
         "You don't know what you felt, but you felt something. Maybe gratitude?"
         "That you wouldn't have to pay an extra 100 to get another copy of your schedule."
         dhannica "Uhm...thank you... for the, uhm...this."
-        $ alec_likePoints += 3
+        $ AlecLoveMeter.add(3)
         alec "No biggie."
         alec "I noticed this on the ground then looked ahead and saw your bag was open, so I had to hand it to you."
         alec "It seems that we're in the same class. Nice to meet you classmate."
@@ -447,8 +484,8 @@ label dhannica_chap1:
 
         menu:
             "Accept":
-                $ alec_likePoints += 2
-                $ clinic = True
+                $ AlecLoveMeter.add(2)
+                $ a_clinic = True
                 dhannica "I mean, sure? Classes are about to start though. We'll be late if we did."
 
             "Deny":
@@ -462,7 +499,7 @@ label dhannica_chap1:
             
         alec "I guess so. How about after the first subject? We have 30 mins vacant. I'm sure that's enough time for the nurse to patch you up."
 
-        if clinic:
+        if a_clinic:
             dhannica "Thanks, but you really don't have to do this."
             alec "And leave my first friend to an injury? I don't think so."
             dhannica_i "I've made a friend~"
