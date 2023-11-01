@@ -11,7 +11,7 @@ default n_refuseTake = False
 default a_clinic = False
 
 
-label dhannica_chap1:
+label chap1_dhannica:
     call chapter_transition
     $ n_name = "???"
     $ mcNameboy = "???"
@@ -220,7 +220,7 @@ label dhannica_chap1:
                 stop ambient2 fadeout 10.0
                 "However, as you were about to reach the door, it immediately closed, which could only mean one thing: it was already full and the bus had already left."
                 dhannica_i "No..."
-                "A sudden pang of pain rushed through me."
+                "A sudden pang of pain rushed through you."
                 dhannica_i "Aaargh!" with vpunch
                 dhannica_i "I forgot about my injury."
                 dhannica_i "Wait, it's been 10 minutes since this happened. Why hasn't it gone away?"
@@ -258,7 +258,7 @@ label dhannica_chap1:
                 "Suddenly, a cold sensation touched your skin."
                 menu:
                     "Accept it":
-                        $ NickLoveMeter.add(5)
+                        $ nickLoveMeter.add(5)
                         $ n_takeIcedTea = True
                     "Refuse":
                         pass
@@ -272,11 +272,10 @@ label dhannica_chap1:
                 if n_takeIcedTea:
                     nick "You sprained yourself, right?"
                     dhannica "I uh, stubbed my toe."
-                    "Nick let out a small chuckle, but it sounded more like he was mocking."
+                    "He let out a small chuckle, but it sounded more like he was mocking."
                     dhannica_i "Did he just laugh at my situation?"
                     dhannica "What's so funny?"
-                    nick "Nothing. Here, take it."
-                    nick "It's iced tea, the cold will help your foot."
+                    nick "Nothing. Here."
                     "He applies the cold side of his flask to the affected area."
                     dhannica "H-hey, isn't this a bit too much?"
                     nick "Just take it, or it'll get worse."
@@ -284,15 +283,17 @@ label dhannica_chap1:
                     
                 else:
                     nick "Something for your foot."
-                    dhannica_i "What the heck is this guy's problem?"
+                    dhannica_i "What's he talking about? The heck is this guy's problem?"
                     nick "It's just iced tea."
-                    dhannica "I'm not gonna drink that."
+                    dhannica "And? I'm not gonna drink that."
                     nick "Didn't I say it was for your foot?"
-                    "He responded, in a tone of pushiness and arrogance."
+                    "There was a tone of pushiness and arrogance when he responded."
                     dhannica_i "Pushy and arrogant? I can play that game."
                     dhannica "I barely know you."
-                    "You replied back with dominance."
+                    "What kind of a half-baked response was that? Anyway, you replied back with dominance."
                     nick "You soon will."
+                    show nick:
+                        ease 1.0 yalign 3.0
                     "He rose from his seat and knelt down to your level, leaving you confused."
                     dhannica "W-what are you doing?"
                     nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
@@ -300,7 +301,7 @@ label dhannica_chap1:
                     dhannica "A-actually, it was my toe..."
                     nick "What?"
                     dhannica "I stubbed my toe because I was running late."
-                    "You explained with a hint of annoyance, which made Nick chuckled. But this only frustrated you even further."
+                    "You explained with a hint of annoyance, which made him chuckled. But this only frustrated you even further."
                     dhannica "What's so funny?"
                     "He didn't answer. Instead, he removed your shoe and held the flask close to your foot."
                     dhannica "Wait!" with vpunch
@@ -312,7 +313,7 @@ label dhannica_chap1:
                 if n_takeIcedTea:
                     nick "I'm not going to drink it from the side anyway. As long as the mouth of the flask isn't soiled, then it's fine."
                     dhannica_i "Why is he so pushy?"
-                    "Nick retrieved a hand towel from his bag that looked like it could cover the entire surface of a flask."
+                    "He retrieved a hand towel from his bag that looked like it could cover the entire surface of a flask."
                     "He took the flask from your hands and started wrapping around it."
                     "You looked at him for a moment, convincing yourself that it was okay as you took it and applied it."
                     "At first, it hurt, but the pain had subsided."
@@ -324,7 +325,9 @@ label dhannica_chap1:
                 else:
                     nick "You have socks on. It's fine."
                     dhannica "It's not! It'll be gross!"
-                    "With a sigh, Nick seemed to give in and took out a hand towel from his bag. He wrapped it around the flask, not too thick that it would insulate the cold, but not too thin that it would hurt."
+                    "With a sigh, he seemed to give in and took out a hand towel from his bag. He wrapped it around the flask, not too thick that it would insulate the cold, but not too thin that it would hurt."
+                    show nick:
+                        ease 1.0 yalign -1.0 zoom 1.2
                     "Gently, he handled your foot with caution, trying not to cause any pain, and positioned it on his knee."
                     "He then began patting the cold flask to your foot. At first, it hurt, but you soon felt immense relief."
                     dhannica_i "This is weird."
@@ -387,7 +390,7 @@ label dhannica_chap1:
                 nick "Put this on your foot. The cold will help your swelling."
                 menu:
                     "Take the flask":
-                        $ NickLoveMeter.add(5)
+                        $ nickLoveMeter.add(5)
                         dhannica "Are you sure?"
                         nick "Just do it."
                         "You wrapped the bottle with his hand towel, mindful of the fact that a complete stranger had just offered you his personal belonging to alleviate your discomfort."
@@ -422,7 +425,7 @@ label dhannica_chap1:
         dhannica_i "Hmm...cute."
         dhannica_i "There are little cute spiderhero webs drawn all over the tips of his shoes." 
         if n_refuseTake:
-            $ NickLoveMeter.add(10)
+            $ nickLoveMeter.add(10)
             "After a few minutes, you began to feel better, albeit only slightly."
             "Part of you felt embarrassed by how conspicuous your situation with him must have appeared, considering that he had been kneeling for a while."
             "With the bus being so crowded, you both stood out for sure."
@@ -472,7 +475,7 @@ label dhannica_chap1:
         "You don't know what you felt, but you felt something. Maybe gratitude?"
         "That you wouldn't have to pay an extra 100 to get another copy of your schedule."
         dhannica "Uhm...thank you... for the, uhm...this."
-        $ AlecLoveMeter.add(3)
+        $ alecLoveMeter.add(3)
         alec "No biggie."
         alec "I noticed this on the ground then looked ahead and saw your bag was open, so I had to hand it to you."
         alec "It seems that we're in the same class. Nice to meet you classmate."
@@ -484,7 +487,7 @@ label dhannica_chap1:
 
         menu:
             "Accept":
-                $ AlecLoveMeter.add(2)
+                $ alecLoveMeter.add(2)
                 $ a_clinic = True
                 dhannica "I mean, sure? Classes are about to start though. We'll be late if we did."
 

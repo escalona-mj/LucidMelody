@@ -44,8 +44,8 @@ label start:
     hide intro_text with dissolve
 
     if current_route == "dhannica":
-        jump dhannica_chap1
+        jump chap1_dhannica
     elif current_route == "alec":
-        jump alec_chap1
+        jump chap1_alec
 
     return

@@ -627,7 +627,7 @@ screen main_menu():
             vbox:
                 text "dev tools"
                 textbutton "Delete all saves" action Function(delete_all_saves)
-                textbutton "Delete persistent (needs restart)" action Jump("delete_persistent")
+                textbutton "Delete persistent (needs restart)" action Function(delete_persistent)
 
     if gui.show_name:
 
@@ -642,15 +642,13 @@ screen main_menu():
 
     timer 300 action [Show(screen="fake_mainMenu", transition=dissolve), Function(mainMenu_ach.grant)]
 
-label delete_persistent:
-    $ persistent._clear(progress=True)
-    $ renpy.quit(relaunch=True)
-    return
-
 init python:
     def delete_all_saves():
         for i in renpy.list_saved_games(fast=True):
             renpy.unlink_save(i)
+    def delete_persistent():
+        persistent._clear(True)
+        renpy.reload_script()
 
 style main_menu_frame is empty
 style main_menu_vbox is vbox
