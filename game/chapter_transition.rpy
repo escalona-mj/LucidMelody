@@ -16,11 +16,12 @@ image chapter_text = ParameterizedText(
 
 default chapter = 0
 default current_chapter = 0
-default chapter_list = ['The Enigmatic Concert',
-                'A Connection Beyond Dreams',
-                'Fragments of Reality',
-                'Echoes of the Past',
-                'Harmonies and Dissonances']
+default chapter_list = ['The Enigmatic Concert', #1
+                'A Connection Beyond Dreams', #2
+                'Fragments of Reality', #3
+                'Echoes of the Past', #4
+                'Harmonies and Dissonances' #5
+                ]
 
 label chapter_transition:
     $ DisableSkip.start()

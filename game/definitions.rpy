@@ -1,3 +1,6 @@
+##########################################################################################################
+#                                               FUNCTIONS                                                #
+##########################################################################################################
 # init -1 python: 
 #     def callback_builder(character_sprite_basename):
 #         def char_callback(event, **kwargs):
@@ -19,77 +22,37 @@ init python:
             config.allow_skipping = True
 
 
-#############################
-#           CHARACTER       #
-#############################
+##########################################################################################################
+#                                               CHARACTERS                                               #
+##########################################################################################################
+define narrator = Character(ctc="ctc", ctc_position='fixed')
+define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed")
 
-define dhannica_i = Character(
-    '[Main]',
-    ctc="ctc",
-    ctc_position="fixed",
-    what_prefix='{i}',
-    what_suffix='{/i}',
-    color='#ff9b9b'
-)
+#thought MC
+define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#ff9b9b', image="dhannica")
+define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#4076ff')
 
-define alec_i = Character(
-    '[Main]',
-    ctc="ctc",
-    ctc_position="fixed",
-    what_prefix='{i}',
-    what_suffix='{/i}',
-    color='#21a733'
-)
 
-define speak = Character(
-    what_prefix='"',
-    what_suffix='"',
-    ctc="ctc",
-    ctc_position="fixed"
-)
-
+#characters
 default mcNamegirl = ""
-define dhannica = DynamicCharacter(
-    'mcNamegirl',
-    kind=speak,
-    color='#ff9b9b',
-    image="dhannica"
-)
-
-define girlMom = Character(
-    'Mom',
-    kind=speak,
-)
+define dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b', image="dhannica")
+define offscr_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="offscr_dhannica")
 
 default mcNameboy = ""
-define alec = DynamicCharacter(
-    'mcNameboy',
-    kind=speak,
-    color='#21a733',
-    image="alec"
-)
+define nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', image='nick')
+define offscr_nick = DynamicCharacter('mcNameboy', kind=nick, image='offscr_nick')
 
-default n_name = "Nick"
-define nick = DynamicCharacter(
-    'n_name',
-    kind=speak,
-    color='#4076ff',
-    image='nick'
-)
+default a_name = "Alec"
+define alec = DynamicCharacter('a_name', kind=speak, color='#21a733', image="alec")
+define offscr_alec = DynamicCharacter('a_name', kind=alec, image="offscr_alec")
 
-define narrator = Character(
-    ctc="ctc",
-    ctc_position='fixed'
-)
+#side characters
+define girlMom = Character('Mom', kind=speak)
+define d_singer = Character('Singer',kind=speak)
 
-define d_singer = Character(
-    'Singer',
-    kind=speak
-    )
-
-#############################
-#           IMAGES          #
-#############################
+######################################################################################################
+#                                               IMAGES                                               #
+######################################################################################################
 image bg highway:
     im.Blur("images/bg/highway.jpg", 2.5)
 
@@ -97,24 +60,30 @@ image bg dhannica room:
     im.Blur("images/bg/dhannica_room.png", 2.5)
 
 image bg stage:
-    im.Blur("images/bg/stage.jpg", 2.5)
+    im.Blur("images/bg/stage.png", 2.5)
 
 image bg living room:
-    im.Blur("images/bg/livingroom.jpg", 2.5)
+    im.Blur("images/bg/livingroom.png", 2.5)
 
 image bg school:
     im.Blur("images/bg/school.jpg", 2.5)
 
 image bg busstop:
-    im.Blur("images/bg/busstop.jpg", 2.5)
+    im.Blur("images/bg/busstop.png", 2.5)
 
 image bg bus:
-    im.Blur("images/bg/bus.jpg", 2.5)
+    im.Blur("images/bg/bus.png", 2.5)
 
 image mom = "images/characters/mom.png"
-#############################
-#       TRANSFORMS          #
-#############################
+
+image camera_flash:
+    Solid("#ffffff2c")
+    pause 0.1
+    Solid("#00000000")
+
+##########################################################################################################
+#                                               TRANSFORMS                                               #
+##########################################################################################################
 
 # Transform that blurs the background when opening screens.
 transform withBlur:
@@ -131,7 +100,8 @@ transform dialogue_noBlur:
     blur 30
     easein .25 blur 0
 
-transform appear(x):
+# character transforms
+transform trans(x):
     yanchor 1.0 subpixel True
     on show:
         ypos 1.03 zoom 0.95 alpha 0.0 xalign x
@@ -139,17 +109,22 @@ transform appear(x):
     on replace:
         alpha 1.0
         parallel:
-            easein .25 xalign x zoom 1.0 ypos 1.03
+            easein .5 xalign x zoom 1.0 ypos 1.03
     on hide:
         easein .25 zoom 0.95 alpha 0.0
 
-transform appear_center:
-    appear(0.5)
-transform appear_left:
-    appear(0.25)
-transform appear_right:
-    appear(0.75)
+transform trans1:
+    trans(0.0)
+transform trans2:
+    trans(0.25)
+transform trans3:
+    trans(0.50)
+transform trans4:
+    trans(0.75)
+transform trans5:
+    trans(1.0)
 
+# camera transforms
 transform dizzy:
     subpixel True
     truecenter
@@ -174,17 +149,17 @@ transform dizzy:
         choice:
             ease_quad 5.0 rotate -4
         repeat
-    parallel:
-        choice:
-            ease 0.3 zoom 1.15
-            ease 1.0 zoom 1.2
-        choice:
-            ease 0.2 zoom 1.15
-            ease 1.0 zoom 1.2
-        choice:
-            ease 0.9 zoom 1.15
-            ease 1.0 zoom 1.2
-        repeat
+    # parallel:
+    #     choice:
+    #         ease 0.3 zoom 1.15
+    #         ease 1.0 zoom 1.2
+    #     choice:
+    #         ease 0.2 zoom 1.15
+    #         ease 1.0 zoom 1.2
+    #     choice:
+    #         ease 0.9 zoom 1.15
+    #         ease 1.0 zoom 1.2
+    #     repeat
     parallel:
         ease_quad 1.0 blur 0
         ease_quad 1.0 blur 10
@@ -202,6 +177,8 @@ transform reset_dizzy:
     parallel:
         ease_quad 1.0 zoom 1.0
 
+
+#APPARENTLY, YOU CAN USE ATL TRANSFORMATIONS AS TRANSITIONS
 transform scenefade(new_widget, old_widget):
     delay 1.5
 
@@ -257,18 +234,17 @@ transform scenedissolve(new_widget, old_widget):
         zoom 1.0 alpha 1.0
         ease 0.7 alpha 0.0 zoom 1.03
 
-#############################
-#        TRANSITIONS        #
-#############################
 
-init python:
-    def eyewarp(x):
-        return x**1.33
-
+###########################################################################################################
+#                                               TRANSITIONS                                               #
+###########################################################################################################
 # define config.say_attribute_transition = Dissolve(.25, alpha=True)
 # define config.say_attribute_transition_layer = "master"
-# init:
-#     $ fastdiv = {"master" : wipeleft}
+
+init -10 python:
+    def eyewarp(x):
+        return x**1.33
+    # $ fastdiv = {"master" : wipeleft}
     
 define long_dissolve = MultipleTransition([
     False, Dissolve(1.5),
@@ -286,14 +262,12 @@ define eye_scene = MultipleTransition([
     Solid("#000"), ImageDissolve("images/transitions/eyes.png", 0.25 ,ramplen=128),
     True])
 
-image camera_flash:
-    Solid("#ffffff2c")
-    pause 0.1
-    Solid("#00000000")
 
-#############################
-#           AUDIO           #
-#############################
+
+
+#####################################################################################################
+#                                               AUDIO                                               #
+#####################################################################################################
 #BGM
 define audio.titlescreen = "audio/bgm/titlescreen.mp3"
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
@@ -313,17 +287,9 @@ define audio.cheer = "audio/sfx/cheer.ogg"
 define audio.birds = "audio/ambient/birds.ogg"
 define audio.busengine = "audio/ambient/bus_engine.ogg" 
 
-#############################
-#      LAYERED IMAGES       #
-#############################
-
-###### DHANNICA ######
-
-image side alec = LayeredImageMask("alec",
-    Transform(crop=(365, 80, 300, 300)),
-    background="gui/side_image/alec_bg_sideImage.png",
-    mask="gui/side_image/mask_sideImage.png",
-    foreground="gui/side_image/fg_sideImage.png")
+###########################################################################################################
+#                                               SIDE IMAGES                                               #
+###########################################################################################################
 
 image side dhannica = LayeredImageMask("dhannica",
     Transform(crop=(310, 120, 300, 300)),
@@ -331,12 +297,35 @@ image side dhannica = LayeredImageMask("dhannica",
     mask="gui/side_image/mask_sideImage.png",
     foreground="gui/side_image/fg_sideImage.png")
 
+image side offscr_dhannica = LayeredImageMask("dhannica",
+    Transform(crop=(310, 120, 300, 300)),
+    background="gui/side_image/offscr_dhannica_bg.png",
+    mask="gui/side_image/offscr_mask.png",
+    foreground="gui/side_image/offscr_fg.png")
+
 image side nick = LayeredImageMask("nick",
     Transform(crop=(340, 25, 330, 300)),
     background="gui/side_image/nick_bg_sideImage.png",
     mask="gui/side_image/mask_sideImage.png",
     foreground="gui/side_image/fg_sideImage.png")
 
+image side offscr_nick = LayeredImageMask("nick",
+    Transform(crop=(340, 25, 330, 300)),
+    background="gui/side_image/offscr_nick_bg.png",
+    mask="gui/side_image/offscr_mask.png",
+    foreground="gui/side_image/offscr_fg.png")
+
+image side offscr_alec = LayeredImageMask("alec",
+    Transform(crop=(365, 80, 300, 300)),
+    background="gui/side_image/offscr_alec_bg.png",
+    mask="gui/side_image/offscr_mask.png",
+    foreground="gui/side_image/offscr_fg.png")
+
+##############################################################################################################
+#                                               LAYERED IMAGES                                               #
+##############################################################################################################
+
+###### DHANNICA ######
 
 image dhannica_blink:
     "images/characters/dhannica/face/eyes_normal.png"

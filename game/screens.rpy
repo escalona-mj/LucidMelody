@@ -117,8 +117,8 @@ screen say(who, what):
     ## If there's a side image, display it above the text. Do not display on the
     ## phone variant - there's no room.
     # if not renpy.variant("small"):
-    add SideImage() xalign 0.0 yalign 1.0 xoffset 50 yoffset -25:
-        zoom 0.85
+    add SideImage() xalign 0.0 yalign 1.0 xoffset 140 yoffset -7:
+        zoom 0.75
 
 ## Make the namebox available for styling through the Character object.
 init python:
@@ -157,12 +157,12 @@ style say_label:
     xalign 0.5
     yalign 0.5
     color u"#fff"
-    outlines [(5, "#16161d", 2, 2)]
+    # outlines [(5, "#16161d", 2, 2)]
 
 style say_dialogue:
     properties gui.text_properties("dialogue")
     color u"#fff"
-    outlines [(5, "#16161d", 2, 2)]
+    # outlines [(5, "#16161d", 2, 2)]
     # line_spacing -5
     xpos gui.dialogue_xpos
     xsize gui.dialogue_width
@@ -171,27 +171,27 @@ style say_dialogue:
     adjust_spacing False
 
 image ctc:
-    # xalign 0.975 yalign 0.975 subpixel True alpha 0.0 zoom 1.03
+    xalign 0.875 yalign 0.975 subpixel True alpha 0.0 zoom 1.03
     "gui/ctc.png"
-    # block:
-    #     ease 0.5 alpha 1.0 yoffset 2
-    #     ease 0.5 alpha 0.5 yoffset -5
-    #     repeat
+    block:
+        ease 0.5 alpha 1.0 yoffset 2
+        ease 0.5 alpha 0.5 yoffset -5
+        repeat
 
-screen ctc(arg=None):
-    imagebutton:
-        xalign 0.975
-        yalign 0.975
-        at transform:
-            subpixel True alpha 0.0 zoom 1.03
-            block:
-                ease 0.5 alpha 1.0 yoffset 2
-                ease 0.5 alpha 0.5 yoffset -5
-                repeat
-        idle "ctc"
-        activate_sound "audio/sfx/click.mp3"
-        action ToggleVariable("persistent.quick_menu_frame", True, False)
-        tooltip "Menu"
+# screen ctc(arg=None):
+#     imagebutton:
+#         xalign 0.975
+#         yalign 0.975
+#         at transform:
+#             subpixel True alpha 0.0 zoom 1.5
+#             block:
+#                 ease 0.5 alpha 1.0 yoffset 2
+#                 ease 0.5 alpha 0.5 yoffset -5
+#                 repeat
+#         idle "ctc"
+#         activate_sound "audio/sfx/click.mp3"
+#         action ToggleVariable("persistent.quick_menu_frame", True, False)
+#         tooltip "Menu"
 
 
 ## Input screen ################################################################
@@ -383,15 +383,18 @@ screen navigation():
 
     fixed:
         if renpy.get_screen("main_menu"):
-            imagebutton:
-                auto "gui/navigation/controls_%s.png"
-                activate_sound "audio/sfx/click.mp3"
-                focus_mask True
+            vbox:
                 xalign 1.0
                 xoffset -50
                 yoffset 50
-                action Show("controls_modal")
-                tooltip "Help"
+                imagebutton:
+                    auto "gui/navigation/controls_%s.png"
+                    activate_sound "audio/sfx/click.mp3"
+                    focus_mask True
+                    action Show("controls_modal")
+                    tooltip "Help"
+                if not persistent.seen_controls:
+                    add "gui/notif_dot.png" xoffset 65 yoffset -100
 
     if renpy.get_screen("main_menu"):
         hbox at nav_item:
@@ -399,7 +402,7 @@ screen navigation():
 
             xalign 0.5
             yalign 0.95
-            spacing 20
+            spacing 30
 
             textbutton "START" action Start()
             textbutton "LOAD GAME" action ShowMenu("load")
@@ -407,9 +410,6 @@ screen navigation():
             textbutton "EXTRAS" action ShowMenu("achievements")
             textbutton "ABOUT" action ShowMenu("about")
             textbutton "QUIT" action Quit(confirm=True)
-
-            if config.developer:
-                textbutton "Image" action ShowMenu("image_tools")
 
     else:
         hbox:
@@ -620,14 +620,6 @@ screen main_menu():
     ## The use statement includes another screen inside this one. The actual
     ## contents of the main menu are in the navigation screen.
     use navigation
-    
-    if config.developer:
-        frame:
-            background None
-            vbox:
-                text "dev tools"
-                textbutton "Delete all saves" action Function(delete_all_saves)
-                textbutton "Delete persistent (needs restart)" action Function(delete_persistent)
 
     if gui.show_name:
 
@@ -641,14 +633,6 @@ screen main_menu():
                 style "main_menu_version"
 
     timer 300 action [Show(screen="fake_mainMenu", transition=dissolve), Function(mainMenu_ach.grant)]
-
-init python:
-    def delete_all_saves():
-        for i in renpy.list_saved_games(fast=True):
-            renpy.unlink_save(i)
-    def delete_persistent():
-        persistent._clear(True)
-        renpy.reload_script()
 
 style main_menu_frame is empty
 style main_menu_vbox is vbox
@@ -1014,18 +998,6 @@ screen preferences():
                     # if config.has_music or config.has_sound or config.has_voice:
                     #     null height gui.pref_spacing
 
-    if config.developer:
-        frame:
-            background None
-            xalign 1.0
-            yalign 0.5
-            vbox:
-                label "Sussy dev tools"
-                style_prefix "check"
-                textbutton _("toggle fullscreen") action If(preferences.fullscreen==False, Preference('display', 'fullscreen'), Preference('display', 'window'))
-                textbutton "tablet screen" action Preference("display", 0.5)
-                textbutton "phone screen" action Preference("display", 0.35)
-
     $ tooltip = GetTooltip()
 
     if tooltip:
@@ -1037,6 +1009,7 @@ screen preferences():
                 size 35
                 textalign 1.0
                 color u'#fff'
+                font gui.interface_text_font
 
 style pref_label is gui_label
 style pref_label_text is gui_label_text
@@ -1435,18 +1408,21 @@ style confirm_btn_hover:
     color u"#fff"
     xalign 0.5
     yalign 0.5
+    size gui.interface_text_size
     font gui.interface_text_font
 
 style confirm_btn_selected:
     color u"#fff"
     xalign 0.5
     yalign 0.5
+    size gui.interface_text_size
     font gui.interface_text_font
 
 style confirm_btn:
     color gui.accent_color
     xalign 0.5
     yalign 0.5
+    size gui.interface_text_size
     font gui.interface_text_font
 
 style confirm_frame is gui_frame
@@ -1820,94 +1796,97 @@ style pref_vbox:
 ## Since a mouse may not be present, we replace the quick menu with a version
 ## that uses fewer and bigger buttons that are easier to touch.
 
-default persistent.quick_menu_frame = False
 
 screen quick_menu():
     variant "mobile"
-
     style_prefix "quickmenu"
-    zorder 999
+    zorder 1000
 
     if quick_menu:
-        showif persistent.quick_menu_frame:
-            frame:
-                xalign 1.0
-                yalign 0.8
-                at transform:
-                    on show:
-                        xalign 1.5 alpha 0.0
-                        easein 0.5 xalign 1.0 alpha 1.0
-                    on hide:
-                        easein 0.5 xalign 1.5 alpha 0.0
-                background None
-                hbox: 
-                    spacing 25
-                    if config.developer == True:
-                        textbutton _("ach") action ShowMenu("achievements")
-                    imagebutton auto _("gui/quickmenu/back_%s.png"):
-                        action Rollback()
-                        tooltip "Back"
-                    imagebutton auto _("gui/quickmenu/history_%s.png"):
-                        action ShowMenu('history')
-                        tooltip "History"
-                    imagebutton auto _("gui/quickmenu/hide_%s.png"):
-                        action HideInterface()
-                        tooltip "Hide"
-                    imagebutton auto _("gui/quickmenu/auto_%s.png"):
-                        action Preference("auto-forward", "toggle")
-                        tooltip "Auto"
-                    imagebutton auto _("gui/quickmenu/skip_%s.png"):
-                        action Skip() alternate Skip(fast=True, confirm=True)
-                        tooltip "Skip"
-                    imagebutton auto _("gui/quickmenu/load_%s.png"):
-                        action ShowMenu('load')
-                        tooltip "Load"
-                    imagebutton auto _("gui/quickmenu/save_%s.png"):
-                        action ShowMenu('save')
-                        tooltip "Save"
-                    imagebutton auto _("gui/quickmenu/settings_%s.png"):
-                        action ShowMenu('preferences')
-                        tooltip "Settings"
 
-# VERSION 1 QUICK MENU
-
-        # frame:
-        #     background None
-        #     padding(50,50,50,50)
-        #     hbox:
-        #         xfill True
-        #         box_wrap_spacing 1920
-        #         hbox:
-        #             spacing 50
+# VERSION 3 QUICKMENU
+        # showif persistent.quick_menu_frame:
+        #     frame:
+        #         xalign 1.0
+        #         yalign 0.8
+        #         at transform:
+        #             on show:
+        #                 xalign 1.5 alpha 0.0
+        #                 easein 0.5 xalign 1.0 alpha 1.0
+        #             on hide:
+        #                 easein 0.5 xalign 1.5 alpha 0.0
+        #         background None
+        #         hbox: 
+        #             spacing 25
+        #             imagebutton auto _("gui/quickmenu/back_%s.png"):
+        #                 action Rollback()
+        #                 tooltip "Back"
         #             imagebutton auto _("gui/quickmenu/history_%s.png"):
         #                 action ShowMenu('history')
         #                 tooltip "History"
         #             imagebutton auto _("gui/quickmenu/hide_%s.png"):
         #                 action HideInterface()
         #                 tooltip "Hide"
+        #             imagebutton auto _("gui/quickmenu/auto_%s.png"):
+        #                 action Preference("auto-forward", "toggle")
+        #                 tooltip "Auto"
+        #             imagebutton auto _("gui/quickmenu/skip_%s.png"):
+        #                 action Skip() alternate Skip(fast=True, confirm=True)
+        #                 tooltip "Skip"
         #             imagebutton auto _("gui/quickmenu/load_%s.png"):
         #                 action ShowMenu('load')
         #                 tooltip "Load"
         #             imagebutton auto _("gui/quickmenu/save_%s.png"):
         #                 action ShowMenu('save')
         #                 tooltip "Save"
-
-        #         hbox:
-        #             spacing 50
-        #             xalign 1.0
-        #             if config.developer:
-        #                 imagebutton auto _("gui/quickmenu/back_%s.png"):
-        #                     action Rollback()
-        #                     tooltip "Back"
-        #             imagebutton auto _("gui/quickmenu/auto_%s.png"):
-        #                     action Preference("auto-forward", "toggle")
-        #                     tooltip "Auto"
-        #             imagebutton auto _("gui/quickmenu/skip_%s.png"):
-        #                 action Skip() alternate Skip(fast=True, confirm=True)
-        #                 tooltip "Skip"
         #             imagebutton auto _("gui/quickmenu/settings_%s.png"):
         #                 action ShowMenu('preferences')
         #                 tooltip "Settings"
+
+# VERSION 1 QUICK MENU
+
+            frame:
+                background None
+                padding(50,50,50,50)
+                hbox:
+                    xfill True
+                    box_wrap_spacing 1920
+                    hbox:
+                        spacing 50
+                        imagebutton auto _("gui/quickmenu/history_%s.png"):
+                            action ShowMenu('history')
+                            tooltip "History"
+                        imagebutton auto _("gui/quickmenu/hide_%s.png"):
+                            action HideInterface()
+                            tooltip "Hide"
+                        imagebutton auto _("gui/quickmenu/load_%s.png"):
+                            action ShowMenu('load')
+                            tooltip "Load"
+                        imagebutton auto _("gui/quickmenu/save_%s.png"):
+                            action ShowMenu('save')
+                            tooltip "Save"
+
+                    hbox:
+                        spacing 50
+                        xalign 1.0
+                        if config.developer:
+                            imagebutton auto _("gui/quickmenu/back_%s.png"):
+                                action Rollback()
+                                tooltip "Back"
+                        imagebutton auto _("gui/quickmenu/settings_%s.png"):
+                            action ShowMenu('emptymenu')
+                            tooltip "Settings"
+                        imagebutton auto _("gui/quickmenu/auto_%s.png"):
+                            action Preference("auto-forward", "toggle")
+                            tooltip "Auto"
+                        imagebutton auto _("gui/quickmenu/skip_%s.png"):
+                            action Skip() alternate Skip(fast=True, confirm=True)
+                            tooltip "Skip"
+                        showif chrBook:
+                            imagebutton auto _("gui/quickmenu/chrBook_%s.png"):
+                                action ShowMenu('chr_book')
+                                tooltip "Character Book"
+                                activate_sound None
 
 # VERSION 2 QUICK MENU
 
@@ -1968,6 +1947,15 @@ screen quick_menu():
                 text tooltip:
                     size 35
 
+style quickmenu_frame:
+    background Frame("gui/frame.png", Borders(35, 50, 35, 50), tile=False)
+    xminimum 500
+    padding(35, 35, 35, 35)
+    yfill True
+
+style quickmenu_button_text:
+    color gui.accent_color
+
 style quickmenu_image_button:
     activate_sound "audio/sfx/click.mp3"
 
@@ -1980,6 +1968,7 @@ style tooltip_text:
     xalign 0.5
     color u'#fff'
     yalign 0.5
+    font gui.interface_text_font
     outlines [(3, "#1a1a1a", 2, 2)]
 
 style window:

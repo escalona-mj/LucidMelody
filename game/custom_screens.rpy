@@ -59,25 +59,24 @@ screen name_input(ok_action, back_action):
 
         vbox:
             # spacing 10
-            text "What is your name?":
-                style "confirm_prompt"
-                xalign 0.5
-                yalign 0.5
-                color u'#000'
-                text_align 0.5
-                # size 30
-            text "(Press Enter without typing your name to use default name.)":
-                xalign 0.5
-                yalign 0.5
-                color u'#000'
-                text_align 0.5
-                size 30
+            text "What is your name?"
+            text "(Press Enter without typing your name to use default name.)" size 30
 
         input default "" value VariableInputValue("Main") length 12 allow "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
             color u'#000'
             xalign 0.5
             yalign 0.5
             size 69
+
+style confirm_text:
+    xalign 0.5
+    yalign 0.5
+    color u'#000'
+    text_align 0.5
+    font gui.interface_text_font
+
+style confirm_input:
+    font "fonts/MyPrettyCutie.ttf"
 
 init python:
     def SavePlayerName():
@@ -87,7 +86,7 @@ init python:
 # CHOOSE MC SCREEN #
 ####################
 
-transform blur_img:
+transform pulse:
     alpha 0
     choice:
         ease 2.0 alpha 0.5
@@ -135,11 +134,11 @@ image girlMC:
     im.MatrixColor("images/characters/dhannica/base.png", im.matrix.brightness(1))
 
 image boyMC:
-    im.MatrixColor("images/characters/alec/base.png", im.matrix.brightness(1))
+    im.MatrixColor("images/characters/nick/base.png", im.matrix.brightness(1))
 
 screen chooseMC():
     add "black"
-    add "gui/chooseMC.png" at blur_img
+    add "gui/chooseMC.png" at pulse
     add "fireflies"
     if persistent.first_gameplay == False:
         text "Please choose your gender.":
@@ -189,45 +188,56 @@ screen chooseMC():
 transform showButtons(x1, x2):
     xalign x1 zoom 1.0
     easein_back 1.0 xalign x2
+    on hover:
+        easein .25 zoom 1.05
+    on idle:
+        easein .25 zoom 1.0
 
 #setting the correct variables before starting the route
 
 label chooseFemale:
+    pause 0.1
     $ current_route = 'dhannica'
-    $ mcNameboy = 'Alec'
+    $ mcNameboy = 'Nick'
     if not Main:
         $ Main = "Dhannica"
-    $ mcNamegirl = "[Main]"
+    $ mcNamegirl = Main
     return
 
 label chooseMale:
-    $ current_route = 'alec'
+    pause 0.1
+    $ current_route = 'nick'
     $ mcNamegirl = 'Dhannica'
     if not Main:
-        $ Main = "Alec"
-    $ mcNameboy = "[Main]"
+        $ Main = "Nick"
+    $ mcNameboy = Main
     return
 
 screen emptymenu:
     tag menu
+    style_prefix "emptymenu"
 
     use game_menu(""):
         vbox:
-            xalign 0.5
-            yalign 0.5
             text "Chapter [chapter]":
                 size 90
-                xalign 0.5
-                color '#fff'
-                outlines [(3, "#000", 2, 2)]
             text "{0}".format(chapter_list[current_chapter]):
                 size 70
-                xalign 0.5
-                color '#fff'
-                outlines [(3, "#000", 2, 2)]
+
+style emptymenu_vbox is vbox:
+    xalign 0.5
+    yalign 0.5
+
+style emptymenu_text:
+    xalign 0.5
+    color '#fff'
 
 screen controls_modal():
-    dismiss action Hide("controls_modal")
+    $ persistent.seen_controls = True
+    if main_menu:
+        dismiss action Hide()
+    else:
+        dismiss action Return()
 
     style_prefix "controls"
 
@@ -242,63 +252,99 @@ screen controls_modal():
 
     frame at screen_appear:
         modal True
-        xalign 0.5
-        yalign 0.5
         vbox:
             spacing 25
-            text "Help" style_prefix "controls_title"
+            if main_menu:
+                text "Help" style_prefix "controls_title"
+            else:
+                text "In case if you missed it,\nhere's the controls!" style_prefix "controls_title"
+                null height 25
 
             hbox:
-                spacing 25
                 hbox:
-                    label "Tap"
+                    style_prefix "gesture"
+                    label "Tap Right Screen"
                     add "gui/tap.png":
                         yalign 0.5
                 text "Advances dialogue."
 
             hbox:
-                spacing 25
                 hbox:
-                    label "Swipe Right"
-                    add "gui/swipe_right.png"
-                text "Rolls back to earlier dialogue."
-
+                    style_prefix "gesture"
+                    label "Swipe Right/Tap Left Screen"
+                    hbox:
+                        yalign 0.5
+                        spacing 10
+                        add "gui/swipe_right.png":
+                            yalign 0.5
+                        text "or"
+                        add "gui/tap.png":
+                            yalign 0.5
+                text "Rolls back to earlier dialogue.":
+                    yalign 0.5
+    
             hbox:
-                spacing 25
                 hbox:
+                    style_prefix "gesture"
                     label "Swipe Down"
                     add "gui/swipe_down.png":
                         yalign 0.5
                 text "Accesses the game menu\nwhile in-game."
 
-            null height 25
 
-            hbox:
-                xalign 0.5
-                text "{i}Tip: Touching the small ":
+            if not main_menu:
+                null height 25
+                text "If you're still overwhelmed with the controls, you can\nview them again on the main menu.":
                     size 30
-                add "gui/purple_ctc.png":
-                    yalign 0.5
-                text "{i} will toggle the quick menu.":
-                    size 30
+            # null height 25
+
+            # hbox:
+            #     xalign 0.5
+            #     text "{i}Tip: Touching the small ":
+            #         size 30
+            #     add "gui/purple_ctc.png":
+            #         yalign 0.5
+            #     text "{i} will toggle the quick menu.":
+            #         size 30
+
+
 
 style controls_frame:
+    background Frame("gui/frame.png", Borders(50,50,50,50), tile=False)
     padding gui.confirm_frame_borders.padding
+    xalign 0.5
+    yalign 0.5
+
+style controls_vbox:
+    spacing 25
+
+style controls_hbox:
+    spacing 25
 
 style controls_title_text:
     is game_menu_label_text
-    size 60
+    xalign 0.5
+    text_align 0.5
 
-style controls_label:
+style gesture_hbox is empty
+style gesture_label:
     is help_label
 
-style controls_label_text:
+style gesture_label_text:
     is help_label_text
     color gui.accent_color
-    font gui.name_text_font
+    font "fonts/MyPrettyCutie.ttf"
+
+style controls_text:
+    text_align 0.5
+    xalign 0.5
+    font gui.interface_text_font
 
 
+default persistent.seen_controls = False
 
-# label after_load:
-#     play sound "audio/sfx/phone_notif.ogg"
-#     call screen dialog(message="Hint: You can touch the left side of the\nscreen to go back once.", ok_action=Return())
+label after_load:
+    if not persistent.seen_controls:
+        play sound "audio/sfx/phone_notif.ogg"
+        call screen controls_modal
+    $ persistent.seen_controls = True

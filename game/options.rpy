@@ -7,10 +7,10 @@
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
 ## the player has not explicitly hidden the interface.
 # init python:
-    # if config.developer:
-    #     config.overlay_screens.append("quick_menu")
+#     if config.developer:
+#         config.overlay_screens.append("quick_menu")
 
-
+#MUSIC CHANNEL
 init python:
     renpy.music.register_channel("ambient", mixer="ambient", loop=True, tight=True)
     renpy.music.register_channel("ambient2", mixer="ambient", loop=True, tight=True)
@@ -19,18 +19,9 @@ init python:
 
 default preferences.voice_after_game_menu = True
 default preferences.voice_sustain = True
+default preferences.mobile_rollback_side = "left"
 
-# init python:
-#     def replace_text(s):
-#         s = s.replace("Fuck", u'F***') # apostrophe
-#         s = s.replace('--', u'\u2014') # em dash
-#         s = s.replace('...', u'\u2026') # ellipsis
-#         return s
-#     config.replace_text = replace_text
-
-# define config.replace_text = replace_text
-
-
+# Comma pause
 default persistent.comma_pause = False
 
 init python:
@@ -44,7 +35,6 @@ init python:
     
 define config.say_menu_text_filter = comma_pause
 
-define config.transparent_tile = False
 
 ## Basics ######################################################################
 
@@ -55,7 +45,7 @@ define config.transparent_tile = False
 
 define config.name = _("Lucid Melody")
 define config.rollback_enabled = True
-define config.developer = True #DEV BUILD
+define config.developer = "auto"
 define config.has_autosave = False
 define config.autosave_on_quit = False
 define config.autosave_slots = 0
@@ -75,9 +65,10 @@ define config.gestures = {
 define config.dispatch_gesture = None
 
 define config.layers = [ 'master', 'choice_menu', 'transient', 'screens', 'overlay', 'front' ]
-# define config.menu_clear_layers = ["front"]
-
 define config.choice_layer = "choice_menu"
+define config.menu_clear_layers = ["front"]
+
+define config.transparent_tile = False
 
 ## Determines if the title given above is shown on the main menu screen. Set
 ## this to False to hide the title.

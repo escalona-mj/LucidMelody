@@ -1,6 +1,6 @@
-##########################
-# NEW ACHIEVEMENT SYSTEM #
-##########################
+##################################################################################################################
+#                                               ACHIEVEMENT SYSTEM                                               #
+##################################################################################################################
 init -50 python:
     import datetime, time
 
@@ -125,15 +125,15 @@ screen finish_animating_achievement(num):
 
 image locked_achievement = "gui/achievements/icons/locked.png"
 
-################
-# ACHIEVEMENTS #
-################
+############################################################################################################
+#                                               ACHIEVEMENTS                                               #
+############################################################################################################
 
 define dream = Achievement(
     name=_("Lucid Melody"),
     id="dream",
     description=_("Complete dreaming."),
-    unlocked_image="gui/achievements/icons/start.png",
+    unlocked_image="gui/achievements/icons/dream.png",
     locked_image="locked_achievement",
 )
 
@@ -149,15 +149,15 @@ define mainMenu_ach = Achievement(
     name=_("Scenery Lover"),
     id="mainMenu_ach",
     description=_("Stay on the main menu screen for quite some time."),
-    unlocked_image="gui/achievements/icons/start.png",
+    unlocked_image="gui/achievements/icons/scenery.png",
     locked_image="locked_achievement",
 )
 
 define independent = Achievement(
     name=_("Independent"),
     id="independent",
-    description=_("Get through the game without dating either of the love interests."),
-    unlocked_image="gui/achievements/icons/start.png",
+    description=_("Get through the game without dating either of the love interests during Dhannica's route."),
+    unlocked_image="gui/achievements/icons/end.png",
     locked_image="locked_achievement",
 )
 
@@ -165,29 +165,29 @@ define girlArc = Achievement(
     name=_("Dhannica's Tribute"),
     id="girlArc",
     description=_("Finish the game during her route."),
-    unlocked_image="gui/achievements/icons/start.png",
+    unlocked_image="gui/achievements/icons/end.png",
     locked_image="locked_achievement",
 )
 
 define boyArc = Achievement(
-    name=_("Alec's Tribute"),
+    name=_("Nick's Tribute"),
     id="boyArc",
     description=_("Finish the game during his route."),
-    unlocked_image="gui/achievements/icons/start.png",
+    unlocked_image="gui/achievements/icons/end.png",
     locked_image="locked_achievement",
 )
 
 define nickArc = Achievement(
-    name=_("Nick's Intervention"),
-    id="nickArc",
-    description=_("Finish the game by choosing Nick over Alec during Dhannica's route."),
-    unlocked_image="gui/achievements/icons/start.png",
+    name=_("Alec's Intervention"),
+    id="alecArc",
+    description=_("Finish the game by choosing Alec over Nick during Dhannica's route."),
+    unlocked_image="gui/achievements/icons/end.png",
     locked_image="locked_achievement",
 )
 
-#####################
-# ACHIEVEMENT TOAST #
-#####################
+#################################################################################################################
+#                                               ACHIEVEMENT TOAST                                               #
+#################################################################################################################
 
 transform achievement_transform():
     on show:
@@ -207,6 +207,7 @@ screen achievement_toast(a, tag, num):
     style_prefix 'achievement_toast'
 
     frame:
+        xmaximum 700
         at achievement_transform
         yoffset achievement_yoffset
 
@@ -232,14 +233,13 @@ style achievement_toast_label_text:
     color '#fff'
     outlines [(0, "#000", 0, 0)]
     
-
 style achievement_toast_text:
     is achievements_text
     color '#fff'
 
-#######################
-# ACHIEVEMENT GALLERY #
-#######################
+####################################################################################################################
+#                                               ACHIEVEMENTS GALLERY                                               #
+####################################################################################################################
 
 screen achievements():
     tag menu
@@ -282,6 +282,7 @@ style achievements_label_text: #unlocked achievement name
 
 style achievements_text: #unlocked achievement description
     yalign 0.5
+    font gui.interface_text_font
     color gui.accent_color
     size 30
 
@@ -299,4 +300,4 @@ style achievements_button:
     padding (20, 20, 20, 20)
     xfill True
 
-define gui.achievement_frame_borders = Borders(115, 25, 25, 25)
+define gui.achievement_frame_borders = Borders(112, 25, 25, 25)

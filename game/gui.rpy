@@ -59,7 +59,7 @@ define gui.interface_text_color = u'#ffffff'
 define gui.game_menu_label_font = "fonts/MyPrettyCutie.ttf"
 
 ## The font used for in-game text.
-define gui.text_font = "fonts/QuinnGothic.ttf"
+define gui.text_font = "fonts/123Marker.ttf"
 
 ## The font used for character names.
 define gui.name_text_font = "fonts/MyPrettyCutie.ttf"
@@ -210,7 +210,7 @@ define gui.choice_button_width = 1185
 define gui.choice_button_height = 119
 define gui.choice_button_tile = False
 define gui.choice_button_borders = Borders(150, 25, 150, 25)
-define gui.choice_button_text_font = gui.text_font
+define gui.choice_button_text_font = "fonts/QuinnGothic.ttf"
 define gui.choice_button_text_size = gui.text_size
 define gui.choice_button_text_xalign = 0.5
 define gui.choice_button_text_idle_color = "#ffffff" #gui.accent_color
@@ -258,7 +258,7 @@ define gui.navigation_xpos = 60
 define gui.skip_ypos = 0
 
 ## The vertical position of the notify screen.
-define gui.notify_ypos = 100
+define gui.notify_ypos = 120
 
 ## The spacing between menu choices.
 define gui.choice_spacing = 33
@@ -433,8 +433,8 @@ init python:
     def mobile():
 
         ## Font sizes.
-        gui.text_size = 40
-        gui.name_text_size = 60
+        gui.text_size = 35
+        gui.name_text_size = 50
         gui.notify_text_size = 38
         gui.interface_text_size = 40
         gui.button_text_size = 40
@@ -443,11 +443,11 @@ init python:
 
         ## Adjust the location of the textbox.
         gui.textbox_height = 360
-        gui.name_xpos = 350
-        gui.name_ypos = 110
-        gui.dialogue_xpos = 350
-        gui.dialogue_ypos = 160
-        gui.dialogue_width = 1500
+        gui.name_xpos = 420
+        gui.name_ypos = 150
+        gui.dialogue_xpos = 415
+        gui.dialogue_ypos = 210
+        gui.dialogue_width = 1250
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54

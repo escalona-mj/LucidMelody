@@ -1,7 +1,4 @@
-﻿default current_route = 'common'
-default persistent.first_gameplay = False
-
-image intro_text = ParameterizedText(
+﻿image intro_text = ParameterizedText(
     xalign=0.5,
     yalign=0.5,
     color='#ffffff',
@@ -12,7 +9,7 @@ init python:
     new_game_messages = [
     "Did you want to take a different path?",
     "Something tells me you're curious about the other.",
-    "Trying to change something?"
+    "You ever wonder how things would've gone\nif you just did one thing differently?"
     ]
 
 label start:
@@ -45,7 +42,7 @@ label start:
 
     if current_route == "dhannica":
         jump chap1_dhannica
-    elif current_route == "alec":
-        jump chap1_alec
+    elif current_route == "nick":
+        jump chap1_nick
 
     return
