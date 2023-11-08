@@ -1,35 +1,17 @@
 label chap1_dhannica:
     call chapter_transition
 
-    $ Dhannica = CharInfo(
+    #dhannica route, so she takes the MC role
+    $ MC = CharInfo(
     char_name="[Main]",
     age="[dhannica_age]",
     description="[dhannica_description]",
     mainChr=True,
     points="dhannica_likePoints",
     max_points="dhannica_likePointsMax",
-    pic="dhannica")
+    pic="journal_dhannica")
 
-    $ Nick = CharInfo(
-    char_name="[mcNameboy]",
-    age="[nick_age]",
-    description="[nick_description]",
-    mainChr=False,
-    points="nick_likePoints",
-    max_points="nick_likePointsMax",
-    pic="nick")
-
-    $ Alec = CharInfo(
-    char_name="[a_name]",
-    age="[alec_age]",
-    description="[alec_description]",
-    mainChr=False,
-    points="alec_likePoints",
-    max_points="alec_likePointsMax",
-    pic="alec")
-
-    $ all_chars = [Dhannica, Nick, Alec]
-
+    $ all_chars = [MC, Dhannica, Nick, Alec]
     $ viewing = "[Main]" #set the default screen when opening the character book for the first time
 
     $ nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff') #remove side image
@@ -138,8 +120,9 @@ label chap1_dhannica:
                 "Go eat breakfast.":
                     $ eatBreakfast = True
                     dhannica_i "Nah, I think I've had enough with social media."
-                    $ chrBook = True
-                    play sfx2 "audio/sfx/chrBook.mp3" volume 0.7
+                    $ renpy.notify("Journal unlocked.")
+                    $ journal = True
+                    play sfx2 "audio/sfx/journal.mp3" volume 0.7
                     "Since it was still early, you made your bed before leaving your bedroom. Once you were done, you changed into your uniform and head downstairs."
 
         "Snooze for another 5 minutes.":
@@ -167,8 +150,9 @@ label chap1_dhannica:
     if beLate:
         dhannica_i "IT'S 7:55?!" with vpunch
         dhannica_i "SHOOT!"
-        $ chrBook = True
-        play sfx2 "audio/sfx/chrBook.mp3" volume 0.7
+        $ renpy.notify("Journal unlocked.")
+        $ journal = True
+        play sfx2 "audio/sfx/journal.mp3" volume 0.7
         if usePhone:
             "You jumped out of bed after spending a good 45 minutes scrolling on your phone and head downstairs."
         else:

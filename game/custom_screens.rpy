@@ -347,4 +347,4 @@ label after_load:
     if not persistent.seen_controls:
         play sound "audio/sfx/phone_notif.ogg"
         call screen controls_modal
-    $ persistent.seen_controls = True
+        $ persistent.seen_controls = True

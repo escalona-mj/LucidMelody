@@ -1,6 +1,7 @@
 default current_route = 'common'
 default persistent.first_gameplay = False
-default chrBook = False
+default journal = False
+default seen_journal = False
 
 #DHANNICA VARIABLES
 default meetDhannica = False
@@ -30,3 +31,5 @@ default alec_age = ""
 default alec_description = ""
 
 
+image white:
+    Solid("#fff")

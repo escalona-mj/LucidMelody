@@ -52,18 +52,28 @@ screen dev_screen():
                 yalign 0.5
                 spacing 10
                 vbox:
+                    yalign 0.5
                     label "Other stuff"
                     style_prefix "check"
                     textbutton "Open achievements" action ShowMenu("achievements")
                     textbutton "Force rollback" action Rollback()
                     textbutton "Toggle developer mode" action ToggleVariable("config.developer", True, False)
-                null
                 vbox:
+                    yalign 0.5
+                    label "Journal testing"
+                    style_prefix "check"
+                    textbutton "has Journal? {0}".format(journal) action ToggleVariable("journal", True, False)
+                    textbutton "meet Alec? {0}".format(meetAlec) action ToggleVariable("meetAlec", True, False)
+                    textbutton "meet Nick? {0}".format(meetNick) action ToggleVariable("meetNick", True, False)
+                    textbutton "meet Dhannica? {0}".format(meetDhannica) action ToggleVariable("meetDhannica", True, False)
+                vbox:
+                    yalign 0.5
                     label "Progress (very destructive)"
                     style_prefix "check"
                     textbutton "Delete all saves" action Function(delete_all_saves)
                     textbutton "Delete persistent" action Show("confirm", message="Are you sure you want to delete persistent data?", yes_action=Function(delete_persistent), no_action=Hide("confirm"))
                 vbox:
+                    yalign 0.5
                     label "Screen size (testing only)"
                     style_prefix "check"
                     textbutton _("toggle fullscreen") action If(preferences.fullscreen==False, Preference('display', 'fullscreen'), Preference('display', 'window'))
@@ -79,6 +89,7 @@ screen dev_screen():
                     textbutton "Remove all pts to Alec" action Function(removeAllPointToAlec)
                     textbutton "Remove all pts to Nick" action Function(removeAllPointToNick)
                 vbox:
+                    yalign 0.5
                     text "Alec points = {0}".format(alec_likePoints) color "#fff"
                     text "Nick points = {0}".format(nick_likePoints) color "#fff"
     fixed:

@@ -1546,32 +1546,34 @@ screen notify(message):
 
     timer 3.25 action Hide('notify')
 
-
 # transform notify_appear:
 #     on show:
-#         alpha 0 yoffset 50 zoom 0.95
-#         easein .5 alpha 1.0 yoffset 0 zoom 1.0
+#         alpha 0 xoffset -100
+#         easein .5 alpha 1.0 xoffset 0
 #     on hide:
-#         easein .5 alpha 0.0 yoffset 50 zoom 0.95
+#         easein .5 alpha 0.0 yoffset -50
 
 transform notify_appear:
     on show:
-        alpha 0 xoffset -100
-        easein .5 alpha 1.0 xoffset 0
-    on hide:
-        easein .5 alpha 0.0 xoffset -100
+        alpha 0 xanchor 1.0
+        easein .5 xanchor 0.0 xoffset 10 alpha 1
+    on hide, replaced:
+        easein .5 alpha 0 yoffset -50
 
 
 style notify_frame is empty
 style notify_text:
     is gui_text
     color gui.accent_color
+    # outlines [(5, "#000000b6", 2, 2)]
 
 style notify_frame:
     ypos gui.notify_ypos
 
-    background Frame("gui/notify.png", gui.notify_frame_borders, tile=gui.frame_tile)
-    padding gui.notify_frame_borders.padding
+    background Frame("gui/notify.png", Borders(60,25,60,25), tile=gui.frame_tile)
+    # background Frame("gui/notify.png", gui.notify_frame_borders, tile=gui.frame_tile)
+    # padding gui.notify_frame_borders.padding
+    padding(50,35,50,35)
 
 style notify_text:
     properties gui.text_properties("notify")
@@ -1882,11 +1884,14 @@ screen quick_menu():
                         imagebutton auto _("gui/quickmenu/skip_%s.png"):
                             action Skip() alternate Skip(fast=True, confirm=True)
                             tooltip "Skip"
-                        showif chrBook:
-                            imagebutton auto _("gui/quickmenu/chrBook_%s.png"):
-                                action ShowMenu('chr_book')
-                                tooltip "Character Book"
-                                activate_sound None
+                        if journal:
+                            vbox:
+                                imagebutton auto _("gui/quickmenu/journal_%s.png"):
+                                    action [ShowMenu('journal'), SetVariable("seen_journal", True)]
+                                    tooltip "Journal"
+                                    activate_sound None
+                                if not seen_journal:
+                                    add "gui/notif_dot.png" xoffset 45 yoffset -80
 
 # VERSION 2 QUICK MENU
 
@@ -1959,9 +1964,8 @@ style quickmenu_button_text:
 style quickmenu_image_button:
     activate_sound "audio/sfx/click.mp3"
 
-style tooltip_frame is empty
 style tooltip_frame:
-    # background Frame("gui/tooltip_frame.png", Borders(25,25,25,25), tile=gui.frame_tile)
+    background None
     padding(25,15,25,15)
 
 style tooltip_text:
@@ -1969,7 +1973,7 @@ style tooltip_text:
     color u'#fff'
     yalign 0.5
     font gui.interface_text_font
-    outlines [(3, "#1a1a1a", 2, 2)]
+    outlines [(3, "#16161d", 2, 2)]
 
 style window:
     variant "mobile"
@@ -2025,12 +2029,14 @@ style scrollbar:
     ysize gui.scrollbar_size
     base_bar Frame("gui/phone/scrollbar/horizontal_[prefix_]bar.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
     thumb Frame("gui/phone/scrollbar/horizontal_[prefix_]thumb.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
+    thumb_offset 4
 
 style vscrollbar:
     variant "mobile"
     xsize gui.scrollbar_size
     base_bar Frame("gui/phone/scrollbar/vertical_[prefix_]bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
     thumb Frame("gui/phone/scrollbar/vertical_[prefix_]thumb.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
+    thumb_offset 4
 
 style slider:
     variant "mobile"

@@ -13,6 +13,34 @@ init python:
     ]
 
 label start:
+    #declare the characters in the journal
+    $ Dhannica = CharInfo(
+    char_name="[mcNamegirl]",
+    age="[dhannica_age]",
+    description="[dhannica_description]",
+    mainChr=False,
+    points="dhannica_likePoints",
+    max_points="dhannica_likePointsMax",
+    pic="journal_dhannica")
+
+    $ Nick = CharInfo(
+    char_name="[mcNameboy]",
+    age="[nick_age]",
+    description="[nick_description]",
+    mainChr=False,
+    points="nick_likePoints",
+    max_points="nick_likePointsMax",
+    pic="journal_nick")
+
+    $ Alec = CharInfo(
+    char_name="[a_name]",
+    age="[alec_age]",
+    description="[alec_description]",
+    mainChr=False,
+    points="alec_likePoints",
+    max_points="alec_likePointsMax",
+    pic="journal_alec")
+
     $ _game_menu_screen = None
     $ DisableSkip.start()
     scene black

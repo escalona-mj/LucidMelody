@@ -100,16 +100,18 @@ transform book_appear:
         rotate -2
         easein .25 zoom 0.95 alpha 0.0 rotate 2
 
-screen chr_book():
-    on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/chrBook_open.ogg")
-    on "hide" action Function(renpy.show_layer_at, noBlur, layer="master"), Play("sfx2", "audio/sfx/chrBook_close.ogg")
+screen journal():
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/journal_open.ogg")
+    on "hide" action Function(renpy.show_layer_at, noBlur, layer="master"), Play("sfx2", "audio/sfx/journal_close.ogg")
     dismiss action Return()
+    add "gui/overlay/confirm.png":
+        alpha 0.65
 
     for char in all_chars:
         if viewing == char.name:
             $ name = "Name: " + char.name
             $ age = "Age: " + char.age
-            $ description = "Description:\n\n" + char.description
+            $ description = "Description:\n" + char.description
             $ mainChr = char.mainChr
             $ points = char.points
             $ max_points = char.max_points
@@ -123,7 +125,7 @@ screen chr_book():
     frame:
         at book_appear
         modal True
-        background Frame("gui/chrBook/chrBook.png")
+        background Frame("gui/journal/journal.png")
         xalign 0.5
         yalign 0.5
         hbox:
@@ -132,57 +134,115 @@ screen chr_book():
             frame:
                 xsize 0
                 ysize 0
-                xoffset -150
+                yoffset 40
+                xoffset 55
+                style_prefix "bookmark"
                 vbox:
-                    spacing 75
+                    xalign 1.0
+                    spacing -25
                     if current_route == "dhannica" or current_route == "alec":
-                        textbutton "[Main]" action [SetVariable("viewing", Dhannica.name)]
+                        vbox:
+                            imagebutton auto "gui/journal/dhannica_bookmark_%s.png" action [SetVariable("viewing", MC.name)]
+                            text "[Main]"
                         if meetNick:
-                            textbutton "[mcNameboy]" action [SetVariable("viewing", Nick.name)]
+                            vbox:
+                                imagebutton auto "gui/journal/nick_bookmark_%s.png" action [SetVariable("viewing", Nick.name)]
+                                text "[mcNameboy]"
+                        if meetAlec:
+                            vbox:
+                                imagebutton auto "gui/journal/alec_bookmark_%s.png" action [SetVariable("viewing", Alec.name)]
+                                text "[a_name]"
                     
                     elif current_route == "nick":
-                        textbutton "[Main]" action [SetVariable("viewing", Nick.name)]
+                        vbox:
+                            imagebutton auto "gui/journal/nick_bookmark_%s.png" action [SetVariable("viewing", MC.name)]
+                            text "[Main]"
                         if meetDhannica:
-                            textbutton "[mcNamegirl]" action [SetVariable("viewing", Dhannica.name)]
+                            vbox:
+                                imagebutton auto "gui/journal/dhannica_bookmark_%s.png" action [SetVariable("viewing", Dhannica.name)]
+                                text "[mcNamegirl]"
                     
-                    if meetAlec:
-                        textbutton "[a_name]" action [SetVariable("viewing", Alec.name)]
 
             frame:
                 background None
-                padding(90,30,30,30)
+                padding(80,30,30,90)
                 viewport:
                     xsize 600
                     ysize 800
+                    draggable True
                     vbox:
                         if LoveMeter == True:
-                            hbox:
-                                vbox:
-                                    spacing 25
-                                    text "Current points:" style 'love_bar_text':
-                                        size 40
-                                        xoffset 55
-                                        yoffset 40
-                                    bar style "love_bar_bar":
-                                        value points
-                                        range max_points
-                                text "[points]" style 'love_bar_text':
-                                    yalign 0.5
-                                    size 60
+                            vbox:
+                                text "Current points: [points]" style 'love_bar_text':
+                                    size 40
+                                    xoffset 55
+                                    yoffset 40
+                                bar style "love_bar_bar":
+                                    value points
+                                    range max_points
                         style_prefix "page"
                         text name
                         text age
+                        null height 10
                         text description
 
             frame:
                 background None
-                padding(30,30,90,60)
-                viewport:
+                padding(30,-50,90,60)
+                vbox:
                     xsize 600
                     ysize 800
-                    xinitial 0.5
                     vbox:
-                        add pic xalign 0.5
+                        add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
+
+            frame:
+                xsize 0
+                ysize 0
+                yoffset 700
+                xoffset -55
+                style_prefix "dream_bookmark"
+                vbox:
+                    imagebutton auto "gui/journal/bookmark_%s.png":
+                        foreground Text("Journal", style="bookmark_btn")
+                        action NullAction()
+
+style bookmark_image_button:
+    activate_sound "audio/sfx/journal_page_flip.ogg"
+    xalign 1.0
 
 style page_text:
     color "#000"
+
+style bookmark_text:
+    text_align 1.0
+    xalign 1.0
+    xoffset -15
+    yoffset -60
+    color "#000"
+
+style dream_bookmark_image_button:
+    is bookmark_image_button
+    
+style bookmark_btn:
+    text_align 0.0
+    yalign 0.5
+    xoffset 15
+    color "#fff"
+
+image journal_dhannica = LayeredImageMask("dhannica",
+    Transform(crop=(170, 0, 500, 600)),
+    background="gui/journal/photo_bg.png",
+    mask="gui/journal/photo_mask.png",
+    foreground="gui/journal/photo_fg.png")
+
+image journal_nick = LayeredImageMask("nick",
+    Transform(crop=(170, -50, 500, 600)),
+    background="gui/journal/photo_bg.png",
+    mask="gui/journal/photo_mask.png",
+    foreground="gui/journal/photo_fg.png")
+
+image journal_alec = LayeredImageMask("alec",
+    Transform(crop=(190, 0, 500, 600)),
+    background="gui/journal/photo_bg.png",
+    mask="gui/journal/photo_mask.png",
+    foreground="gui/journal/photo_fg.png")
