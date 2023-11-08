@@ -12,7 +12,7 @@ label chap1_dhannica:
     pic="journal_dhannica")
 
     $ all_chars = [MC, Dhannica, Nick, Alec]
-    $ viewing = "[Main]" #set the default screen when opening the character book for the first time
+    $ current_page = "[Main]" #set the default screen when opening the character book for the first time
 
     $ nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff') #remove side image
     $ a_name = "???"

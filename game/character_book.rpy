@@ -3,7 +3,7 @@
 ##################################################################################################################
 init python:
     class CharInfo:
-        def __init__(self, char_name, age, description, mainChr, points, max_points, pic=None):
+        def __init__(self, char_name='', age='', description='', mainChr=False, points='', max_points='', pic=None, isJournal=False, journal_entry=''):
             self.name = char_name
             self.age = age
             self.description = description
@@ -11,13 +11,23 @@ init python:
             self.points_var = points
             self.max_points_var = max_points
             self.pic = pic
+            self.isJournal = isJournal # This parameter identifies if the instance is a journal.
+            self.journal_entry = journal_entry
 
         #from the old LoveMeter
         @property
-        def points(self): return getattr(store, self.points_var, 0)
+        def points(self):
+            if not self.isJournal:
+                return getattr(store, self.points_var, 0)
+            else:
+                return None
 
         @property
-        def max_points(self): return getattr(store, self.max_points_var, 0)
+        def max_points(self):
+            if not self.isJournal:
+                return getattr(store, self.max_points_var, 0)
+            else:
+                return None
 
         #single method
         def __add__(self, value):
@@ -100,6 +110,10 @@ transform book_appear:
         rotate -2
         easein .25 zoom 0.95 alpha 0.0 rotate 2
 
+transform page_flip:
+    xzoom 0
+    easein_back .5 xzoom 1
+
 screen journal():
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/journal_open.ogg")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master"), Play("sfx2", "audio/sfx/journal_close.ogg")
@@ -107,8 +121,12 @@ screen journal():
     add "gui/overlay/confirm.png":
         alpha 0.65
 
+    # if the
+    if current_page == "Journal":
+        $ entry = Journal.journal_entry
+
     for char in all_chars:
-        if viewing == char.name:
+        if current_page == char.name:
             $ name = "Name: " + char.name
             $ age = "Age: " + char.age
             $ description = "Description:\n" + char.description
@@ -131,6 +149,7 @@ screen journal():
         hbox:
             spacing 10
             
+            #BOOKMARK SECTION
             frame:
                 xsize 0
                 ysize 0
@@ -139,31 +158,41 @@ screen journal():
                 style_prefix "bookmark"
                 vbox:
                     xalign 1.0
-                    spacing -25
+                    spacing 25
                     if current_route == "dhannica" or current_route == "alec":
-                        vbox:
-                            imagebutton auto "gui/journal/dhannica_bookmark_%s.png" action [SetVariable("viewing", MC.name)]
-                            text "[Main]"
+                        imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
+                            foreground Text("", style="bookmark_btn")
+                            selected_foreground Text("{0}".format(Main), style="bookmark_btn")
+                            action [SetVariable("current_page", MC.name)]
+                            focus_mask True
                         if meetNick:
-                            vbox:
-                                imagebutton auto "gui/journal/nick_bookmark_%s.png" action [SetVariable("viewing", Nick.name)]
-                                text "[mcNameboy]"
+                            imagebutton auto "gui/journal/nick_bookmark_%s.png":
+                                foreground Text("", style="bookmark_btn")
+                                selected_foreground Text("{0}".format(mcNameboy), style="bookmark_btn")
+                                action [SetVariable("current_page", Nick.name)]
+                                focus_mask True
                         if meetAlec:
-                            vbox:
-                                imagebutton auto "gui/journal/alec_bookmark_%s.png" action [SetVariable("viewing", Alec.name)]
-                                text "[a_name]"
+                            imagebutton auto "gui/journal/alec_bookmark_%s.png":
+                                foreground Text("", style="bookmark_btn")
+                                selected_foreground Text("{0}".format(a_name), style="bookmark_btn")
+                                action [SetVariable("current_page", Alec.name)]
+                                focus_mask True
                     
                     elif current_route == "nick":
-                        vbox:
-                            imagebutton auto "gui/journal/nick_bookmark_%s.png" action [SetVariable("viewing", MC.name)]
-                            text "[Main]"
+                        imagebutton auto "gui/journal/nick_bookmark_%s.png":
+                            foreground Text("", style="bookmark_btn")
+                            selected_foreground Text("{0}".format(Main), style="bookmark_btn")
+                            action [SetVariable("current_page", MC.name)]
+                            focus_mask True
                         if meetDhannica:
-                            vbox:
-                                imagebutton auto "gui/journal/dhannica_bookmark_%s.png" action [SetVariable("viewing", Dhannica.name)]
-                                text "[mcNamegirl]"
-                    
-
+                                imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
+                                    foreground Text("", style="bookmark_btn")
+                                    selected_foreground Text("{0}".format(mcNamegirl), style="bookmark_btn")
+                                    action [SetVariable("current_page", Dhannica.name)]
+                                    focus_mask True
+            #FIRST PAGE      
             frame:
+                at page_flip
                 background None
                 padding(80,30,30,90)
                 viewport:
@@ -171,30 +200,40 @@ screen journal():
                     ysize 800
                     draggable True
                     vbox:
-                        if LoveMeter == True:
-                            vbox:
-                                text "Current points: [points]" style 'love_bar_text':
-                                    size 40
-                                    xoffset 55
-                                    yoffset 40
-                                bar style "love_bar_bar":
-                                    value points
-                                    range max_points
+                        if not current_page == "Journal":
+                            if LoveMeter == True:
+                                vbox:
+                                    text "Current points: [points]" style 'love_bar_text':
+                                        size 40
+                                        xoffset 55
+                                        yoffset 40
+                                    bar style "love_bar_bar":
+                                        value points
+                                        range max_points
+                        else:
+                            pass
                         style_prefix "page"
-                        text name
-                        text age
-                        null height 10
-                        text description
+                        if current_page == "Journal":
+                            text entry
+                        else:
+                            text name
+                            text age
+                            null height 10
+                            text description
 
+            #SECOND PAGE
             frame:
+                at page_flip
                 background None
                 padding(30,-50,90,60)
                 vbox:
                     xsize 600
                     ysize 800
                     vbox:
-                        add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
+                        if not current_page == "Journal":
+                            add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
 
+            #JOURNAL BOOKMARK
             frame:
                 xsize 0
                 ysize 0
@@ -203,29 +242,30 @@ screen journal():
                 style_prefix "dream_bookmark"
                 vbox:
                     imagebutton auto "gui/journal/bookmark_%s.png":
-                        foreground Text("Journal", style="bookmark_btn")
-                        action NullAction()
+                        foreground Text("", style="dream_bookmark_btn")
+                        selected_foreground Text("Journal", style="dream_bookmark_btn")
+                        action [SetVariable("current_page", "Journal")]
+                        focus_mask True
+
+style page_text:
+    color "#000"
 
 style bookmark_image_button:
     activate_sound "audio/sfx/journal_page_flip.ogg"
     xalign 1.0
 
-style page_text:
-    color "#000"
-
-style bookmark_text:
+style bookmark_btn:
     text_align 1.0
     xalign 1.0
     xoffset -15
-    yoffset -60
+    yalign 0.5
     color "#000"
-
-style dream_bookmark_image_button:
-    is bookmark_image_button
     
-style bookmark_btn:
+style dream_bookmark_image_button is bookmark_image_button
+style dream_bookmark_btn:
     text_align 0.0
     yalign 0.5
+    xalign 0.0
     xoffset 15
     color "#fff"
 
@@ -246,3 +286,4 @@ image journal_alec = LayeredImageMask("alec",
     background="gui/journal/photo_bg.png",
     mask="gui/journal/photo_mask.png",
     foreground="gui/journal/photo_fg.png")
+

@@ -18,7 +18,6 @@ label start:
     char_name="[mcNamegirl]",
     age="[dhannica_age]",
     description="[dhannica_description]",
-    mainChr=False,
     points="dhannica_likePoints",
     max_points="dhannica_likePointsMax",
     pic="journal_dhannica")
@@ -27,7 +26,6 @@ label start:
     char_name="[mcNameboy]",
     age="[nick_age]",
     description="[nick_description]",
-    mainChr=False,
     points="nick_likePoints",
     max_points="nick_likePointsMax",
     pic="journal_nick")
@@ -36,10 +34,11 @@ label start:
     char_name="[a_name]",
     age="[alec_age]",
     description="[alec_description]",
-    mainChr=False,
     points="alec_likePoints",
     max_points="alec_likePointsMax",
     pic="journal_alec")
+
+    $ Journal = CharInfo(isJournal=True, journal_entry="[journal_entry]")
 
     $ _game_menu_screen = None
     $ DisableSkip.start()

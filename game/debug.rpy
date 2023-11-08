@@ -58,14 +58,17 @@ screen dev_screen():
                     textbutton "Open achievements" action ShowMenu("achievements")
                     textbutton "Force rollback" action Rollback()
                     textbutton "Toggle developer mode" action ToggleVariable("config.developer", True, False)
-                vbox:
-                    yalign 0.5
-                    label "Journal testing"
-                    style_prefix "check"
-                    textbutton "has Journal? {0}".format(journal) action ToggleVariable("journal", True, False)
-                    textbutton "meet Alec? {0}".format(meetAlec) action ToggleVariable("meetAlec", True, False)
-                    textbutton "meet Nick? {0}".format(meetNick) action ToggleVariable("meetNick", True, False)
-                    textbutton "meet Dhannica? {0}".format(meetDhannica) action ToggleVariable("meetDhannica", True, False)
+                if not main_menu:
+                    vbox:
+                        yalign 0.5
+                        label "Journal testing"
+                        style_prefix "check"
+                        textbutton "has Journal? {0}".format(journal) action ToggleVariable("journal", True, False)
+                        if current_route == "dhannica" or current_route == "alec":
+                            textbutton "meet Alec? {0}".format(meetAlec) action ToggleVariable("meetAlec", True, False)
+                            textbutton "meet Nick? {0}".format(meetNick) action ToggleVariable("meetNick", True, False)
+                        elif current_route == "nick":
+                            textbutton "meet Dhannica? {0}".format(meetDhannica) action ToggleVariable("meetDhannica", True, False)
                 vbox:
                     yalign 0.5
                     label "Progress (very destructive)"
@@ -79,19 +82,20 @@ screen dev_screen():
                     textbutton _("toggle fullscreen") action If(preferences.fullscreen==False, Preference('display', 'fullscreen'), Preference('display', 'window'))
                     textbutton "tablet screen" action Preference("display", 0.5)
                     textbutton "phone screen" action Preference("display", 0.35)
-                vbox:
-                    label "Point manager"
-                    style_prefix "check"
-                    textbutton "Add 10pts to Alec" action Function(addPointToAlec)
-                    textbutton "Remove 10pts to Alec" action Function(removePointToAlec)
-                    textbutton "Add 10pts to Nick" action Function(addPointToNick)
-                    textbutton "Remove 10pts to Alec" action Function(removePointToNick)
-                    textbutton "Remove all pts to Alec" action Function(removeAllPointToAlec)
-                    textbutton "Remove all pts to Nick" action Function(removeAllPointToNick)
-                vbox:
-                    yalign 0.5
-                    text "Alec points = {0}".format(alec_likePoints) color "#fff"
-                    text "Nick points = {0}".format(nick_likePoints) color "#fff"
+                if not main_menu:
+                    vbox:
+                        label "Point manager"
+                        style_prefix "check"
+                        textbutton "Add 10pts to Alec" action Function(addPointToAlec)
+                        textbutton "Remove 10pts to Alec" action Function(removePointToAlec)
+                        textbutton "Add 10pts to Nick" action Function(addPointToNick)
+                        textbutton "Remove 10pts to Alec" action Function(removePointToNick)
+                        textbutton "Remove all pts to Alec" action Function(removeAllPointToAlec)
+                        textbutton "Remove all pts to Nick" action Function(removeAllPointToNick)
+                    vbox:
+                        yalign 0.5
+                        text "Alec points = {0}".format(alec_likePoints) color "#fff"
+                        text "Nick points = {0}".format(nick_likePoints) color "#fff"
     fixed:
         imagebutton:
             xalign 0.5

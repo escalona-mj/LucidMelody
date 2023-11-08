@@ -2,6 +2,7 @@ default current_route = 'common'
 default persistent.first_gameplay = False
 default journal = False
 default seen_journal = False
+default journal_entry = ""
 
 #DHANNICA VARIABLES
 default meetDhannica = False
