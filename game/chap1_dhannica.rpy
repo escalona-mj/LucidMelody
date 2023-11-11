@@ -7,8 +7,6 @@ label chap1_dhannica:
     age="[dhannica_age]",
     description="[dhannica_description]",
     mainChr=True,
-    points="dhannica_likePoints",
-    max_points="dhannica_likePointsMax",
     pic="journal_dhannica")
 
     $ all_chars = [MC, Dhannica, Nick, Alec]
@@ -42,7 +40,7 @@ label chap1_dhannica:
     dhannica_i "I never thought I got to be on front stage..."
     dhannica_i "Now I get to observe him closer!"
     dhannica_i "This is all making me teary...!"
-    d_singer "{size=+50}YOU THERE!{/size}{fast}" with vpunch
+    d_singer "{sc}{size=+50}YOU THERE!{/size}{/sc}{fast}" with vpunch
     "The lead singer shouted, while looking at your teary soulful eyes."
     dhannica "Wh-wha? Me?"
     d_singer "Yes you! You'd been crying there for so long."
@@ -62,13 +60,14 @@ label chap1_dhannica:
     "They were green..."
     "You were lost in the song, in his eyes, having caught a milisecond of his identity."
     "You wonder and think, will this last forever?"
-    play sfx2 alarmloop volume 0.25 loop
+    $ renpy.music.set_volume(0.0, delay=0.0, channel='sfx2')
+    play sfx2 alarmloop loop
+    $ renpy.music.set_volume(1.0, delay=5.0, channel='sfx2')
     "Maybe..."
-    play sfx2 alarmloop volume 0.5 loop
     "Maybe.."
-    play sfx2 alarmloop volume 0.75 loop
     "{cps=15}Mayb{nw}"
-    stop sfx2
+    $ renpy.music.set_volume(1.0, delay=0.0, channel='sfx2')
+    stop sfx2 fadeout 1.0
     stop ambient
     #delete the dream history to make it more authentic like she forgor
     $ del _history_list[-33:]
@@ -82,10 +81,10 @@ label chap1_dhannica:
     pause 4.0
     $ dream.grant()
     $ dhannica_age = "18"
-    $ dhannica_description = "A simple gal."
+    $ dhannica_description = "There's not much to say anything about me."
     window auto
     menu:
-        "Get up and turn off the alarm.":
+        "Get up and turn off the alarm":
             camera at dizzy
             scene bg dhannica room with eye_open
             dhannica_i "Ugh... That was such a dream."
@@ -94,15 +93,16 @@ label chap1_dhannica:
             window hide(None)
             pause 1.25
             window auto
-            $ renpy.notify("Character updated.")
-            $ dhannica_description = "{0} Well, a hungry one.".format(dhannica_description)
+            # $ update_journal("Character updated.")
+            # $ dhannica_description = "{0} Well, a hungry one.".format(dhannica_description)
             dhannica_i "Oh shoot, I forgot! I never really had dinner last night."
             camera at reset_dizzy
             play sound phone_notif
             dhannica_i "Huh? My phone..."
+            dhannica_i "..."
             dhannica_i "It won't hurt to peek right?"
             menu:
-                "Check my phone.":
+                "Check your phone":
                     $ usePhone = True
                     $ beLate = True
                     "You extended your hand to grab your phone."
@@ -117,15 +117,14 @@ label chap1_dhannica:
                     pause 1.5
                     "It didn't take long for you to finally remember something."
 
-                "Go eat breakfast.":
+                "Go eat breakfast":
                     $ eatBreakfast = True
                     dhannica_i "Nah, I think I've had enough with social media."
-                    $ renpy.notify("Journal unlocked.")
                     $ journal = True
-                    play sfx2 "audio/sfx/journal.mp3" volume 0.7
+                    $ update_journal("Journal unlocked.")
                     "Since it was still early, you made your bed before leaving your bedroom. Once you were done, you changed into your uniform and head downstairs."
 
-        "Snooze for another 5 minutes.":
+        "Snooze for another 5 minutes":
             $ beLate = True
             dhannica_i "Nooo, I need to remember..."
             dhannica_i "I don't wanna wake up..."
@@ -140,6 +139,7 @@ label chap1_dhannica:
             play sound alarm fadein 3.0 loop volume 0.6
             window hide(None)
             pause 3.0
+            camera at dizzy
             scene bg dhannica room with eye_open
             window auto
             dhannica_i "Urk..."
@@ -148,11 +148,11 @@ label chap1_dhannica:
             stop sound fadeout 0.2
 
     if beLate:
-        dhannica_i "IT'S 7:55?!" with vpunch
-        dhannica_i "SHOOT!"
-        $ renpy.notify("Journal unlocked.")
+        camera at reset_dizzy
+        dhannica_i "{sc}IT'S 7:55?!{/sc}" with vpunch
+        dhannica_i "{sc}SHOOT!{/sc}"
         $ journal = True
-        play sfx2 "audio/sfx/journal.mp3" volume 0.7
+        $ update_journal("Journal unlocked.")
         if usePhone:
             "You jumped out of bed after spending a good 45 minutes scrolling on your phone and head downstairs."
         else:
@@ -182,6 +182,8 @@ label chap1_dhannica:
         hide mom at trans3
         girlMom "At least bring an ice pack!"
         dhannica "I'm going, bye~"
+        $ update_journal("Journal updated.")
+        $ dhannica_description = "{0} Well, a bit tardy I suppose.".format(dhannica_description)
     elif eatBreakfast:
         "You accidentally bumped your toe on the baluster."
         dhannica "Arrrrgh...this sucks, what the hell."
@@ -209,6 +211,7 @@ label chap1_dhannica:
     play sound doorclose
     scene bg highway with scenedissolve
     play ambient birds
+
     if beLate:
         "Running frantically on a Monday morning with nothing to eat and an injured toe can surely do something to you."
         "You felt weak and drained, when you've barely even started the day."
@@ -228,11 +231,12 @@ label chap1_dhannica:
         "You had to do something..."
         menu:
             dhannica_i "Should I just run for it?"
-            "Yes.":
+            "Yes":
                 "You mustered up the courage to suck up the pain and just run for it, and that's exactly what you did."
                 "You didn't care about your appearance, even if you felt people were staring at you, wondering if you were okay or if they should help you."
                 play sound bus_open fadeout 0.5
                 stop ambient2 fadeout 10.0
+                show bg busstop_no_bus with dissolve
                 "However, as you were about to reach the door, it immediately closed, which could only mean one thing: it was already full and the bus had already left."
                 dhannica_i "No..."
                 "A sudden pang of pain rushed through you."
@@ -250,8 +254,11 @@ label chap1_dhannica:
                 dhannica_i  "But, good heavens, it still hurt."
                 camera:
                     ease 2.0 xalign 0.5
-                show nick at trans3
+                show nick:
+                    offscreenleft
+                    ease 2.5 xalign 0.5 ypos 1.03
                 "As you kept your gaze fixed on the bus schedule, you noticed a presence beside you."
+                show nick at trans3
                 "If you hadn't looked up, you might not have even noticed him."
                 camera:
                     ease 1.0 yalign 0.55
@@ -276,7 +283,7 @@ label chap1_dhannica:
                     "Refuse":
                         pass
                 $ meetNick = True
-                $ renpy.notify("Character added.")
+                $ update_journal("Character added.")
                 camera:
                     ease 1.0 zoom 1.5 truecenter
                 hide flask with Dissolve(0.2)
@@ -288,7 +295,8 @@ label chap1_dhannica:
                     nick "You sprained yourself, right?"
                     dhannica "I uh, stubbed my toe."
                     "He let out a small chuckle, but it sounded more like he was mocking."
-                    dhannica_i "Did he just laugh at my situation?"
+                    dhannica_i "Was he laughing at my situation?"
+                    dhannica_i "I swear, this guy..."
                     dhannica "What's so funny?"
                     nick "Nothing. Here."
                     show nick:
@@ -336,7 +344,6 @@ label chap1_dhannica:
                     "At first, it hurt, but the pain had subsided."
                     camera:
                         ease 1.0 yalign 0.6
-
                     "As you knelt down, tending to your swollen toe, you couldn't help but notice his shoes."
                     
                 else:
@@ -349,8 +356,20 @@ label chap1_dhannica:
                     "He gave you a quick glance, checking if you were alright and if he'd done a good job."
                     "In that moment, you saw them clearly: his eyes, one blue and the other green. Something about him felt peculiar to you."
                     "As he tended to your foot, you couldn't help but notice his shoes."
+                    show nick:
+                        ease_back 1.0 yalign 1.03
+                    show nick at trans3
+                    "He rose abruptly, seemingly aware that the interaction between you two was drawing attention."
+                    camera:
+                        ease 1.0 truecenter zoom 1.0
+                    "It was sort of giving a public display of affection, garnering curious glances from onlookers."
+                    nick "J-just put that there. Give the bottle back to me when you get a chance."
+                    hide nick at trans3
+                    "He soon left at a fastened pace, leaving you all alone in the bus stop."
+                    dhannica_i "Well that was...interesting."
+                    jump school
                     
-            "No.":
+            "No":
                 dhannica_i "You know what? I think it's safest to just keep my pace; I know I'll get there anyways."
                 "You continued walking at the same limping pace, enduring the persistent pain in your foot."
                 "As you approached the bus stop, you noticed a commotion of people rushing onto the bus."
@@ -359,16 +378,16 @@ label chap1_dhannica:
                 "The last person tried to board, but was rejected by the conductor informing that the bus was already full."
                 "You stood there, observing the commotion, unintentionally fixating on a man berating the driver."
                 stop ambient2 fadeout 3.0
+                show bg busstop_no_bus with dissolve
                 "You didn't realize you'd been standing there for 20 seconds, nor did you know why you had."
                 "He finally looked in your direction, and when both of your eyes met, you instinctively glanced at the ground, as if you hadn't already been caught staring."
                 $ meetNick = True
-                $ renpy.notify("Character added.")
+                $ update_journal("Character added.")
                 offscr_nick "Why are you looking at me like that?"
-                show nick at trans4
                 "You tried your best not to appear obvious and began to slowly make your way to a nearby bench, attempting not to limp to hide your injury."
-                show nick at trans1
                 "He continued to stand there, waiting for the next bus to arrive."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
+                "The silence was there, stagnating in the air."
                 dhannica "You can sit down if you'd like. The next bus comes in about 15 minutes anyway."
                 ".{w=0.5}.{w=0.5}.{w=0.5}"
                 dhannica_i "DID I JUST SAY THAT, [Main!u]?!" with vpunch
@@ -381,9 +400,10 @@ label chap1_dhannica:
                 dhannica_i "Sometimes, I don't even know why I hit the snooze button."
                 dhannica "{size=-10}How does anyone wake up after the first alarm?{/size}"
                 play ambient2 busengine fadein 2.0
+                show bg busstop with dissolve
                 "As you sat there contemplating your life choices, the next bus had already arrived."
                 play sound busopen
-                "Both of you stood up at the same time, with the atmosphere being thick between the two of you."
+                "Both of you stood up at the same time, despite the atmosphere being thick between the two of you."
                 "He seem to have rushed and went ahead of you before boarding into the bus."
                 "It appeared to be full, but you needed to check if you could squeeze in."
                 stop ambient fadeout 1.0
@@ -406,7 +426,7 @@ label chap1_dhannica:
                 dhannica "U-uhm, okay."
                 "You were quite embarrassed, trying not to look at his face."
                 "You draped your hair over your features as you bent down, concealing your expression, which was in complete utter embarrassment."
-                dhannica "{size=-10}Thank you...{/size}"
+                dhannica "{size=-5}Thank you...{/size}"
                 "He handed you a flask, with its exterior dripping wet with pebbles of moist water sliding off of it."
                 show nick at trans3
                 nick "Here."
@@ -422,7 +442,7 @@ label chap1_dhannica:
                         "In fact, he appears as though he doesn't want to interact with anyone."
                         "You gently applied the cold flask to the side of your foot and instantly began to experience relief. Your pinky toe had swelled and grown warm, but this remedy appeared to be reducing the discomfort."
                         "Leaning down as you tended your injury, you couldn't help but notice his shoes."
-                    "Refuse to take it":
+                    "Refuse":
                         $ n_refuseTake = True
                         dhannica "You wouldn't want me to do that."
                         nick "Why not?"
@@ -449,6 +469,24 @@ label chap1_dhannica:
         "They were quite rugged, classic black and white high-top Chuck Taylors."
         dhannica_i "Hmm...cute."
         dhannica_i "There are little cute spiderhero webs drawn all over the tips of his shoes." 
+
+        if n_takeIcedTea:
+            $ Nick.add(5)
+            camera:
+                ease 1.0 truecenter zoom 1.0
+            show nick:
+                ease_back 1.0 yalign 1.0
+            offscr_nick "There, that should do it."
+            show nick at trans3
+            nick "..."
+            dhannica "..."
+            nick "I uhh, gotta go."
+            show nick:
+                ease_back 1.0 offscreenright
+            dhannica "Wait! Your flask!..."
+            "You're clueless at what just happened."
+            dhannica_i "Guess I'll return this..."
+
         if n_refuseTake:
             $ Nick.add(10)
             "After a few minutes, you began to feel better, albeit only slightly."
@@ -456,7 +494,7 @@ label chap1_dhannica:
             "With the bus being so crowded, you both stood out for sure."
             show nick at trans3
             "He seemed to notice it too. It's obvious because of how he promptly stood up, maintaining his composure."
-            nick "Keep that until the cold is gone. Just give it back to me when you're done."
+            nick "Err...keep that until the cold is gone. Just give it back to me when you're done."
             show nick:
                 ease 1.0 offscreenleft
             pause 1.0
@@ -470,6 +508,8 @@ label chap1_dhannica:
             window auto
             "He disembarked at the next bus stop, and you never saw him again."
             "Silence came after, for the rest of the ride."
+            play ambient birds
+            jump school
 
     else:
         "The air around you was chilly, and the birds were all up and singing."
@@ -478,65 +518,158 @@ label chap1_dhannica:
         dhannica_i "As if this stupid toe would make it easier for me."
         jump school
     
-    label school:
-        camera:
-            ease 1.0 truecenter zoom 1.0
-        scene bg school with scenefadehold
-        $ welcome.grant()
-        "You finally reached the school, walking through the gates limping on your other foot."
-        dhannica_i "I look like a loser. That's just great."
-        dhannica_i "Is this how people are gonna remember me...? The limping kid on the first day of school."
-        "You gaze before you a school, with an interesting color choice that seem be used redundantly everywhere."
-        "..."
-        "It didn't take long for you to finally realize what you're here for."
-        dhannica "Oh right, my class schedule."
-        "You rummaged through your bag, only to find out your outer pocket was open and your class schedule had fallen out."
-        dhannica_i "This day just gets better and better."
-        "Sarcasm was the only thing that could sugarcoat this situation."
-        "You start to trace back your previous steps, carefully searching for your schedule, with your eyes glued to the ground."
-        "Suddenly...a hand appeared in your field of vision, holding a piece of paper."
-        "You read, '{i}Purposive Communication - 7:15 am - 8-15 am{/i}'."
-        "It was your schedule."
-        $ meetAlec = True
-        $ renpy.notify("Character added.")
-        show alec at trans3
-        "You looked at his hand and followed the trail of grungy accessories, to his chain necklace up to his green eyes."
-        "You don't know what you felt, but you felt something. Maybe gratitude?"
-        "That you wouldn't have to pay an extra 100 to get another copy of your schedule."
-        dhannica "Uhm...thank you... for the, uhm...this."
-        $ Alec.add(3)
-        alec "No biggie."
-        alec "I noticed this on the ground then looked ahead and saw your bag was open, so I had to hand it to you."
-        alec "It seems that we're in the same class. Nice to meet you classmate."
-        "He stretches out his hand for a handshake."
-        "In which, you relunctantly returned the offer."
-        alec "By the way, are you okay? You don't seem to be walking right."
-        dhannica "Oh...yeah haha, I stubbed my toe this morning. And well, I thought it was gonna be okay after a few minutes, but I guess that's still yet to come."
-        alec "Would you like me to accompany you to the nurse's office?"
-
-        menu:
-            "Accept":
-                $ Alec.add(2)
-                $ a_clinic = True
-                dhannica "I mean, sure? Classes are about to start though. We'll be late if we did."
-
-            "Deny":
-                dhannica "You dont have to, I mean I wouldn't want to be a bother."
-                alec "Nonsense, friends don't bother me."
-                dhannica_i "What~"
-                alec "We're friends, right?"
-                dhannica "I guess...?"
-                dhannica_i "I've made a friend~"
-                dhannica "But we'll be late if we go now."
-            
-        alec "I guess so. How about after the first subject? We have 30 mins vacant. I'm sure that's enough time for the nurse to patch you up."
-
-        if a_clinic:
-            dhannica "Thanks, but you really don't have to do this."
-            alec "And leave my first friend to an injury? I don't think so."
-            dhannica_i "I've made a friend~"
-
-        dhannica "I mean if you insist, how dare would I refuse hahaha."
-        alec "Let's go, we'll be late for first sub."
-        "Alec offers his hand for you to hold unto as you both walk to your classroom."
+label school:
+    camera:
+        ease 1.0 truecenter zoom 1.0
+    scene bg school with scenefadehold
+    $ welcome.grant()
+    if beLate:
+        $ update_journal("Character updated.")
+        $ nick_description = "A strange guy that offered me help. Had blue and green eyes...\n\nIt's weird that he had to leave me his flask. Couldn't he just wait for it before leaving me?"
+        "You finally reached the school in a faster pace, thanks to the cold flask that was applied to you by a stranger."
+        dhannica_i "I gotta thank him for this."
+        dhannica_i "But first, my classroom!"
+        stop ambient fadeout 1.0
         jump classroom
+
+    $ update_journal("Journal updated.")
+    $ dhannica_description = "{0} Well, an early bird I suppose.".format(dhannica_description)
+    "You finally reached the school, walking through the gates limping on your other foot."
+    dhannica_i "I look like a loser. That's just great."
+    dhannica_i "Is this how people are gonna remember me...? The limping kid on the first day of school."
+    "You gaze before you a school, with an interesting color choice that seem be used redundantly everywhere."
+    "..."
+    "It didn't take long for you to finally realize what you're here for."
+    dhannica "Oh right, my class schedule."
+    "You rummaged through your bag, only to find out your outer pocket was open and your class schedule had fallen out."
+    dhannica_i "This day just gets better and better."
+    "Sarcasm was the only thing that could sugarcoat this situation."
+    "You start to trace back your previous steps, carefully searching for your schedule, with your eyes glued to the ground."
+    "Suddenly...a hand appeared in your field of vision, holding a piece of paper."
+    "You read, '{i}Purposive Communication - 7:15 am - 8-15 am{/i}'."
+    "It was your schedule."
+    $ meetAlec = True
+    $ update_journal("Character added.")
+    show alec at trans3
+    "You looked at his hand and followed the trail of grungy accessories, to his chain necklace up to his green eyes."
+    "You don't know what you felt, but you felt something. Maybe gratitude?"
+    "That you wouldn't have to pay an extra 100 to get another copy of your schedule."
+    dhannica "Uhm...thank you... for the, uhm...this."
+    $ Alec.add(3)
+    alec "No biggie."
+    alec "I noticed this on the ground then looked ahead and saw your bag was open, so I had to hand it to you."
+    alec "It seems that we're in the same class. Nice to meet you classmate."
+    "He stretches out his hand for a handshake."
+    "In which, you relunctantly returned the offer."
+    alec "By the way, are you okay? You don't seem to be walking right."
+    dhannica "Oh...yeah haha, I stubbed my toe this morning. And well, I thought it was gonna be okay after a few minutes, but I guess that's still yet to come."
+    alec "Would you like me to accompany you to the nurse's office?"
+
+    menu:
+        "Accept":
+            $ Alec.add(2)
+            $ a_clinic = True
+            dhannica "I mean, sure? Classes are about to start though. We'll be late if we did."
+
+        "Deny":
+            dhannica "You dont have to, I mean I wouldn't want to be a bother."
+            alec "Nonsense, friends don't bother me."
+            dhannica_i "What~"
+            alec "We're friends, right?"
+            dhannica "I guess...?"
+            dhannica_i "I've made a friend~"
+            dhannica "But we'll be late if we go now."
+        
+    alec "I guess so. How about after the first subject? We have 30 mins vacant. I'm sure that's enough time for the nurse to patch you up."
+
+    if a_clinic:
+        dhannica "Thanks, but you really don't have to do this."
+        alec "And leave my first friend to an injury? I don't think so."
+        dhannica_i "I've made a friend~"
+
+    $ update_journal("Character updated.")
+    $ alec_description = "A really stylish guy. Had green eyes... Quite friendly and offered me help. Literally added me as his friend. Well, in real life."
+    dhannica "I mean if you insist, how dare would I refuse hahaha."
+    alec "Let's go, we'll be late for first sub."
+    hide alec at trans3
+    "He offers his hand for you to hold unto as you both walk to your classroom."
+    stop ambient fadeout 1.0
+    jump classroom
+
+label classroom:
+    scene bg classroom with scenefadehold
+    if beLate:
+        "You hustle to class, pulling yourself towards the door with just a minute to spare before the teacher arrives."
+        "Suddenly, a gentle touch on your arm catches your attention."
+        show alec at trans3
+        $ meetAlec = True
+        $ update_journal("Character added.")
+        "You turn to see a person with white hair and adorned with lots of jewelry."
+        "Those unmistakable green eyes meet yours."
+        dhannica "O-oh, thanks."
+        alec "No problem, I was about to get in anyway."
+        "He guides you to an empty seat, introducing himself along the way."
+        $ a_name = "Alec"
+        alec "I'm Alec, by the way."
+        hide alec at trans3
+        "The teacher calls the class to order."
+    else:
+        "You both made your way to class, arriving right on time, with the professor trailing behind as you entered."
+    
+    prof "Good morning, class! Lots of fresh blood I see today!"
+    prof "Well, freshmen, I hope you all have an educational yet memorable time here as an STIer."
+    prof "I expect you all to wear our school colors, its name, legacy, as well as your IDs."
+    prof "Because believe me, the guards outside won't let you in without it. Hahaha."
+    "The entire class laughs."
+    prof "No, but seriously though, three strikes and you're out."
+    prof "Alright, let's take attendance first before we discuss the school rules, shall we?"
+    scene bg classroom with long_dissolve
+    "As the professor continued with the lively discussion while inserting puns to keep the atmosphere engaging, you find it challenging to focus."
+    if beLate:
+        "The pain in your left foot is intensifying, and you sense Alec noticing your discomfort."
+    else:
+        "The pain in your left foot is intensifying, and you sense the white-haired guy noticing your discomfort."
+    dhannica_i "When is he gonna stop blabbering?"
+    if beLate:
+        "The door opens, and a newcomer rushes in, catching his breath."
+        unknown_guy "Sorry, I'm late!"
+        prof "Ah, first day and he's already late."
+        "Suddenly, Alec raises his hand, catching the professor's attention."
+    else:
+        "Suddenly, the white-haired guy raises his hand, catching the professor's attention."
+    prof "Yes, Mr. Boyband with the grunge style. What's up?"
+    offscr_alec "My friend here has sprained herself on the way to school and she wanted to ask if she could go to the nurse's office to get it checked out."
+    prof "Well, why didn't you go there before class started?"
+    if beLate:
+        dhannica "Uhh..."
+        "Alec looks at you as if he's expecting a better answer."
+    else:
+        dhannica "Uhh, we didn't want to be marked late, so we came in and took attendance first."
+    prof "Well, you could've just given me the nurse's note and come in after you've gone to see her, and you'd still be marked as present, just excused."
+    dhannica "W-we didn't think about that."
+    prof "Well, now you have."
+    prof "Class, next time prioritize your health, as long as it's valid, alright?"
+    prof "You may go."
+    "You stood up, limping, and headed towards the door."
+    if beLate:
+        prof "Are you going alone looking like that? I don't think so."
+        "The profesor signals the newcomer standing next to him and points at you."
+        prof "Make yourself useful, since you're late. Escort her to the nurse's office."
+        show nick:
+            trans3
+            ease 1.0 offscreenleft
+        "As you take a good look at your assigned escort, surprise washes over you."
+        dhannica "{sc}It's YOU?!{/sc}" with vpunch
+    else:
+        prof "Aren't you going to bring your friend?"
+        "He walks towards you to escort you to the nurse's room."
+        dhannica "Thanks."
+        alec "No problem."
+        scene bg school hallway with scenefadehold
+        show nick:
+            offscreenright
+            ease 1.0 xalign 0.5
+            pause .5
+            ease 1.0 offscreenleft
+        "As you exited, a guy rushed towards the door, abruptly halting in front of you before swerving to enter."
+        offscr_nick "Sorry, I'm late!"

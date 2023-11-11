@@ -14,7 +14,9 @@
 init python:
     renpy.music.register_channel("ambient", mixer="ambient", loop=True, tight=True)
     renpy.music.register_channel("ambient2", mixer="ambient", loop=True, tight=True)
-    renpy.music.register_channel("sfx2", mixer="sfx", loop=False, tight=True)
+    renpy.music.register_channel("sfx2", mixer="sfx", loop=False)
+    renpy.music.register_channel("notif", mixer="sfx", loop=False, tight=True)
+
     config.auto_voice = "audio/voice/{id}.ogg"
 
 default preferences.voice_after_game_menu = True

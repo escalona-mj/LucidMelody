@@ -1,12 +1,15 @@
-define config.always_shown_screens = ["dev_screen"]
-
 init python:
+    if not renpy.variant("pc"):
+        config.always_shown_screens = ["dev_screen"]
+
     def delete_all_saves():
         for i in renpy.list_saved_games(fast=True):
             renpy.unlink_save(i)
+            
     def delete_persistent():
         persistent._clear(True)
         renpy.reload_script()
+        delete_all_saves()
 
     def addPointToAlec():
         Alec.add(10)
@@ -73,8 +76,8 @@ screen dev_screen():
                     yalign 0.5
                     label "Progress (very destructive)"
                     style_prefix "check"
-                    textbutton "Delete all saves" action Function(delete_all_saves)
-                    textbutton "Delete persistent" action Show("confirm", message="Are you sure you want to delete persistent data?", yes_action=Function(delete_persistent), no_action=Hide("confirm"))
+                    textbutton "Delete all saves" action Show("confirm", message="Are you sure you want to delete all the saves?", yes_action=[Function(delete_all_saves), Hide()], no_action=Hide(), _layer="front")
+                    textbutton "Delete persistent" action Show("confirm", message="Are you sure you want to delete persistent data?\n(This will also delete all the saves.)", yes_action=Function(delete_persistent), no_action=Hide(), _layer="front")
                 vbox:
                     yalign 0.5
                     label "Screen size (testing only)"
@@ -108,5 +111,5 @@ screen dev_screen():
             action ToggleLocalVariable("devtools", True, False)
 
 
-# init python:
-#     build.classify("**debug.rpy", None)
+init python:
+    build.classify("**debug.rpy", None)

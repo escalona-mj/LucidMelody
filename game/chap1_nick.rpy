@@ -7,8 +7,6 @@ label chap1_nick:
     age="[nick_age]",
     description="[nick_description]",
     mainChr=True,
-    points="nick_likePoints",
-    max_points="nick_likePointsMax",
     pic="journal_nick")
 
     $ all_chars = [MC, Dhannica, Nick, Alec]

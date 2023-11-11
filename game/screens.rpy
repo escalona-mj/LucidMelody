@@ -161,7 +161,6 @@ style say_label:
 
 style say_dialogue:
     properties gui.text_properties("dialogue")
-    color u"#fff"
     # outlines [(5, "#16161d", 2, 2)]
     # line_spacing -5
     xpos gui.dialogue_xpos
@@ -1570,7 +1569,7 @@ style notify_text:
 style notify_frame:
     ypos gui.notify_ypos
 
-    background Frame("gui/notify.png", Borders(60,25,60,25), tile=gui.frame_tile)
+    background Frame("gui/notify.png", Borders(60,10,60,10), tile=gui.frame_tile)
     # background Frame("gui/notify.png", gui.notify_frame_borders, tile=gui.frame_tile)
     # padding gui.notify_frame_borders.padding
     padding(50,35,50,35)
@@ -1805,136 +1804,54 @@ screen quick_menu():
     zorder 1000
 
     if quick_menu:
-
-# VERSION 3 QUICKMENU
-        # showif persistent.quick_menu_frame:
-        #     frame:
-        #         xalign 1.0
-        #         yalign 0.8
-        #         at transform:
-        #             on show:
-        #                 xalign 1.5 alpha 0.0
-        #                 easein 0.5 xalign 1.0 alpha 1.0
-        #             on hide:
-        #                 easein 0.5 xalign 1.5 alpha 0.0
-        #         background None
-        #         hbox: 
-        #             spacing 25
-        #             imagebutton auto _("gui/quickmenu/back_%s.png"):
-        #                 action Rollback()
-        #                 tooltip "Back"
-        #             imagebutton auto _("gui/quickmenu/history_%s.png"):
-        #                 action ShowMenu('history')
-        #                 tooltip "History"
-        #             imagebutton auto _("gui/quickmenu/hide_%s.png"):
-        #                 action HideInterface()
-        #                 tooltip "Hide"
-        #             imagebutton auto _("gui/quickmenu/auto_%s.png"):
-        #                 action Preference("auto-forward", "toggle")
-        #                 tooltip "Auto"
-        #             imagebutton auto _("gui/quickmenu/skip_%s.png"):
-        #                 action Skip() alternate Skip(fast=True, confirm=True)
-        #                 tooltip "Skip"
-        #             imagebutton auto _("gui/quickmenu/load_%s.png"):
-        #                 action ShowMenu('load')
-        #                 tooltip "Load"
-        #             imagebutton auto _("gui/quickmenu/save_%s.png"):
-        #                 action ShowMenu('save')
-        #                 tooltip "Save"
-        #             imagebutton auto _("gui/quickmenu/settings_%s.png"):
-        #                 action ShowMenu('preferences')
-        #                 tooltip "Settings"
-
-# VERSION 1 QUICK MENU
-
-            frame:
-                background None
-                padding(50,50,50,50)
+        frame:
+            hbox:
+                xfill True
+                box_wrap_spacing 1920
                 hbox:
-                    xfill True
-                    box_wrap_spacing 1920
-                    hbox:
-                        spacing 50
-                        imagebutton auto _("gui/quickmenu/history_%s.png"):
-                            action ShowMenu('history')
-                            tooltip "History"
-                        imagebutton auto _("gui/quickmenu/hide_%s.png"):
-                            action HideInterface()
-                            tooltip "Hide"
-                        imagebutton auto _("gui/quickmenu/load_%s.png"):
-                            action ShowMenu('load')
-                            tooltip "Load"
-                        imagebutton auto _("gui/quickmenu/save_%s.png"):
-                            action ShowMenu('save')
-                            tooltip "Save"
+                    spacing 50
+                    imagebutton auto _("gui/quickmenu/history_%s.png"):
+                        action ShowMenu('history')
+                        tooltip "History"
+                    imagebutton auto _("gui/quickmenu/hide_%s.png"):
+                        action HideInterface()
+                        tooltip "Hide"
+                    imagebutton auto _("gui/quickmenu/load_%s.png"):
+                        action ShowMenu('load')
+                        tooltip "Load"
+                    imagebutton auto _("gui/quickmenu/save_%s.png"):
+                        action ShowMenu('save')
+                        tooltip "Save"
 
-                    hbox:
-                        spacing 50
-                        xalign 1.0
-                        if config.developer:
-                            imagebutton auto _("gui/quickmenu/back_%s.png"):
-                                action Rollback()
-                                tooltip "Back"
-                        imagebutton auto _("gui/quickmenu/settings_%s.png"):
-                            action ShowMenu('emptymenu')
-                            tooltip "Settings"
-                        imagebutton auto _("gui/quickmenu/auto_%s.png"):
-                            action Preference("auto-forward", "toggle")
-                            tooltip "Auto"
-                        imagebutton auto _("gui/quickmenu/skip_%s.png"):
-                            action Skip() alternate Skip(fast=True, confirm=True)
-                            tooltip "Skip"
-                        if journal:
-                            vbox:
-                                imagebutton auto _("gui/quickmenu/journal_%s.png"):
-                                    action [ShowMenu('journal'), SetVariable("seen_journal", True)]
-                                    tooltip "Journal"
-                                    activate_sound None
-                                if not seen_journal:
-                                    add "gui/notif_dot.png" xoffset 45 yoffset -80
+                hbox:
+                    spacing 50
+                    xalign 1.0
+                    if config.developer:
+                        imagebutton auto _("gui/quickmenu/back_%s.png"):
+                            action Rollback()
+                            tooltip "Back"
+                    imagebutton auto _("gui/quickmenu/settings_%s.png"):
+                        action ShowMenu('emptymenu')
+                        tooltip "Settings"
+                    imagebutton auto _("gui/quickmenu/auto_%s.png"):
+                        action Preference("auto-forward", "toggle")
+                        tooltip "Auto"
+                    imagebutton auto _("gui/quickmenu/skip_%s.png"):
+                        action Skip() alternate Skip(fast=True, confirm=True)
+                        tooltip "Skip"
 
-# VERSION 2 QUICK MENU
-
-    # if quick_menu:
-    #     imagebutton auto _("gui/quickmenu/menu_%s.png"):
-    #             activate_sound "audio/sfx/click.mp3"
-    #             action ToggleVariable("persistent.quick_menu_frame", True, False)
-    #             xalign 0.995
-    #             yalign 0.995
-    #             tooltip "Menu"
-
-    #     if persistent.quick_menu_frame:
-    #         hbox:
-    #             xalign 0.9
-    #             yalign 0.995
-    #             spacing 10
-    #             if config.developer == True:
-    #                 textbutton _("ach") action ShowMenu("achievements")
-    #             imagebutton auto _("gui/quickmenu/back_%s.png"):
-    #                 action Rollback()
-    #                 tooltip "Back"
-    #             imagebutton auto _("gui/quickmenu/history_%s.png"):
-    #                 action ShowMenu('history')
-    #                 tooltip "History"
-    #             imagebutton auto _("gui/quickmenu/hide_%s.png"):
-    #                 action HideInterface()
-    #                 tooltip "Hide"
-    #             imagebutton auto _("gui/quickmenu/auto_%s.png"):
-    #                 action Preference("auto-forward", "toggle")
-    #                 tooltip "Auto"
-    #             imagebutton auto _("gui/quickmenu/skip_%s.png"):
-    #                 action Skip() alternate Skip(fast=True, confirm=True)
-    #                 tooltip "Skip"
-    #             imagebutton auto _("gui/quickmenu/load_%s.png"):
-    #                 action ShowMenu('load')
-    #                 tooltip "Load"
-    #             imagebutton auto _("gui/quickmenu/save_%s.png"):
-    #                 action ShowMenu('save')
-    #                 tooltip "Save"
-    #             imagebutton auto _("gui/quickmenu/settings_%s.png"):
-    #                 action ShowMenu('preferences')
-    #                 tooltip "Settings"
-
+        frame:
+            yoffset 890
+            xoffset -35
+            xalign 1.0
+            if journal:
+                vbox:
+                    imagebutton auto _("gui/quickmenu/journal_%s.png"):
+                        action [ShowMenu('journal'), SetVariable("notify_journal", False)]
+                        tooltip "Journal"
+                        activate_sound None
+                    if notify_journal:
+                        add "gui/notif_dot.png" xoffset 45 yoffset -80
 
     # This has to be the last thing shown in the screen.
 
@@ -1953,10 +1870,8 @@ screen quick_menu():
                     size 35
 
 style quickmenu_frame:
-    background Frame("gui/frame.png", Borders(35, 50, 35, 50), tile=False)
-    xminimum 500
-    padding(35, 35, 35, 35)
-    yfill True
+    background None
+    padding(50,50,50,50)
 
 style quickmenu_button_text:
     color gui.accent_color

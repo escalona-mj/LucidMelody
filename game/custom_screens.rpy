@@ -1,6 +1,6 @@
 screen dialog(message, ok_action):
-    on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="master")
-    on "hide" action Function(renpy.show_layer_at, dialogue_noBlur, layer="master")
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
+    on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
     modal True
     zorder 200
     style_prefix "confirm"
@@ -338,13 +338,5 @@ style gesture_label_text:
 style controls_text:
     text_align 0.5
     xalign 0.5
+    color gui.accent_color
     font gui.interface_text_font
-
-
-default persistent.seen_controls = False
-
-label after_load:
-    if not persistent.seen_controls:
-        play sound "audio/sfx/phone_notif.ogg"
-        call screen controls_modal
-        $ persistent.seen_controls = True

@@ -35,7 +35,7 @@ init python:
             self.new_points = min(max(self.points + value, 0), self.max_points)
             renpy.hide_screen('love_bar') # hide the screen so it resets the timer
             renpy.show_screen('love_bar', char=self) # then show with self as its arg. all you need is this object
-            renpy.play("audio/sfx/love_ding.ogg", channel="sfx2")
+            renpy.play("audio/sfx/love_ding.ogg", channel="notif")
             return self
 
         # this makes add/remove methods completely optional.
@@ -46,6 +46,12 @@ init python:
         # we'll need this later
         def update(self):
             setattr(store, self.points_var, self.new_points)
+
+    def update_journal(message):
+        global notify_journal
+        renpy.notify(message)
+        renpy.play("audio/sfx/journal.ogg", channel="notif")
+        notify_journal = True
 
 screen love_bar(char): # char reference is all you need
     style_prefix 'love_bar'
@@ -99,7 +105,6 @@ transform value_appear:
     pause 1.0
     easein 0.5 yoffset -25 alpha 0.0
 
-
 transform book_appear:
     subpixel True
     on show:
@@ -121,7 +126,7 @@ screen journal():
     add "gui/overlay/confirm.png":
         alpha 0.65
 
-    # if the
+    # if we're in the journal, grab the entry
     if current_page == "Journal":
         $ entry = Journal.journal_entry
 
@@ -200,18 +205,6 @@ screen journal():
                     ysize 800
                     draggable True
                     vbox:
-                        if not current_page == "Journal":
-                            if LoveMeter == True:
-                                vbox:
-                                    text "Current points: [points]" style 'love_bar_text':
-                                        size 40
-                                        xoffset 55
-                                        yoffset 40
-                                    bar style "love_bar_bar":
-                                        value points
-                                        range max_points
-                        else:
-                            pass
                         style_prefix "page"
                         if current_page == "Journal":
                             text entry
@@ -232,6 +225,18 @@ screen journal():
                     vbox:
                         if not current_page == "Journal":
                             add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
+                            if LoveMeter == True:
+                                vbox:
+                                    xalign 0.5
+                                    text "Current points: [points]" style 'love_bar_text':
+                                        size 40
+                                        xoffset 55
+                                        yoffset 40
+                                    bar style "love_bar_bar":
+                                        value points
+                                        range max_points
+                        else:
+                            pass
 
             #JOURNAL BOOKMARK
             frame:
@@ -252,22 +257,17 @@ style page_text:
 
 style bookmark_image_button:
     activate_sound "audio/sfx/journal_page_flip.ogg"
-    xalign 1.0
 
 style bookmark_btn:
-    text_align 1.0
-    xalign 1.0
-    xoffset -15
+    text_align 0.5
+    xalign 0.5
     yalign 0.5
-    color "#000"
-    
-style dream_bookmark_image_button is bookmark_image_button
-style dream_bookmark_btn:
-    text_align 0.0
-    yalign 0.5
-    xalign 0.0
-    xoffset 15
+    font "fonts/MyPrettyCutie.ttf"
     color "#fff"
+    size 45
+
+style dream_bookmark_image_button is bookmark_image_button
+style dream_bookmark_btn is bookmark_btn
 
 image journal_dhannica = LayeredImageMask("dhannica",
     Transform(crop=(170, 0, 500, 600)),
@@ -286,4 +286,3 @@ image journal_alec = LayeredImageMask("alec",
     background="gui/journal/photo_bg.png",
     mask="gui/journal/photo_mask.png",
     foreground="gui/journal/photo_fg.png")
-

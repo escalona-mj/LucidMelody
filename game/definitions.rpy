@@ -49,6 +49,8 @@ define offscr_alec = DynamicCharacter('a_name', kind=alec, image="offscr_alec")
 #side characters
 define girlMom = Character('Mom', kind=speak)
 define d_singer = Character('Singer',kind=speak)
+define prof = Character('Prof', kind=speak)
+define unknown_guy = Character('???', kind=speak, image="unknown_guy")
 
 ######################################################################################################
 #                                               IMAGES                                               #
@@ -71,8 +73,18 @@ image bg school:
 image bg busstop:
     im.Blur("images/bg/busstop.png", 2.5)
 
+image bg busstop_no_bus:
+    im.Blur("images/bg/busstop_no_bus.png", 2.5)
+
 image bg bus:
     im.Blur("images/bg/bus.png", 2.5)
+
+image bg school hallway:
+    im.Blur("images/bg/schoolhallway.png", 2.5)
+
+image bg classroom:
+    im.Blur("images/bg/classroom.png", 2.5)
+
 
 image mom = "images/characters/mom.png"
 
@@ -181,7 +193,6 @@ transform reset_dizzy:
 #APPARENTLY, YOU CAN USE ATL TRANSFORMATIONS AS TRANSITIONS
 transform scenefade(new_widget, old_widget):
     delay 1.5
-
     contains:
         pause 0.5
         new_widget
@@ -189,7 +200,6 @@ transform scenefade(new_widget, old_widget):
         truecenter
         zoom 1.03 alpha 0.0
         easein 1.0 alpha 1.0 zoom 1.0
-
     contains:
         old_widget
         subpixel True
@@ -200,39 +210,35 @@ transform scenefade(new_widget, old_widget):
 
 transform scenefadehold(new_widget, old_widget):
     delay 2.5
-
     contains:
         pause 1.5
         new_widget
         subpixel True
         truecenter
         zoom 1.03 alpha 0.0
-        ease 1.0 alpha 1.0 zoom 1.0
-
+        easein 1.0 alpha 1.0 zoom 1.0
     contains:
         old_widget
         subpixel True
         truecenter
         zoom 1.0 alpha 1.0
-        ease 0.5 zoom 1.03 alpha 0.0
+        easein 0.5 zoom 1.03 alpha 0.0
         pause 1.5
 
 transform scenedissolve(new_widget, old_widget):
-    delay 0.8
-
+    delay 0.6
     contains:
         new_widget
         subpixel True
         truecenter
         zoom 1.03 alpha 0.0
-        ease 0.7 alpha 1.0 zoom 1.0
-
+        easein 0.5 alpha 1.0 zoom 1.0
     contains:
         old_widget
         subpixel True
         truecenter
         zoom 1.0 alpha 1.0
-        ease 0.7 alpha 0.0 zoom 1.03
+        easein 0.5 alpha 0.0 zoom 1.03
 
 
 ###########################################################################################################
@@ -320,6 +326,8 @@ image side offscr_alec = LayeredImageMask("alec",
     background="gui/side_image/offscr_alec_bg.png",
     mask="gui/side_image/offscr_mask.png",
     foreground="gui/side_image/offscr_fg.png")
+
+image side unknown_guy = "gui/side_image/unknown_guy_sideImage.png"
 
 ##############################################################################################################
 #                                               LAYERED IMAGES                                               #

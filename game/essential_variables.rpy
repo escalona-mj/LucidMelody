@@ -1,7 +1,8 @@
 default current_route = 'common'
 default persistent.first_gameplay = False
+default persistent.seen_controls = False
 default journal = False
-default seen_journal = False
+default notify_journal = True
 default journal_entry = ""
 
 #DHANNICA VARIABLES
@@ -30,7 +31,3 @@ default alec_likePoints = 0
 default alec_likePointsMax = 100
 default alec_age = ""
 default alec_description = ""
-
-
-image white:
-    Solid("#fff")

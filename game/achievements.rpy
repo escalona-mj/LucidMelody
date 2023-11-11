@@ -70,7 +70,7 @@ init -50 python:
             #show a toast if this is the first time
             if not has_achievement:
                 self.achievement_popup()
-                renpy.play("audio/sfx/notify.mp3", channel="sfx2")
+                renpy.play("audio/sfx/notify.mp3", channel="notif")
                 config.skipping = False
 
             #double check achievement sync to avoid syncing issues
