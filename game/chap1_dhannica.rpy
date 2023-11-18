@@ -82,7 +82,7 @@ label chap1_dhannica:
     $ dream.grant()
     $ dhannica_age = "18"
     $ dhannica_description = "There's not much to say anything about me."
-    $ entry1 = "The dream was something else. A concert perhaps? The person in my dreams... I saw them. It felt familiar. Emerald eyes..."
+    $ entry1 = "Entry No. 1\n\nThe dream was something else. A concert perhaps? The person in my dreams... I saw them. It felt familiar. Emerald eyes..."
     $ add_entry(entry1)
     window auto
     menu:

@@ -797,6 +797,19 @@ screen game_menu(title, scroll=None, yinitial=0.0):
     if main_menu:
         key "game_menu" action ShowMenu("main_menu")
 
+    $ tooltip = GetTooltip()
+
+    if tooltip:
+        frame:
+            background None
+            xalign 1.0
+            yalign 0.15
+            text tooltip:
+                size 35
+                textalign 1.0
+                color u'#fff'
+                font gui.interface_text_font
+
 
 style game_menu_outer_frame is empty
 style game_menu_navigation_frame is empty
@@ -919,7 +932,6 @@ screen about():
             frame style "empty_frame":
                 has vbox:
                     style_prefix "about_role"
-
                 label "Programming"
 
                 frame style "empty_frame":
@@ -1130,19 +1142,6 @@ screen preferences():
 
                     # if config.has_music or config.has_sound or config.has_voice:
                     #     null height gui.pref_spacing
-
-    $ tooltip = GetTooltip()
-
-    if tooltip:
-        frame:
-            background None
-            xalign 1.0
-            yalign 0.15
-            text tooltip:
-                size 35
-                textalign 1.0
-                color u'#fff'
-                font gui.interface_text_font
 
 style pref_label is gui_label
 style pref_label_text is gui_label_text

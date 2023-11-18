@@ -118,6 +118,7 @@ transform book_appear:
         rotate -2
         easein .25 zoom 0.95 alpha 0.0 rotate 2
 
+
 transform page_flip:
     xzoom 0
     easein_back .5 xzoom 1
@@ -125,9 +126,17 @@ transform page_flip:
 screen journal():
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/journal_open.ogg")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master"), Play("sfx2", "audio/sfx/journal_close.ogg")
-    dismiss action Return()
+    # dismiss action Return()
+
     add "gui/overlay/confirm.png":
         alpha 0.65
+
+    frame:
+        background None
+        xoffset 50
+        yoffset 25
+        imagebutton auto _("gui/quickmenu/back_%s.png"):
+            action Return()
 
     for char in all_chars:
         if current_page == char.name:
@@ -194,52 +203,64 @@ screen journal():
                                     selected_foreground Text("{0}".format(mcNamegirl), style="bookmark_btn")
                                     action [SetVariable("current_page", Dhannica.name)]
                                     focus_mask True
-            #FIRST PAGE      
+            #FIRST PAGE
             frame:
                 at page_flip
                 background None
                 padding(80,30,30,90)
-                viewport:
-                    xsize 600
-                    ysize 800
-                    draggable True
-                    vbox:
-                        style_prefix "page"
-                        if current_page == "Journal":
-                            if len(journal_entries) > 0:
-                                text "{0}".format(journal_entries[first_page - 1])
-                        else:
-                            text name
-                            text age
-                            null height 10
-                            text description
+                vbox:
+                    viewport:
+                        xsize 600
+                        ysize 800
+                        draggable True
+                        vbox:
+                            style_prefix "page"
+                            if not current_page == "Journal":
+                                text name
+                                text age
+                                null height 10
+                                text description
+                            else:
+                                if len(journal_entries) > 0:
+                                    text "{0}".format(journal_entries[first_page - 1])
+
+                    if current_page == "Journal":
+                        if len(journal_entries) > 0:
+                            text "[first_page]" color "#000":
+                                xalign 0.5
 
             #SECOND PAGE
             frame:
                 at page_flip
                 background None
                 padding(30,30,90,60)
-                viewport:
-                    xsize 600
-                    ysize 800
-                    draggable True
-                    vbox:
-                        style_prefix "page"
-                        if not current_page == "Journal":
-                            add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
-                            if LoveMeter == True:
-                                vbox:
-                                    xalign 0.5
-                                    text "Current points: [points]" style 'love_bar_text':
-                                        size 40
-                                        xoffset 55
-                                        yoffset 40
-                                    bar style "love_bar_bar":
-                                        value points
-                                        range max_points
-                        else:
-                            if first_page < len(journal_entries):
-                                text "{0}".format(journal_entries[second_page - 1])
+                vbox:
+                    viewport:
+                        xsize 600
+                        ysize 800
+                        draggable True
+                        vbox:
+                            style_prefix "page"
+                            if not current_page == "Journal":
+                                add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
+                                if LoveMeter == True:
+                                    vbox:
+                                        xalign 0.5
+                                        text "Current points: [points]" style 'love_bar_text':
+                                            size 40
+                                            xoffset 55
+                                            yoffset 40
+                                        bar style "love_bar_bar":
+                                            value points
+                                            range max_points
+                            else:
+                                if first_page < len(journal_entries):
+                                    text "{0}".format(journal_entries[second_page - 1])
+
+                    if current_page == "Journal":
+                        if first_page < len(journal_entries):
+                            text "[second_page]" color "#000":
+                                xalign 0.5
                                 
             #JOURNAL BOOKMARK
             frame:
@@ -249,24 +270,13 @@ screen journal():
                 xoffset -55
                 style_prefix "dream_bookmark"
                 hbox:
-                    vbox:
                         imagebutton auto "gui/journal/bookmark_%s.png":
                             foreground Text("", style="dream_bookmark_btn")
                             selected_foreground Text("Journal", style="dream_bookmark_btn")
                             action [SetVariable("current_page", "Journal")]
                             focus_mask True
 
-    showif current_page == "Journal":
-        
-        hbox:
-            at transform:
-                rotate -2
-                xalign 0.5
-                yalign 1.45
-            spacing 500
-            text "[first_page]"
-            text "[second_page]"
-
+    if current_page == "Journal":
         if (first_page >= 3) and (len(journal_entries) >= 3):
             imagebutton action Function(back_page) style_prefix "page":
                 idle "gui/journal/prev_page.png"
