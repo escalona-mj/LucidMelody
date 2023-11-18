@@ -8,8 +8,8 @@ init python:
             
     def delete_persistent():
         persistent._clear(True)
-        renpy.reload_script()
         delete_all_saves()
+        renpy.reload_script()
 
     def addPointToAlec():
         Alec.add(10)

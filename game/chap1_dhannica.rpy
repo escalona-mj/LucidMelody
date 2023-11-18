@@ -70,7 +70,7 @@ label chap1_dhannica:
     stop sfx2 fadeout 1.0
     stop ambient
     #delete the dream history to make it more authentic like she forgor
-    $ del _history_list[-33:]
+    $ _history_list = []
     $ config.skipping = False
     if not config.developer:
         $ renpy.block_rollback()
@@ -82,6 +82,8 @@ label chap1_dhannica:
     $ dream.grant()
     $ dhannica_age = "18"
     $ dhannica_description = "There's not much to say anything about me."
+    $ entry1 = "The dream was something else. A concert perhaps? The person in my dreams... I saw them. It felt familiar. Emerald eyes..."
+    $ add_entry(entry1)
     window auto
     menu:
         "Get up and turn off the alarm":

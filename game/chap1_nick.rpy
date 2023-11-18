@@ -17,6 +17,6 @@ label chap1_nick:
     $ mcNamegirl = "???"
 
     "..."
-    play sound "audio/sfx/phone_notif.ogg"
+    play sound phone_notif
     call screen dialog(message="Nick's route is not available at the moment.", ok_action=Return())
     return

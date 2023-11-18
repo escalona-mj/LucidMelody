@@ -3,7 +3,9 @@ default persistent.first_gameplay = False
 default persistent.seen_controls = False
 default journal = False
 default notify_journal = True
-default journal_entry = ""
+default journal_entries = []
+default first_page = 1
+default second_page = 2
 
 #DHANNICA VARIABLES
 default meetDhannica = False

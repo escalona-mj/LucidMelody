@@ -38,9 +38,6 @@ label start:
     max_points="alec_likePointsMax",
     pic="journal_alec")
 
-    $ Journal = CharInfo(isJournal=True, journal_entry="[journal_entry]")
-
-    $ _game_menu_screen = None
     $ DisableSkip.start()
     scene black
     with scenefade

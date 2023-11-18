@@ -38,5 +38,4 @@ label chapter_transition:
     with dissolve
     $ current_chapter = current_chapter + 1
     $ DisableSkip.stop()
-    $ _game_menu_screen = 'emptymenu'
     return

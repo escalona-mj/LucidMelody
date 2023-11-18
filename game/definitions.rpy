@@ -14,11 +14,13 @@
 init python:
     class DisableSkip():
         def start():
-            _skipping = False #disable skip
+            global _game_menu_screen
+            _game_menu_screen = None
             config.skipping = False # if skipping, stop it
             config.allow_skipping = False #prevents from skipping
         def stop():
-            _skipping = True
+            global _game_menu_screen
+            _game_menu_screen = 'emptymenu'
             config.allow_skipping = True
 
 
@@ -31,7 +33,6 @@ define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_positi
 #thought MC
 define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#ff9b9b', image="dhannica")
 define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#4076ff')
-
 
 #characters
 default mcNamegirl = ""
@@ -121,7 +122,7 @@ transform trans(x):
     on replace:
         alpha 1.0
         parallel:
-            easein .5 xalign x zoom 1.0 ypos 1.03
+            easein .25 xalign x zoom 1.0 ypos 1.03
     on hide:
         easein .25 zoom 0.95 alpha 0.0
 
@@ -267,9 +268,6 @@ define eye_scene = MultipleTransition([
     Solid("#000"), Pause(0.5),
     Solid("#000"), ImageDissolve("images/transitions/eyes.png", 0.25 ,ramplen=128),
     True])
-
-
-
 
 #####################################################################################################
 #                                               AUDIO                                               #

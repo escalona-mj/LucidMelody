@@ -3,7 +3,7 @@
 ##################################################################################################################
 init python:
     class CharInfo:
-        def __init__(self, char_name='', age='', description='', mainChr=False, points='', max_points='', pic=None, isJournal=False, journal_entry=''):
+        def __init__(self, char_name='', age='', description='', mainChr=False, points='', max_points='', pic=None):
             self.name = char_name
             self.age = age
             self.description = description
@@ -11,23 +11,15 @@ init python:
             self.points_var = points
             self.max_points_var = max_points
             self.pic = pic
-            self.isJournal = isJournal # This parameter identifies if the instance is a journal.
-            self.journal_entry = journal_entry
 
         #from the old LoveMeter
         @property
         def points(self):
-            if not self.isJournal:
-                return getattr(store, self.points_var, 0)
-            else:
-                return None
+            return getattr(store, self.points_var, 0)
 
         @property
         def max_points(self):
-            if not self.isJournal:
-                return getattr(store, self.max_points_var, 0)
-            else:
-                return None
+            return getattr(store, self.max_points_var, 0)
 
         #single method
         def __add__(self, value):
@@ -48,10 +40,21 @@ init python:
             setattr(store, self.points_var, self.new_points)
 
     def update_journal(message):
-        global notify_journal
         renpy.notify(message)
-        renpy.play("audio/sfx/journal.ogg", channel="notif")
-        notify_journal = True
+        renpy.play("audio/sfx/journal.ogg", channel="notif2")
+        store.notify_journal = True
+
+    def add_entry(entry):
+        store.journal_entries.append(entry)
+        update_journal("Entry added.")
+
+    def next_page():
+        store.first_page += 2
+        store.second_page += 2
+    
+    def back_page():
+        store.first_page -= 2
+        store.second_page -= 2
 
 screen love_bar(char): # char reference is all you need
     style_prefix 'love_bar'
@@ -125,10 +128,6 @@ screen journal():
     dismiss action Return()
     add "gui/overlay/confirm.png":
         alpha 0.65
-
-    # if we're in the journal, grab the entry
-    if current_page == "Journal":
-        $ entry = Journal.journal_entry
 
     for char in all_chars:
         if current_page == char.name:
@@ -207,7 +206,11 @@ screen journal():
                     vbox:
                         style_prefix "page"
                         if current_page == "Journal":
-                            text entry
+                            if len(journal_entries) > 0:
+                                text "{0}".format(journal_entries[first_page - 1])
+                                text "[first_page]"
+                                if (first_page >= 3) and (len(journal_entries) >= 3):
+                                    textbutton "Prev" action Function(back_page)
                         else:
                             text name
                             text age
@@ -218,11 +221,12 @@ screen journal():
             frame:
                 at page_flip
                 background None
-                padding(30,-50,90,60)
+                padding(30,30,90,60)
                 vbox:
                     xsize 600
                     ysize 800
                     vbox:
+                        style_prefix "page"
                         if not current_page == "Journal":
                             add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
                             if LoveMeter == True:
@@ -236,8 +240,11 @@ screen journal():
                                         value points
                                         range max_points
                         else:
-                            pass
-
+                            if first_page < len(journal_entries):
+                                text "{0}".format(journal_entries[second_page - 1])
+                                text "[second_page]"
+                                if second_page < len(journal_entries):
+                                    textbutton "Next" action Function(next_page)
             #JOURNAL BOOKMARK
             frame:
                 xsize 0
@@ -253,6 +260,10 @@ screen journal():
                         focus_mask True
 
 style page_text:
+    color "#000"
+
+style page_button_text:
+    activate_sound "audio/sfx/journal_page_flip.ogg"
     color "#000"
 
 style bookmark_image_button:

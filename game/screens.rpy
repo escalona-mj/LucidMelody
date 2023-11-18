@@ -18,8 +18,11 @@ style input:
     adjust_spacing False
 
 style hyperlink_text:
-    properties gui.text_properties("hyperlink", accent=True)
-    hover_underline True
+    # properties gui.text_properties("hyperlink", accent=True)
+    properties gui.text_properties("hyperlink", accent=False)
+    font gui.interface_text_font
+    # hover_underline True
+    underline True
     activate_sound "audio/sfx/click.mp3"
 
 style gui_text:
@@ -380,22 +383,20 @@ transform nav_item:
 
 screen navigation():
 
-    fixed:
-        if renpy.get_screen("main_menu"):
-            vbox:
-                xalign 1.0
-                xoffset -50
-                yoffset 50
-                imagebutton:
-                    auto "gui/navigation/controls_%s.png"
-                    activate_sound "audio/sfx/click.mp3"
-                    focus_mask True
-                    action Show("controls_modal")
-                    tooltip "Help"
-                if not persistent.seen_controls:
-                    add "gui/notif_dot.png" xoffset 65 yoffset -100
-
     if renpy.get_screen("main_menu"):
+        vbox:
+            xalign 1.0
+            xoffset -50
+            yoffset 50
+            imagebutton:
+                auto "gui/navigation/controls_%s.png"
+                activate_sound "audio/sfx/click.mp3"
+                focus_mask True
+                action Show("controls_modal")
+                tooltip "Help"
+            if not persistent.seen_controls:
+                add "gui/notif_dot.png" xoffset 65 yoffset -100
+                
         hbox at nav_item:
             style_prefix "navigation"
 
@@ -554,6 +555,8 @@ init python:
             return "gui/menu/menu_dhannica.png"
         elif last_save['route'] == 'alec':
             return "gui/menu/menu_alec.png"
+        elif last_save['route'] == 'nick':
+            return "gui/menu/menu_nick.png"
 
 
 screen bg():
@@ -868,17 +871,148 @@ screen about():
 
         style_prefix "about"
 
+        null height 25
+
+        frame style "empty_frame":
+            xfill True
+            has vbox:
+                spacing 10
+                xfill True
+            add "gui/menu/logo_white.png":
+                zoom 0.35
+                xalign 0.5
+            text "Beta [config.version!t]":
+                xalign 0.5
+                size 30
+            text "Game entry for the subject Game Development.":
+                xalign 0.5
+                size 30
+        
+        null height 100
+
         vbox:
+            xfill True
 
-            label "[config.name!t]"
-            text _("Version [config.version!t]\n")
+            ###STORY
+            frame style "empty_frame":
+                style_prefix "about_title"
+                label "STORY"
+                
+            frame style "empty_frame":
+                has vbox:
+                    style_prefix "about_role"
+                label "Writer"
 
-            ## gui.about is usually set in options.rpy.
-            if gui.about:
-                text "[gui.about!t]\n"
+                frame style "empty_frame":
+                    style_prefix "about_person"
+                    has vbox
+                    text "Ace Brian Laraño"
+                    text "Kaia Buenafe"
 
-            text _("Made with {a=https://www.renpy.org/}Ren'Py{/a} [renpy.version_only].\n\n[renpy.license!t]")
+            null height 100
 
+            ###DEVS
+            frame style "empty_frame":
+                style_prefix "about_title"
+                label "DEVELOPMENT"
+                
+            frame style "empty_frame":
+                has vbox:
+                    style_prefix "about_role"
+
+                label "Programming"
+
+                frame style "empty_frame":
+                    style_prefix "about_person"
+                    has vbox
+                    text "{a=show:controls_modal}Mark John Escalona{/a}"
+            
+            null height 100
+
+            ###ART
+            frame style "empty_frame":
+                style_prefix "about_title"
+                label "ART"
+            
+            hbox:
+                xalign 0.5
+                spacing 100
+
+                frame style "empty_frame":
+                    has vbox:
+                        style_prefix "about_role"
+                    label "BG Artist"
+
+                    frame style "empty_frame":
+                        style_prefix "about_person"
+                        has vbox
+                        text "Cindy Angeles"
+                
+                frame style "empty_frame":
+                    has vbox:
+                        style_prefix "about_role"
+                    label "Artist"
+
+                    frame style "empty_frame":
+                        style_prefix "about_person"
+                        has vbox
+                        text "Zenrich Jordan Keh"
+                        text "Kaia Buenafe"
+
+            null height 100
+
+            ###AUDIO
+            frame style "empty_frame":
+                style_prefix "about_title"
+                label "MUSIC"
+            
+            frame style "empty_frame":
+                style_prefix "about_person"
+                has vbox
+                text "Mekaella Joy Muit"
+                text "Maneja Moises"
+                text "Ivan Barzaga"
+                    
+        null height 100
+               
+            # label "[config.name!t]"
+            # text _("Version [config.version!t]\n")
+
+            # ## gui.about is usually set in options.rpy.
+            # if gui.about:
+            #     text "[gui.about!t]\n"
+
+        text _("Made with {a=https://www.renpy.org/}Ren'Py{/a} [renpy.version_only].\n\n[renpy.license!t]")
+        
+        null height 25
+
+
+style empty_frame:
+    background None
+    xalign 0.5
+    text_align 0.5
+    padding(0,0,0,0)
+
+style about_title_label_text:
+    font "fonts/MyPrettyCutie.ttf"
+    outlines [(10, "#16161d", 2, 2)]
+    size 60
+    text_align 0.5
+    xalign 0.5
+
+style about_role_label:
+    xalign 0.5
+
+style about_role_label_text:
+    size 45
+    text_align 0.5
+    xalign 0.5
+
+style about_person_text:
+    font gui.interface_text_font
+    size 35
+    text_align 0.5
+    xalign 0.5
 
 style about_label is gui_label
 style about_label_text is gui_label_text
