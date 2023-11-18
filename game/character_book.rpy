@@ -208,9 +208,6 @@ screen journal():
                         if current_page == "Journal":
                             if len(journal_entries) > 0:
                                 text "{0}".format(journal_entries[first_page - 1])
-                                text "[first_page]"
-                                if (first_page >= 3) and (len(journal_entries) >= 3):
-                                    textbutton "Prev" action Function(back_page)
                         else:
                             text name
                             text age
@@ -222,9 +219,10 @@ screen journal():
                 at page_flip
                 background None
                 padding(30,30,90,60)
-                vbox:
+                viewport:
                     xsize 600
                     ysize 800
+                    draggable True
                     vbox:
                         style_prefix "page"
                         if not current_page == "Journal":
@@ -242,9 +240,7 @@ screen journal():
                         else:
                             if first_page < len(journal_entries):
                                 text "{0}".format(journal_entries[second_page - 1])
-                                text "[second_page]"
-                                if second_page < len(journal_entries):
-                                    textbutton "Next" action Function(next_page)
+                                
             #JOURNAL BOOKMARK
             frame:
                 xsize 0
@@ -252,19 +248,42 @@ screen journal():
                 yoffset 700
                 xoffset -55
                 style_prefix "dream_bookmark"
-                vbox:
-                    imagebutton auto "gui/journal/bookmark_%s.png":
-                        foreground Text("", style="dream_bookmark_btn")
-                        selected_foreground Text("Journal", style="dream_bookmark_btn")
-                        action [SetVariable("current_page", "Journal")]
-                        focus_mask True
+                hbox:
+                    vbox:
+                        imagebutton auto "gui/journal/bookmark_%s.png":
+                            foreground Text("", style="dream_bookmark_btn")
+                            selected_foreground Text("Journal", style="dream_bookmark_btn")
+                            action [SetVariable("current_page", "Journal")]
+                            focus_mask True
+
+    showif current_page == "Journal":
+        
+        hbox:
+            at transform:
+                rotate -2
+                xalign 0.5
+                yalign 1.45
+            spacing 500
+            text "[first_page]"
+            text "[second_page]"
+
+        if (first_page >= 3) and (len(journal_entries) >= 3):
+            imagebutton action Function(back_page) style_prefix "page":
+                idle "gui/journal/prev_page.png"
+                xalign 0.05
+                yalign 0.5
+            
+        if second_page < len(journal_entries):
+            imagebutton action Function(next_page) style_prefix "page":
+                idle "gui/journal/next_page.png"
+                xalign 0.95
+                yalign 0.5
 
 style page_text:
     color "#000"
 
-style page_button_text:
+style page_image_button:
     activate_sound "audio/sfx/journal_page_flip.ogg"
-    color "#000"
 
 style bookmark_image_button:
     activate_sound "audio/sfx/journal_page_flip.ogg"
