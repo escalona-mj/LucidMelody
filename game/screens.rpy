@@ -393,7 +393,6 @@ screen navigation():
                 activate_sound "audio/sfx/click.mp3"
                 focus_mask True
                 action Show("controls_modal")
-                tooltip "Help"
             if not persistent.seen_controls:
                 add "gui/notif_dot.png" xoffset 65 yoffset -100
                 
@@ -1040,108 +1039,181 @@ style about_label_text:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#preferences
 
+default pref_text = True
+default pref_vol = False
+
 screen preferences():
     tag menu
 
     use game_menu(_("Settings"), scroll="viewport"):
         vbox:
-            style_prefix "header"
-            label _("Text Settings"):
-                xalign 0.5
-                top_padding 25
-
-            # null height 25
-
+            xfill True
+            xalign 0.5
+            null height 25
             hbox:
-                spacing 50
-                vbox:
-                    xsize 550
-                    style_prefix "check"
-                    label _("Skip")
-                    textbutton _("Unseen Text") action Preference("skip", "toggle"):
-                        tooltip "Skips the dialogue regardless if seen or unseen."
-                    textbutton _("After Choices") action Preference("after choices", "toggle"):
-                        tooltip "Keeps skipping, even on choices."
-                    textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
-                        tooltip "Adds a slight delay per comma."
-
-
-                vbox:
-                    style_prefix "slider"
-                    xsize 550
-                    label _("Text Speed")
-                    bar value Preference("text speed"):
-                        style "bar"
-                        tooltip "The speed of the in-game dialogue text."
-
-                    label _("Auto-Forward Time")
-                    bar value Preference("auto-forward time"):
-                        style "bar"
-                        tooltip "The speed of the automation per dialogue.\n(The lower it is, the faster it gets.)"
-
-                ## Additional vboxes of type "radio_pref" or "check_pref" can be
-                ## added here, to add additional creator-defined preferences.
-
-            # null height (4 * gui.pref_spacing)
-
-            # null height 400
-
-            label _("Music Settings"):
+                style_prefix "header"
                 xalign 0.5
+                spacing 100
+                textbutton "TEXT" action [SetScreenVariable("pref_text", True),SetScreenVariable("pref_vol", False)]
+                textbutton "MUSIC" action [SetScreenVariable("pref_vol", True),SetScreenVariable("pref_text", False)]
 
-            # null height 25
+            null height 25
 
-            hbox:
-                style_prefix "slider"
-                spacing 50
+            if pref_text and not pref_vol:
+
                 vbox:
-                    xsize 550
-                    if config.has_music:
-                        label _("BGM Volume")
-                        bar value Preference("music volume"):
-                            style "bar"
-                            tooltip "The loudness of background music throughout the game."
-
-                    if config.has_sound:
-                        label _("Sound Volume")
+                    xalign 0.5
+                    yalign 0.5
+                    spacing 50
+                    hbox:
+                        spacing 100
                         vbox:
-                            bar value Preference("sound volume"):
-                                style "bar"
-                                tooltip "The loudness of sound effects throughout the game."
+                            # xsize 550
+                            style_prefix "check"
+                            label _("Text")
+                            textbutton _("Unseen Text") action Preference("skip", "toggle"):
+                                tooltip "Skips the dialogue regardless\nif seen or unseen."
+                            textbutton _("After Choices") action Preference("after choices", "toggle"):
+                                tooltip "Keeps skipping, even on choices."
+                            textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
+                                tooltip "Adds a slight delay per comma."
 
-                            if config.sample_sound:
-                                textbutton _("Test") action Play("sound", config.sample_sound)
+                        vbox:
+                            style_prefix "radio"
+                            label _("Rollback Side")
+                            textbutton _("Disable") action Preference("rollback side", "disable"):
+                                tooltip "Disable rollback entirely."
+                            textbutton _("Left") action Preference("rollback side", "left"):
+                                tooltip "Tapping the left side of the screen will\nrollback to a previous dialogue."
+                            textbutton _("Right") action Preference("rollback side", "right"):
+                                tooltip "Tapping the right side of the screen will\nrollback to a previous dialogue."
+
+                    vbox:
+                        xalign 0.5
+                        xsize 700
+                        style_prefix "slider"
+                        label _("Text Speed")
+                        bar value Preference("text speed"):
+                            style "bar"
+                            tooltip "The speed of the in-game dialogue text."
+
+                        label _("Auto-Forward Time")
+                        bar value Preference("auto-forward time"):
+                            style "bar"
+                            tooltip "The speed of the automation per dialogue.\n(The lower it is, the faster it gets.)"
+
+            elif pref_vol and not pref_text: 
+
                 vbox:
-                    xsize 550
-                    if config.has_voice:
-                        label _("Voice Volume")
-                        hbox:
-                            bar value Preference("voice volume"):
+                    xalign 0.5
+                    yalign 0.5
+                    spacing 50
+                    style_prefix "slider"
+                    vbox:
+                        xsize 700
+                        if config.has_music:
+                            label _("BGM Volume")
+                            bar value Preference("music volume"):
                                 style "bar"
-                                tooltip "The loudness of voice throughout the game."
+                                tooltip "The loudness of background music\nthroughout the game."
 
-                            if config.sample_voice:
-                                textbutton _("Test") action Play("voice", config.sample_voice)
+                        if config.has_sound:
+                            label _("Sound Volume")
+                            vbox:
+                                bar value Preference("sound volume"):
+                                    style "bar"
+                                    tooltip "The loudness of sound effects throughout the game."
 
-                    label _("Ambient Volume")
-                    bar value Preference("ambient volume"):
-                        style "bar"
-                        tooltip "The loudness of ambience throughout the game."
+                                if config.sample_sound:
+                                    textbutton _("Test") action Play("sound", config.sample_sound)
+                    vbox:
+                        xsize 700
+                        if config.has_voice:
+                            label _("Voice Volume")
+                            hbox:
+                                bar value Preference("voice volume"):
+                                    style "bar"
+                                    tooltip "The loudness of voice throughout the game."
 
-            null height 20
+                                if config.sample_voice:
+                                    textbutton _("Test") action Play("voice", config.sample_voice)
 
-            textbutton _("Mute All"):
-                action Preference("all mute", "toggle")
-                tooltip "Mute all sounds."
-                style "mute_all_button"
-                foreground "gui/phone/button/sound_[prefix_]foreground.png"
-                padding (75, 6, 6, 6)
-                xalign 0.5
+                        label _("Ambient Volume")
+                        bar value Preference("ambient volume"):
+                            style "bar"
+                            tooltip "The loudness of ambience throughout the game."
 
-                    # null height 35
+                    textbutton _("Mute All"):
+                        action Preference("all mute", "toggle")
+                        tooltip "Mute all sounds."
+                        style "mute_all_button"
+                        foreground "gui/phone/button/sound_[prefix_]foreground.png"
+                        padding (75, 6, 6, 6)
+                        xalign 0.5
 
-                    # if config.has_music or config.has_sound or config.has_voice:
-                    #     null height gui.pref_spacing
+        #         ## Additional vboxes of type "radio_pref" or "check_pref" can be
+        #         ## added here, to add additional creator-defined preferences.
+
+        #     # null height (4 * gui.pref_spacing)
+
+        #     # null height 400
+
+        #     label _("Music Settings"):
+        #         xalign 0.5
+
+        #     # null height 25
+
+        #     hbox:
+        #         style_prefix "slider"
+        #         spacing 50
+        #         vbox:
+        #             xsize 550
+        #             if config.has_music:
+        #                 label _("BGM Volume")
+        #                 bar value Preference("music volume"):
+        #                     style "bar"
+        #                     tooltip "The loudness of background music throughout the game."
+
+        #             if config.has_sound:
+        #                 label _("Sound Volume")
+        #                 vbox:
+        #                     bar value Preference("sound volume"):
+        #                         style "bar"
+        #                         tooltip "The loudness of sound effects throughout the game."
+
+        #                     if config.sample_sound:
+        #                         textbutton _("Test") action Play("sound", config.sample_sound)
+        #         vbox:
+        #             xsize 550
+        #             if config.has_voice:
+        #                 label _("Voice Volume")
+        #                 hbox:
+        #                     bar value Preference("voice volume"):
+        #                         style "bar"
+        #                         tooltip "The loudness of voice throughout the game."
+
+        #                     if config.sample_voice:
+        #                         textbutton _("Test") action Play("voice", config.sample_voice)
+
+        #             label _("Ambient Volume")
+        #             bar value Preference("ambient volume"):
+        #                 style "bar"
+        #                 tooltip "The loudness of ambience throughout the game."
+
+        #     null height 20
+
+        #     textbutton _("Mute All"):
+        #         action Preference("all mute", "toggle")
+        #         tooltip "Mute all sounds."
+        #         style "mute_all_button"
+        #         foreground "gui/phone/button/sound_[prefix_]foreground.png"
+        #         padding (75, 6, 6, 6)
+        #         xalign 0.5
+
+        #             # null height 35
+
+        #             # if config.has_music or config.has_sound or config.has_voice:
+        #             #     null height gui.pref_spacing
 
 style pref_label is gui_label
 style pref_label_text is gui_label_text
@@ -1213,8 +1285,10 @@ style slider_button_text:
 style slider_vbox:
     xsize 675
 
-style header_label_text:
-    outlines [(5, "#16161d", 2, 2)]
+style header_button_text:
+    size 60
+    font "fonts/MyPrettyCutie.ttf"
+    outlines [(10, "#16161d", 2, 2)]
 
 
 ## History screen ##############################################################

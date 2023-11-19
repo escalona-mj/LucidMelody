@@ -27,15 +27,15 @@ label chapter_transition:
     $ DisableSkip.start()
     scene black with fade
     $ chapter = chapter + 1
+    $ current_chapter = current_chapter + 1
     play sound "audio/sfx/new_chapter.mp3" volume 0.5
     pause 0.45
     show chapter_num "Chapter [chapter]"
     pause 0.5
-    show chapter_text "{0}".format(chapter_list[current_chapter])
+    show chapter_text "{0}".format(chapter_list[current_chapter - 1])
     pause 4.0
     hide chapter_num
     hide chapter_text
     with dissolve
-    $ current_chapter = current_chapter + 1
     $ DisableSkip.stop()
     return

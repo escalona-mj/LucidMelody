@@ -221,7 +221,7 @@ screen emptymenu:
         vbox:
             text "Chapter [chapter]":
                 size 90
-            text "{0}".format(chapter_list[current_chapter]):
+            text "{0}".format(chapter_list[current_chapter - 1]):
                 size 70
 
 style emptymenu_vbox is vbox:
@@ -268,20 +268,24 @@ screen controls_modal():
                         yalign 0.5
                 text "Advances dialogue."
 
-            hbox:
+            if not preferences.mobile_rollback_side == "disable":
                 hbox:
-                    style_prefix "gesture"
-                    label "Swipe Right/Tap Left Screen"
                     hbox:
+                        style_prefix "gesture"
+                        if preferences.mobile_rollback_side == "left":
+                            label "Swipe Right/Tap Left Screen"
+                        else:
+                            label "Swipe Right/Tap Right Screen"
+                        hbox:
+                            yalign 0.5
+                            spacing 10
+                            add "gui/swipe_right.png":
+                                yalign 0.5
+                            text "or" style_prefix "controls"
+                            add "gui/tap.png":
+                                yalign 0.5
+                    text "Rolls back to earlier dialogue.":
                         yalign 0.5
-                        spacing 10
-                        add "gui/swipe_right.png":
-                            yalign 0.5
-                        text "or"
-                        add "gui/tap.png":
-                            yalign 0.5
-                text "Rolls back to earlier dialogue.":
-                    yalign 0.5
     
             hbox:
                 hbox:
