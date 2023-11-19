@@ -283,6 +283,7 @@ label chap1_dhannica:
                         $ Nick.add(5)
                         $ n_takeIcedTea = True
                     "Refuse":
+                        $ n_refuseIcedTea = True
                         pass
                 $ meetNick = True
                 $ update_journal("Character added.")
@@ -308,7 +309,7 @@ label chap1_dhannica:
                     offscr_nick "Just take it, or it'll get worse."
                     dhannica "But it'll get dirty!"
                     
-                else:
+                elif n_refuseIcedTea:
                     nick "Something for your foot."
                     dhannica_i "What's he talking about? The heck is this guy's problem?"
                     nick "It's just iced tea."
@@ -358,18 +359,6 @@ label chap1_dhannica:
                     "He gave you a quick glance, checking if you were alright and if he'd done a good job."
                     "In that moment, you saw them clearly: his eyes, one blue and the other green. Something about him felt peculiar to you."
                     "As he tended to your foot, you couldn't help but notice his shoes."
-                    show nick:
-                        ease_back 1.0 yalign 1.03
-                    show nick at trans3
-                    "He rose abruptly, seemingly aware that the interaction between you two was drawing attention."
-                    camera:
-                        ease 1.0 truecenter zoom 1.0
-                    "It was sort of giving a public display of affection, garnering curious glances from onlookers."
-                    nick "J-just put that there. Give the bottle back to me when you get a chance."
-                    hide nick at trans3
-                    "He soon left at a fastened pace, leaving you all alone in the bus stop."
-                    dhannica_i "Well that was...interesting."
-                    jump school
                     
             "No":
                 dhannica_i "You know what? I think it's safest to just keep my pace; I know I'll get there anyways."
@@ -436,6 +425,7 @@ label chap1_dhannica:
                 menu:
                     "Take the flask":
                         $ Nick.add(5)
+                        $ n_takeFlask = True
                         dhannica "Are you sure?"
                         nick "Just do it."
                         hide nick at trans3
@@ -489,6 +479,42 @@ label chap1_dhannica:
             "You're clueless at what just happened."
             dhannica_i "Guess I'll return this..."
 
+        if n_refuseIcedTea:
+            show nick:
+                ease_back 1.0 yalign 1.03
+            show nick at trans3
+            "He rose abruptly, seemingly aware that the interaction between you two was drawing attention."
+            camera:
+                ease 1.0 truecenter zoom 1.0
+            "It was sort of giving a public display of affection, garnering curious glances from onlookers."
+            nick "J-just put that there. Give the bottle back to me when you get a chance."
+            hide nick at trans3
+            "He soon left at a fastened pace, leaving you all alone in the bus stop."
+            dhannica_i "Well that was...interesting."
+            jump school
+
+        if n_takeFlask:
+            show nick at trans3
+            offscr_nick "There, that should do it."
+            nick "..."
+            dhannica "..."
+            nick "Err...keep that until the cold is gone. Just give it back to me when you're done."
+            show nick:
+                ease 1.0 offscreenleft
+            pause 1.0
+            play sound busopen
+            pause 1.2
+            play ambient busengine fadein 0.7
+            pause 1.6
+            play sound busopen
+            pause 1.0
+            stop ambient fadeout 1.2
+            window auto
+            "He disembarked at the next bus stop, and you never saw him again."
+            "Silence came after, for the rest of the ride."
+            play ambient birds fadein 2.0
+            jump school
+
         if n_refuseTake:
             $ Nick.add(10)
             "After a few minutes, you began to feel better, albeit only slightly."
@@ -510,7 +536,7 @@ label chap1_dhannica:
             window auto
             "He disembarked at the next bus stop, and you never saw him again."
             "Silence came after, for the rest of the ride."
-            play ambient birds
+            play ambient birds fadein 2.0
             jump school
 
     else:
@@ -655,7 +681,7 @@ label classroom:
     "You stood up, limping, and headed towards the door."
     if beLate:
         prof "Are you going alone looking like that? I don't think so."
-        "The profesor signals the newcomer standing next to him and points at you."
+        "The professor signals the newcomer standing next to him and points at you."
         prof "Make yourself useful, since you're late. Escort her to the nurse's office."
         show nick:
             trans3

@@ -20,7 +20,7 @@ init python:
 
     config.auto_voice = "audio/voice/{id}.ogg"
 
-default preferences.voice_after_game_menu = True
+# default preferences.voice_after_game_menu = True
 default preferences.voice_sustain = True
 default preferences.mobile_rollback_side = "left"
 

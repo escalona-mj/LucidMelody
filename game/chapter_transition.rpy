@@ -15,6 +15,7 @@ image chapter_text = ParameterizedText(
 )
 
 default chapter = 0
+default chapter_name = None
 default current_chapter = 0
 default chapter_list = ['The Enigmatic Concert', #1
                 'A Connection Beyond Dreams', #2
@@ -28,11 +29,12 @@ label chapter_transition:
     scene black with fade
     $ chapter = chapter + 1
     $ current_chapter = current_chapter + 1
+    $ chapter_name = chapter_list[current_chapter - 1]
     play sound "audio/sfx/new_chapter.mp3" volume 0.5
     pause 0.45
     show chapter_num "Chapter [chapter]"
     pause 0.5
-    show chapter_text "{0}".format(chapter_list[current_chapter - 1])
+    show chapter_text "[chapter_name]"
     pause 4.0
     hide chapter_num
     hide chapter_text

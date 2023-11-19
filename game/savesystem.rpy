@@ -59,6 +59,7 @@ screen load():
 init python:
     def save_indicator(data):
         data['route'] = current_route
+        data['chapter'] = chapter
     config.save_json_callbacks = [save_indicator]            
 
 
@@ -107,7 +108,8 @@ screen file_slots(title):
 
                         null height 5
 
-                        text FileTime(slot, format=_("{#file_time}%A, %B %d %Y, %H:%M"), empty=_("unknown dream")):
+                        $ cur_chap = FileJson(slot, key='chapter')
+                        text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nChapter [cur_chap]"), empty=_("unknown dream")):
                             style "slot_time_text"
 
                         text FileSaveName(slot):

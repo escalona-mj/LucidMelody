@@ -221,7 +221,7 @@ screen emptymenu:
         vbox:
             text "Chapter [chapter]":
                 size 90
-            text "{0}".format(chapter_list[current_chapter - 1]):
+            text "[chapter_name]":
                 size 70
 
 style emptymenu_vbox is vbox:

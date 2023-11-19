@@ -20,7 +20,9 @@ default dhannica_description = ""
 #NICK VARIABLES
 default meetNick = False
 default n_takeIcedTea = False
+default n_refuseIcedTea = False
 default n_refuseTake = False
+default n_takeFlask = False
 default nick_likePoints = 0
 default nick_likePointsMax = 100
 default nick_age = ""

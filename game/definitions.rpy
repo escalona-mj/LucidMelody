@@ -1,17 +1,28 @@
 ##########################################################################################################
 #                                               FUNCTIONS                                                #
 ##########################################################################################################
-# init -1 python: 
-#     def callback_builder(character_sprite_basename):
-#         def char_callback(event, **kwargs):
-#             if event == "show_done":
-#                 renpy.show(character_sprite_basename + " talk")
-#             elif event == "slow_done":
-#                 renpy.show(character_sprite_basename + " -talk")
-#                 renpy.restart_interaction()
-#         return char_callback
+init python: 
+    def narrator_beep(event, **kwargs):
+        if event == "show" or event == "show_done":
+            renpy.sound.play("audio/voice/narrator.ogg", channel="voice", loop=True)
+        elif event == "slow_done" or event == "end":
+            renpy.sound.stop(channel="voice")
+        return narrator_beep
 
-init python:
+    def dhannica_beep(event, **kwargs):
+        if event == "show" or event == "show_done":
+            renpy.sound.play("audio/voice/dhannica.ogg", channel="voice", loop=True)
+        elif event == "slow_done" or event == "end":
+            renpy.sound.stop(channel="voice")
+        return dhannica_beep
+
+    def alec_beep(event, **kwargs):
+        if event == "show" or event == "show_done":
+            renpy.sound.play("audio/voice/alec.ogg", channel="voice", loop=True)
+        elif event == "slow_done" or event == "end":
+            renpy.sound.stop(channel="voice")
+        return alec_beep
+
     class DisableSkip():
         def start():
             global _game_menu_screen
@@ -27,8 +38,8 @@ init python:
 ##########################################################################################################
 #                                               CHARACTERS                                               #
 ##########################################################################################################
-define narrator = Character(ctc="ctc", ctc_position='fixed')
-define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed")
+define narrator = Character(ctc="ctc", ctc_position='fixed', callback=narrator_beep)
+define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed", callback=narrator_beep)
 
 #thought MC
 define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#ff9b9b', image="dhannica")
@@ -36,7 +47,7 @@ define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix
 
 #characters
 default mcNamegirl = ""
-define dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b', image="dhannica")
+define dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b', image="dhannica", callback=dhannica_beep)
 define offscr_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="offscr_dhannica")
 
 default mcNameboy = ""
@@ -44,7 +55,7 @@ define nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', image='
 define offscr_nick = DynamicCharacter('mcNameboy', kind=nick, image='offscr_nick')
 
 default a_name = "Alec"
-define alec = DynamicCharacter('a_name', kind=speak, color='#21a733', image="alec")
+define alec = DynamicCharacter('a_name', kind=speak, color='#21a733', image="alec", callback=alec_beep)
 define offscr_alec = DynamicCharacter('a_name', kind=alec, image="offscr_alec")
 
 #side characters
