@@ -62,9 +62,7 @@ define config.gl2 = True
 define config.gl_resize = False
 define config.has_sync = False
 
-define config.gestures = {
-    "e" : "rollback",
-    "s" : "game_menu"}
+define config.gestures = {"s" : "game_menu"}
 define config.dispatch_gesture = None
 
 define config.layers = [ 'master', 'choice_menu', 'transient', 'screens', 'overlay', 'front' ]

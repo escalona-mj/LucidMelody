@@ -263,7 +263,7 @@ screen controls_modal():
             hbox:
                 hbox:
                     style_prefix "gesture"
-                    label "Tap Right Screen"
+                    label "Tap Screen"
                     add "gui/tap.png":
                         yalign 0.5
                 text "Advances dialogue."
@@ -273,17 +273,11 @@ screen controls_modal():
                     hbox:
                         style_prefix "gesture"
                         if preferences.mobile_rollback_side == "left":
-                            label "Swipe Right/Tap Left Screen"
+                            label "Tap Left Screen"
                         else:
-                            label "Swipe Right/Tap Right Screen"
-                        hbox:
+                            label "Tap Right Screen"
+                        add "gui/tap.png":
                             yalign 0.5
-                            spacing 10
-                            add "gui/swipe_right.png":
-                                yalign 0.5
-                            text "or" style_prefix "controls"
-                            add "gui/tap.png":
-                                yalign 0.5
                     text "Rolls back to earlier dialogue.":
                         yalign 0.5
     
@@ -300,6 +294,7 @@ screen controls_modal():
                 null height 25
                 text "If you're still overwhelmed with the controls, you can\nview them again on the main menu.":
                     size 30
+                    text_align 0.5
             # null height 25
 
             # hbox:
@@ -340,7 +335,6 @@ style gesture_label_text:
     font "fonts/MyPrettyCutie.ttf"
 
 style controls_text:
-    text_align 0.5
     xalign 0.5
     color gui.accent_color
     font gui.interface_text_font
