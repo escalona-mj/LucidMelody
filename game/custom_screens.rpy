@@ -194,10 +194,13 @@ transform showButtons(x1, x2):
         easein .25 zoom 1.0
 
 #setting the correct variables before starting the route
+default isDhannica = False
+default isNick = False
 
 label chooseFemale:
     pause 0.1
     $ current_route = 'dhannica'
+    $ isDhannica = True
     $ mcNameboy = 'Nick'
     if not Main:
         $ Main = "Dhannica"
@@ -207,6 +210,7 @@ label chooseFemale:
 label chooseMale:
     pause 0.1
     $ current_route = 'nick'
+    $ isNick = True
     $ mcNamegirl = 'Dhannica'
     if not Main:
         $ Main = "Nick"
@@ -231,6 +235,16 @@ style emptymenu_vbox is vbox:
 style emptymenu_text:
     xalign 0.5
     color '#fff'
+
+screen time_intermission(txt):
+    fixed:
+        add Text(txt, slow_cps=10, text_align=0.5, outlines= [(3, "#16161d", 2, 2)]) xalign 0.5 yalign 0.5:
+            at transform:
+                alpha 0.0
+                ease 1.0 alpha 1.0
+                pause 3.0
+                ease 1.0 alpha 0.0
+
 
 screen controls_modal():
     $ persistent.seen_controls = True

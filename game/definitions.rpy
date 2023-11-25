@@ -16,6 +16,13 @@ init python:
             renpy.sound.stop(channel="voice")
         return dhannica_beep
 
+    def dhannica_i_beep(event, **kwargs):
+        if event == "show" or event == "show_done":
+            renpy.sound.play("audio/voice/dhannica.ogg", channel="voice", loop=True, relative_volume=0.25)
+        elif event == "slow_done" or event == "end":
+            renpy.sound.stop(channel="voice")
+        return dhannica_beep
+
     def alec_beep(event, **kwargs):
         if event == "show" or event == "show_done":
             renpy.sound.play("audio/voice/alec.ogg", channel="voice", loop=True)
@@ -25,30 +32,29 @@ init python:
 
     class DisableSkip():
         def start():
-            global _game_menu_screen
-            _game_menu_screen = None
+            store._game_menu_screen = None
             config.skipping = False # if skipping, stop it
             config.allow_skipping = False #prevents from skipping
         def stop():
-            global _game_menu_screen
-            _game_menu_screen = 'emptymenu'
+            store._game_menu_screen = 'emptymenu'
             config.allow_skipping = True
 
 
 ##########################################################################################################
 #                                               CHARACTERS                                               #
 ##########################################################################################################
-define narrator = Character(ctc="ctc", ctc_position='fixed', callback=narrator_beep)
+define narrator = Character(ctc="ctc", ctc_position='fixed')
 define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed", callback=narrator_beep)
 
 #thought MC
-define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#ff9b9b', image="dhannica")
+define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#ff9b9b', image="dhannica", callback=dhannica_i_beep)
 define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#4076ff')
 
 #characters
 default mcNamegirl = ""
 define dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b', image="dhannica", callback=dhannica_beep)
 define offscr_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="offscr_dhannica")
+define phone_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="offscr_dhannica", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31)
 
 default mcNameboy = ""
 define nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', image='nick')
@@ -57,12 +63,17 @@ define offscr_nick = DynamicCharacter('mcNameboy', kind=nick, image='offscr_nick
 default a_name = "Alec"
 define alec = DynamicCharacter('a_name', kind=speak, color='#21a733', image="alec", callback=alec_beep)
 define offscr_alec = DynamicCharacter('a_name', kind=alec, image="offscr_alec")
+define phone_alec = DynamicCharacter('a_name', kind=alec, image="offscr_alec", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31)
 
 #side characters
 define girlMom = Character('Mom', kind=speak)
 define d_singer = Character('Singer',kind=speak)
 define prof = Character('Prof', kind=speak)
 define unknown_guy = Character('???', kind=speak, image="unknown_guy")
+define nurse = Character('Nurse', kind=speak)
+define doctor = Character('Doctor', kind=speak)
+define everyone = Character('Everyone', kind=speak)
+
 
 ######################################################################################################
 #                                               IMAGES                                               #
@@ -96,6 +107,12 @@ image bg school hallway:
 
 image bg classroom:
     im.Blur("images/bg/classroom.png", 2.5)
+    
+image bg clinic:
+    im.Blur("images/bg/clinic.jpg", 2.5)
+
+image bg hospital:
+    im.Blur("images/bg/hospital.jpg", 2.5)
 
 
 image mom = "images/characters/mom.png"

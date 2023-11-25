@@ -95,8 +95,6 @@ label chap1_dhannica:
             window hide(None)
             pause 1.25
             window auto
-            # $ update_journal("Character updated.")
-            # $ dhannica_description = "{0} Well, a hungry one.".format(dhannica_description)
             dhannica_i "Oh shoot, I forgot! I never really had dinner last night."
             camera at reset_dizzy
             play sound phone_notif
@@ -151,8 +149,8 @@ label chap1_dhannica:
 
     if beLate:
         camera at reset_dizzy
-        dhannica_i "{sc}IT'S 7:55?!{/sc}" with vpunch
-        dhannica_i "{sc}SHOOT!{/sc}"
+        dhannica "{sc}IT'S 7:55?!{/sc}" with vpunch
+        dhannica "{sc}SHOOT!{/sc}"
         $ journal = True
         $ update_journal("Journal unlocked.")
         if usePhone:
@@ -286,6 +284,7 @@ label chap1_dhannica:
                         $ n_refuseIcedTea = True
                         pass
                 $ meetNick = True
+                $ current_route = 'nick'
                 $ update_journal("Character added.")
                 camera:
                     ease 1.0 zoom 1.5 truecenter
@@ -361,6 +360,7 @@ label chap1_dhannica:
                     "As he tended to your foot, you couldn't help but notice his shoes."
                     
             "No":
+                $ n_takeBus = True
                 dhannica_i "You know what? I think it's safest to just keep my pace; I know I'll get there anyways."
                 "You continued walking at the same limping pace, enduring the persistent pain in your foot."
                 "As you approached the bus stop, you noticed a commotion of people rushing onto the bus."
@@ -373,6 +373,7 @@ label chap1_dhannica:
                 "You didn't realize you'd been standing there for 20 seconds, nor did you know why you had."
                 "He finally looked in your direction, and when both of your eyes met, you instinctively glanced at the ground, as if you hadn't already been caught staring."
                 $ meetNick = True
+                $ current_route = 'nick'
                 $ update_journal("Character added.")
                 offscr_nick "Why are you looking at me like that?"
                 "You tried your best not to appear obvious and began to slowly make your way to a nearby bench, attempting not to limp to hide your injury."
@@ -558,69 +559,77 @@ label school:
         dhannica_i "I gotta thank him for this."
         dhannica_i "But first, my classroom!"
         stop ambient fadeout 1.0
-        jump classroom
 
-    $ update_journal("Journal updated.")
-    $ dhannica_description = "{0} Well, an early bird I suppose.".format(dhannica_description)
-    "You finally reached the school, walking through the gates limping on your other foot."
-    dhannica_i "I look like a loser. That's just great."
-    dhannica_i "Is this how people are gonna remember me...? The limping kid on the first day of school."
-    "You gaze before you a school, with an interesting color choice that seem be used redundantly everywhere."
-    "..."
-    "It didn't take long for you to finally realize what you're here for."
-    dhannica "Oh right, my class schedule."
-    "You rummaged through your bag, only to find out your outer pocket was open and your class schedule had fallen out."
-    dhannica_i "This day just gets better and better."
-    "Sarcasm was the only thing that could sugarcoat this situation."
-    "You start to trace back your previous steps, carefully searching for your schedule, with your eyes glued to the ground."
-    "Suddenly...a hand appeared in your field of vision, holding a piece of paper."
-    "You read, '{i}Purposive Communication - 7:15 am - 8-15 am{/i}'."
-    "It was your schedule."
-    $ meetAlec = True
-    $ update_journal("Character added.")
-    show alec at trans3
-    "You looked at his hand and followed the trail of grungy accessories, to his chain necklace up to his green eyes."
-    "You don't know what you felt, but you felt something. Maybe gratitude?"
-    "That you wouldn't have to pay an extra 100 to get another copy of your schedule."
-    dhannica "Uhm...thank you... for the, uhm...this."
-    $ Alec.add(3)
-    alec "No biggie."
-    alec "I noticed this on the ground then looked ahead and saw your bag was open, so I had to hand it to you."
-    alec "It seems that we're in the same class. Nice to meet you classmate."
-    "He stretches out his hand for a handshake."
-    "In which, you relunctantly returned the offer."
-    alec "By the way, are you okay? You don't seem to be walking right."
-    dhannica "Oh...yeah haha, I stubbed my toe this morning. And well, I thought it was gonna be okay after a few minutes, but I guess that's still yet to come."
-    alec "Would you like me to accompany you to the nurse's office?"
+    else:
+        $ update_journal("Journal updated.")
+        $ dhannica_description = "{0} Well, an early bird I suppose.".format(dhannica_description)
+        "You finally reached the school, walking through the gates limping on your other foot."
+        dhannica_i "I look like a loser. That's just great."
+        dhannica_i "Is this how people are gonna remember me...? The limping kid on the first day of school."
+        "You gaze before you a school, with an interesting color choice that seem be used redundantly everywhere."
+        "..."
+        "It didn't take long for you to finally realize what you're here for."
+        dhannica "Oh right, my class schedule."
+        "You rummaged through your bag, only to find out your outer pocket was open and your class schedule had fallen out."
+        dhannica_i "This day just gets better and better."
+        "Sarcasm was the only thing that could sugarcoat this situation."
+        "You start to trace back your previous steps, carefully searching for your schedule, with your eyes glued to the ground."
+        "Suddenly...a hand appeared in your field of vision, holding a piece of paper."
+        "You read, '{i}Purposive Communication - 7:15 am - 8-15 am{/i}'."
+        "It was your schedule."
+        $ meetAlec = True
+        $ current_route = 'alec'
+        $ update_journal("Character added.")
+        show alec at trans3
+        "You looked at his hand and followed the trail of grungy accessories, to his chain necklace up to his green eyes."
+        "You don't know what you felt, but you felt some sort of gratitude."
+        "That you wouldn't have to pay extra to get another copy of your schedule."
+        dhannica "Uhm...thank you... for the, uhm...this."
+        $ Alec.add(3)
+        alec "No biggie."
+        alec "I noticed your bag was open and this fell out."
+        alec "It seems that we're in the same class. Nice to meet you classmate."
+        "He stretches out his hand for a handshake."
+        "In which, you relunctantly returned the offer."
+        $ a_name = "Alec"
+        $ update_journal("Character updated.")
+        alec "I'm Alec."
+        alec "By the way, are you okay? You don't seem to be walking right."
+        dhannica "Oh...yeah haha, I stubbed my toe this morning. And well, I thought it was gonna be okay after a few minutes, but I guess that's still yet to come."
+        alec "Is that so?"
 
-    menu:
-        "Accept":
-            $ Alec.add(2)
-            $ a_clinic = True
-            dhannica "I mean, sure? Classes are about to start though. We'll be late if we did."
+        menu:
+            alec "Would you like me to accompany you to the infirmary?"
+            "Accept":
+                $ Alec.add(2)
+                $ a_clinic = True
+                dhannica "I mean, sure? Classes are about to start though and we'll be late if we did."
 
-        "Deny":
-            dhannica "You dont have to, I mean I wouldn't want to be a bother."
-            alec "Nonsense, friends don't bother me."
-            dhannica_i "What~"
-            alec "We're friends, right?"
-            dhannica "I guess...?"
+            "Deny":
+                dhannica "You don't have to, I mean I wouldn't want to bother you."
+                alec "Nonsense, friends don't bother me."
+                dhannica "..."
+                alec "We're friends, right?"
+                dhannica "I guess...?"
+                dhannica_i "I've made a friend~"
+                dhannica_i "And he's quite upfront with it."
+                dhannica "But we'll be late if we go now."
+            
+        alec "I guess so. How about after the first subject? We have 30 minutes vacant. I'm sure that's enough time for the nurse to patch you up."
+
+        if a_clinic:
+            dhannica "Thanks, but you really don't have to do this."
+            alec "And leave my first friend to an injury? I don't think so."
             dhannica_i "I've made a friend~"
-            dhannica "But we'll be late if we go now."
-        
-    alec "I guess so. How about after the first subject? We have 30 mins vacant. I'm sure that's enough time for the nurse to patch you up."
+            dhannica_i "And he's quite upfront with it."
 
-    if a_clinic:
-        dhannica "Thanks, but you really don't have to do this."
-        alec "And leave my first friend to an injury? I don't think so."
-        dhannica_i "I've made a friend~"
-
-    $ update_journal("Character updated.")
-    $ alec_description = "A really stylish guy. Had green eyes... Quite friendly and offered me help. Literally added me as his friend. Well, in real life."
-    dhannica "I mean if you insist, how dare would I refuse hahaha."
-    alec "Let's go, we'll be late for first sub."
-    hide alec at trans3
-    "He offers his hand for you to hold unto as you both walk to your classroom."
+        $ update_journal("Character updated.")
+        $ alec_description = "A really stylish guy. Had green eyes... Quite friendly and offered me help. Literally added me as his friend. Well, in real life."
+        dhannica "I mean if you insist, how dare would I refuse hahaha."
+        alec "Let's go, we'll be late for first sub."
+        hide alec at trans3
+        "He offers his hand for you to hold unto as you both walk to your classroom."
+    
     stop ambient fadeout 1.0
     jump classroom
 
@@ -653,18 +662,13 @@ label classroom:
     prof "Alright, let's take attendance first before we discuss the school rules, shall we?"
     scene bg classroom with long_dissolve
     "As the professor continued with the lively discussion while inserting puns to keep the atmosphere engaging, you find it challenging to focus."
-    if beLate:
-        "The pain in your left foot is intensifying, and you sense Alec noticing your discomfort."
-    else:
-        "The pain in your left foot is intensifying, and you sense the white-haired guy noticing your discomfort."
+    "The pain in your left foot is intensifying, and you sense Alec noticing your discomfort."
     dhannica_i "When is he gonna stop blabbering?"
     if beLate:
         "The door opens, and a newcomer rushes in, catching his breath."
         unknown_guy "Sorry, I'm late!"
         prof "Ah, first day and he's already late."
-        "Suddenly, Alec raises his hand, catching the professor's attention."
-    else:
-        "Suddenly, the white-haired guy raises his hand, catching the professor's attention."
+    "Suddenly, Alec raises his hand, catching the professor's attention."
     prof "Yes, Mr. Boyband with the grunge style. What's up?"
     offscr_alec "My friend here has sprained herself on the way to school and she wanted to ask if she could go to the nurse's office to get it checked out."
     prof "Well, why didn't you go there before class started?"
@@ -690,9 +694,9 @@ label classroom:
         dhannica "{sc}It's YOU?!{/sc}" with vpunch
     else:
         prof "Aren't you going to bring your friend?"
-        "He walks towards you to escort you to the nurse's room."
+        "Alec walks towards you to escort you to the nurse's room."
         dhannica "Thanks."
-        alec "No problem."
+        offscr_alec "No problem."
         scene bg school hallway with scenefadehold
         show nick:
             offscreenright
@@ -701,3 +705,4 @@ label classroom:
             ease 1.0 offscreenleft
         "As you exited, a guy rushed towards the door, abruptly halting in front of you before swerving to enter."
         offscr_nick "Sorry, I'm late!"
+    jump chap2_dhannica

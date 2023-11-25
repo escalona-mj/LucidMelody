@@ -447,7 +447,7 @@ init python:
         gui.name_ypos = 150
         gui.dialogue_xpos = 415
         gui.dialogue_ypos = 210
-        gui.dialogue_width = 1250
+        gui.dialogue_width = 1200
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54

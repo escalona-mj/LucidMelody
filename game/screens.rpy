@@ -981,8 +981,11 @@ screen about():
                 style_prefix "about_person"
                 has vbox
                 text "Mekaella Joy Muit"
-                text "Maneja Moises"
+                text "Neil Moises Maneja"
                 text "Ivan Barzaga"
+                text "Rechelle Añover"
+                text "Kristian Magallanes"
+                text "John Christian Mantele"
                     
         null height 100
                
@@ -1115,7 +1118,7 @@ screen preferences():
                             label _("BGM Volume")
                             bar value Preference("music volume"):
                                 style "bar"
-                                tooltip "The loudness of background music\nthroughout the game."
+                                tooltip "The loudness of background music throughout the game."
 
                         if config.has_sound:
                             label _("Sound Volume")

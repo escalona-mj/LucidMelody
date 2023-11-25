@@ -48,6 +48,10 @@ init python:
         store.journal_entries.append(entry)
         update_journal("Entry added.")
 
+    def remove_entry(entry):
+        store.journal_entries.remove(entry)
+        update_journal("Entry removed.")
+
     def next_page():
         store.first_page += 2
         store.second_page += 2
@@ -105,7 +109,7 @@ style love_bar_bar is default:
 transform value_appear:
     alpha 0.0 yoffset 25
     easein 0.5 yoffset 0 alpha 1.0
-    pause 1.0
+    pause 2.5
     easein 0.5 yoffset -25 alpha 0.0
 
 transform book_appear:
@@ -172,7 +176,7 @@ screen journal():
                 vbox:
                     xalign 1.0
                     spacing 25
-                    if current_route == "dhannica" or current_route == "alec":
+                    if isDhannica:
                         imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
                             foreground Text("", style="bookmark_btn")
                             selected_foreground Text("{0}".format(Main), style="bookmark_btn")
@@ -191,7 +195,7 @@ screen journal():
                                 action [SetVariable("current_page", Alec.name)]
                                 focus_mask True
                     
-                    elif current_route == "nick":
+                    elif isNick:
                         imagebutton auto "gui/journal/nick_bookmark_%s.png":
                             foreground Text("", style="bookmark_btn")
                             selected_foreground Text("{0}".format(Main), style="bookmark_btn")

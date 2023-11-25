@@ -3,7 +3,8 @@ image chapter_num = ParameterizedText(
     yalign=0.45,
     size=70,
     color='#ffffff',
-    text_align=0.5
+    text_align=0.5,
+    outlines = [(3, "#16161d", 2, 2)]
 )
 
 image chapter_text = ParameterizedText(
@@ -11,7 +12,8 @@ image chapter_text = ParameterizedText(
     yalign=0.53,
     size=50,
     color='#ffffff',
-    text_align=0.5
+    text_align=0.5,
+    outlines= [(3, "#16161d", 2, 2)]
 )
 
 default chapter = 0
@@ -26,7 +28,7 @@ default chapter_list = ['The Enigmatic Concert', #1
 
 label chapter_transition:
     $ DisableSkip.start()
-    scene black with fade
+    # scene black with fade
     $ chapter = chapter + 1
     $ current_chapter = current_chapter + 1
     $ chapter_name = chapter_list[current_chapter - 1]

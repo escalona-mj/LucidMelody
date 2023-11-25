@@ -119,11 +119,11 @@ screen file_slots(title):
                         if cur_route == 'common':
                             pass
                         elif cur_route == 'dhannica':
-                            add 'save_dhannica_indicator' xpos 215 ypos -280
+                            add 'save_dhannica_indicator' xpos 215 ypos -300
                         elif cur_route == 'alec':
-                            add 'save_alec_indicator' xpos 215 ypos -280
+                            add 'save_alec_indicator' xpos 215 ypos -300
                         elif cur_route == 'nick':
-                            add 'save_nick_indicator' xpos 215 ypos -280
+                            add 'save_nick_indicator' xpos 215 ypos -300
 
                         key "save_delete" action FileDelete(slot)
 

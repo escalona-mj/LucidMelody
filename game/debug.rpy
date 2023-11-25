@@ -21,10 +21,10 @@ init python:
     def removePointToNick():
         Nick.remove(10)
 
-    def removeAllPointToAlec():
-        Alec.remove(100)
-    def removeAllPointToNick():
-        Nick.remove(100)
+    def AddDream():
+        add_entry(entry1)
+    def RemoveDream():
+        remove_entry(entry1)
 
 screen dev_screen():
     default devtools = False
@@ -72,6 +72,8 @@ screen dev_screen():
                             textbutton "meet Nick? {0}".format(meetNick) action ToggleVariable("meetNick", True, False)
                         elif current_route == "nick":
                             textbutton "meet Dhannica? {0}".format(meetDhannica) action ToggleVariable("meetDhannica", True, False)
+                        textbutton "Add dream entry" action Function(AddDream)
+                        textbutton "Remove dream entry" action Function(RemoveDream)
                 vbox:
                     yalign 0.5
                     label "Progress (very destructive)"
@@ -93,12 +95,11 @@ screen dev_screen():
                         textbutton "Remove 10pts to Alec" action Function(removePointToAlec)
                         textbutton "Add 10pts to Nick" action Function(addPointToNick)
                         textbutton "Remove 10pts to Alec" action Function(removePointToNick)
-                        textbutton "Remove all pts to Alec" action Function(removeAllPointToAlec)
-                        textbutton "Remove all pts to Nick" action Function(removeAllPointToNick)
                     vbox:
                         yalign 0.5
                         text "Alec points = {0}".format(alec_likePoints) color "#fff"
                         text "Nick points = {0}".format(nick_likePoints) color "#fff"
+                
     fixed:
         imagebutton:
             xalign 0.5
@@ -111,5 +112,6 @@ screen dev_screen():
             action ToggleLocalVariable("devtools", True, False)
 
 
-init python:
-    build.classify("**debug.rpy", None)
+# init python:
+#     build.classify("**debug.rpy", None)
+#     build.classify("**debug.rpyc", None)
