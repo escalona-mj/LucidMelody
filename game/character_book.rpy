@@ -159,7 +159,6 @@ screen journal():
 
     frame:
         at book_appear
-        modal True
         background Frame("gui/journal/journal.png")
         xalign 0.5
         yalign 0.5
@@ -202,11 +201,11 @@ screen journal():
                             action [SetVariable("current_page", MC.name)]
                             focus_mask True
                         if meetDhannica:
-                                imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
-                                    foreground Text("", style="bookmark_btn")
-                                    selected_foreground Text("{0}".format(mcNamegirl), style="bookmark_btn")
-                                    action [SetVariable("current_page", Dhannica.name)]
-                                    focus_mask True
+                            imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
+                                foreground Text("", style="bookmark_btn")
+                                selected_foreground Text("{0}".format(mcNamegirl), style="bookmark_btn")
+                                action [SetVariable("current_page", Dhannica.name)]
+                                focus_mask True
             #FIRST PAGE
             frame:
                 at page_flip
@@ -274,11 +273,11 @@ screen journal():
                 xoffset -55
                 style_prefix "dream_bookmark"
                 hbox:
-                        imagebutton auto "gui/journal/bookmark_%s.png":
-                            foreground Text("", style="dream_bookmark_btn")
-                            selected_foreground Text("Journal", style="dream_bookmark_btn")
-                            action [SetVariable("current_page", "Journal")]
-                            focus_mask True
+                    imagebutton auto "gui/journal/bookmark_%s.png":
+                        foreground Text("", style="dream_bookmark_btn")
+                        selected_foreground Text("Journal", style="dream_bookmark_btn")
+                        action [SetVariable("current_page", "Journal")]
+                        focus_mask True
 
     if current_page == "Journal":
         if (first_page >= 3) and (len(journal_entries) >= 3):

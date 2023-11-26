@@ -34,47 +34,37 @@ image save_nick_indicator:
     .10
     repeat
 
-## Load and Save screens #######################################################
-##
-## These screens are responsible for letting the player save the game and load
-## it again. Since they share nearly everything in common, both are implemented
-## in terms of a third screen, file_slots.
-##
-## https://www.renpy.org/doc/html/screen_special.html#save https://
-## www.renpy.org/doc/html/screen_special.html#load
-
-screen save():
-
-    tag menu
-
-    use file_slots(_("Save"))
-
-
-screen load():
-
-    tag menu
-
-    use file_slots(_("Load"))
-
 init python:
     def save_indicator(data):
         data['route'] = current_route
         data['chapter'] = chapter
+        data['ch_name'] = chapter_name
     config.save_json_callbacks = [save_indicator]            
 
+transform save_hover:
+    zoom 1.5
+    crop (213, 100, config.thumbnail_width, config.thumbnail_height)
+    linear 10 crop (213, 400, config.thumbnail_width, config.thumbnail_height)
 
-screen file_slots(title):
+    zoom 2.0
+    crop (0, 352, config.thumbnail_width, config.thumbnail_height)
+    linear 10 crop (625, 352, config.thumbnail_width, config.thumbnail_height)
+    repeat
+
+transform save_idle:
+    zoom 1.5
+    crop (213, 100, config.thumbnail_width, config.thumbnail_height)
+
+default slot_selected = None
+
+screen file_slots():
+    tag menu
 
     default page_name_value = FilePageNameInputValue(pattern=_("Page {}"), auto=_("Automatic saves"), quick=_("Quick saves"))
 
-    use game_menu(title):
+    use game_menu("Saves"):
         
         vbox:
-            ## This ensures the input will get the enter event before any of the
-            ## buttons do.
-            order_reverse True
-
-            ## The page name, which can be edited by clicking on a button.
             button:
                 style "page_label"
 
@@ -85,49 +75,85 @@ screen file_slots(title):
                 input:
                     style "page_label_text"
                     value page_name_value
+                
 
-            ## The grid of file slots.
-            grid gui.file_slot_cols gui.file_slot_rows:
-                style_prefix "slot"
-
+            vbox:
                 xalign 0.5
                 yalign 0.5
 
                 spacing gui.slot_spacing
 
-                for i in range(gui.file_slot_cols * gui.file_slot_rows):
+                for i in range(3):
 
-                    $ slot = i + 1
+                    $ slot = i 
 
                     button:
-                        action FileAction(slot)
+                        xfill True
+                        xsize 1250
+                        ysize 200
 
-                        has vbox
+                        frame:
+                            background None 
+                            add "gui/phone/button/slot_shadow.png"
+                            if FileLoadable(slot):
+                                if slot_selected == slot:
+                                    add AlphaMask(At(FileScreenshot(slot), save_hover),"gui/phone/button/slot_mask.png")
+                                    add "gui/phone/button/slot_overlay.png"
+                                else:
+                                    add AlphaMask(At(FileScreenshot(slot), save_idle),"gui/phone/button/slot_mask.png")
+                            else:
+                                add "gui/phone/button/slot_idle.png"
 
-                        add FileScreenshot(slot) xalign 0.5
+                        if ((FileLoadable(slot)) or (not FileLoadable(slot))):
+                            action SetVariable("slot_selected", slot)
 
-                        null height 5
+                        frame:
+                            background None
+                            padding (25,25,25,25)
+                            hbox:
+                                xfill True
+                                box_wrap_spacing 1250
+                                vbox:
+                                    yoffset 75
+                                    $ cur_chap = FileJson(slot, key='chapter')
+                                    $ cur_chap_name = FileJson(slot, key='ch_name')
+                                    text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nChapter [cur_chap]: [cur_chap_name]"), empty=_("")):
+                                        style "slot_time_text"
+                                    text FileSaveName(slot):
+                                        style "slot_name_text"
+                                hbox:
+                                    yoffset 110
+                                    xoffset 20
+                                    xalign 1.0
+                                    spacing 20
+                                    style_prefix "load_save_btn"
+                                    if slot_selected == i:
+                                        if main_menu:
+                                            if FileLoadable(slot):
+                                                textbutton "LOAD" action FileLoad(slot)
+                                        else:
+                                            if FileLoadable(slot):
+                                                textbutton "LOAD" action FileLoad(slot)
+                                            textbutton "SAVE" action FileSave(slot)
 
-                        $ cur_chap = FileJson(slot, key='chapter')
-                        text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nChapter [cur_chap]"), empty=_("unknown dream")):
-                            style "slot_time_text"
-
-                        text FileSaveName(slot):
-                            style "slot_name_text"
-
-                        $ cur_route = FileJson(slot, key='route')
-                        if cur_route == 'common':
-                            pass
-                        elif cur_route == 'dhannica':
-                            add 'save_dhannica_indicator' xpos 215 ypos -300
-                        elif cur_route == 'alec':
-                            add 'save_alec_indicator' xpos 215 ypos -300
-                        elif cur_route == 'nick':
-                            add 'save_nick_indicator' xpos 215 ypos -300
-
-                        key "save_delete" action FileDelete(slot)
+                            $ cur_route = FileJson(slot, key='route')
+                            if cur_route == 'common':
+                                pass
+                            elif cur_route == 'dhannica':
+                                add 'save_dhannica_indicator' xpos 1085 ypos -25
+                            elif cur_route == 'alec':
+                                add 'save_alec_indicator' xpos 1085 ypos -25
+                            elif cur_route == 'nick':
+                                add 'save_nick_indicator' xpos 1085 ypos -25
+                            
+                            if slot_selected == i:
+                                if FileLoadable(slot):
+                                    imagebutton auto "gui/phone/button/delete_save_%s.png" action FileDelete(slot) xpos -25 ypos -25:
+                                        activate_sound "audio/sfx/click.mp3"
+                            
 
             ## Buttons to access other pages.
+            null height 15
             vbox:
                 style_prefix "page"
 
@@ -164,6 +190,11 @@ screen file_slots(title):
                             xalign 0.5
 
 
+style load_save_btn_button_text:
+    color "#fff"
+    font "fonts/MyPrettyCutie.ttf"
+    outlines [(5, "#16161d", 2, 2)]
+
 style page_label is gui_label
 style page_label_text is gui_label_text
 style page_button is empty
@@ -173,8 +204,11 @@ style slot_button is gui_button
 style slot_button_text is gui_button_text
 style slot_time_text:
     is slot_button_text
-    color u'#000000'
-style slot_name_text is slot_button_text
+    outlines [(3, "#16161d", 2, 2)]
+
+style slot_name_text:
+    is slot_button_text
+    outlines [(3, "#16161d", 2, 2)]
 
 style page_label:
     xpadding 75
@@ -184,17 +218,19 @@ style page_label_text:
     textalign 0.5
     layout "subtitle"
     hover_color gui.hover_color
+    outlines [(3, "#16161d", 2, 2)]
 
 style page_button:
     properties gui.button_properties("page_button")
+    activate_sound "audio/sfx/click.mp3"
 
 style page_button_text:
     textalign 0.5
     selected_color u'#a8a8a8'
     properties gui.button_text_properties("page_button")
 
-style slot_button:
-    properties gui.button_properties("slot_button")
+# style slot_button:
+#     properties gui.button_properties("slot_button")
 
 style slot_button_text:
     properties gui.button_text_properties("slot_button")

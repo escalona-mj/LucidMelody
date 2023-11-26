@@ -404,7 +404,7 @@ screen navigation():
             spacing 30
 
             textbutton "START" action Start()
-            textbutton "LOAD GAME" action ShowMenu("load")
+            textbutton "SAVES" action ShowMenu('file_slots')
             textbutton "SETTINGS" action ShowMenu("preferences")
             textbutton "EXTRAS" action ShowMenu("achievements")
             textbutton "ABOUT" action ShowMenu("about")
@@ -425,19 +425,12 @@ screen navigation():
                     selected_foreground Text(_("History"), style="navigation_btn_selected")
                     action ShowMenu("history")
                     
-                imagebutton:
-                    auto "gui/navigation/save_%s.png"
-                    foreground Text(_("Save"), style="navigation_btn")
-                    hover_foreground Text(_("Save"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Save"), style="navigation_btn_selected")
-                    action ShowMenu("save")
-
             imagebutton:
-                auto "gui/navigation/load_%s.png"
-                foreground Text(_("Load"), style="navigation_btn")
-                hover_foreground Text(_("Load"), style="navigation_btn_hover")
-                selected_foreground Text(_("Load"), style="navigation_btn_selected")
-                action ShowMenu("load")
+                auto "gui/navigation/save_%s.png"
+                foreground Text(_("Saves"), style="navigation_btn")
+                hover_foreground Text(_("Saves"), style="navigation_btn_hover")
+                selected_foreground Text(_("Saves"), style="navigation_btn_selected")
+                action ShowMenu('file_slots')
 
             imagebutton:
                 auto "gui/navigation/preferences_%s.png"
@@ -1780,9 +1773,9 @@ style notify_frame:
     ypos gui.notify_ypos
 
     background Frame("gui/notify.png", Borders(60,10,60,10), tile=gui.frame_tile)
+    padding(50,35,50,35)
     # background Frame("gui/notify.png", gui.notify_frame_borders, tile=gui.frame_tile)
     # padding gui.notify_frame_borders.padding
-    padding(50,35,50,35)
 
 style notify_text:
     properties gui.text_properties("notify")
@@ -2026,12 +2019,12 @@ screen quick_menu():
                     imagebutton auto _("gui/quickmenu/hide_%s.png"):
                         action HideInterface()
                         tooltip "Hide"
-                    imagebutton auto _("gui/quickmenu/load_%s.png"):
-                        action ShowMenu('load')
-                        tooltip "Load"
+                    # imagebutton auto _("gui/quickmenu/load_%s.png"):
+                    #     action ShowMenu('load')
+                    #     tooltip "Load"
                     imagebutton auto _("gui/quickmenu/save_%s.png"):
-                        action ShowMenu('save')
-                        tooltip "Save"
+                        action ShowMenu('file_slots')
+                        tooltip "Saves"
 
                 hbox:
                     spacing 50

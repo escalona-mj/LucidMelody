@@ -39,6 +39,13 @@ init python:
             store._game_menu_screen = 'emptymenu'
             config.allow_skipping = True
 
+    def DropShadow(d, color="#000", blur=5, offset=(0, 0)):
+        return Fixed(
+                Transform(d, matrixcolor=TintMatrix(color), blur=blur, offset=offset),
+                d,
+                fit_first=True
+            )
+
 
 ##########################################################################################################
 #                                               CHARACTERS                                               #

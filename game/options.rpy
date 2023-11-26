@@ -67,7 +67,7 @@ define config.dispatch_gesture = None
 
 define config.layers = [ 'master', 'choice_menu', 'transient', 'screens', 'overlay', 'front' ]
 define config.choice_layer = "choice_menu"
-define config.menu_clear_layers = ["front"]
+define config.menu_clear_layers = ['front', 'choice_menu']
 
 define config.transparent_tile = False
 

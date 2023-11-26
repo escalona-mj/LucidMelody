@@ -208,10 +208,10 @@ label chap2_dhannica:
     dhannica "Oh come on Mom! What chore can I do while sitting down?"
     girlMom "Oh, there's tons. Folding clothes, hanging up the laundry, cleaning your room..."
     dhannica "While sitting down? How can I possibly clean my room while sitting down?"
-    girlMom "Clean your bed, at least.{w=0.1}{nw}"
-    girlMom "Your bed is a mess.{w=0.1}{nw}"
-    girlMom "There's piles of clothes all over.{w=0.1}{nw}"
-    girlMom "How can you sleep with all th-{w=0.1}{nw}"
+    girlMom "Clean your bed, at least.{w=0.1}{nw}" with vpunch
+    girlMom "Your bed is a mess.{w=0.1}{nw}" with vpunch
+    girlMom "There's piles of clothes all over.{w=0.1}{nw}" with vpunch
+    girlMom "How can you sleep with all th-{w=0.1}{nw}" with vpunch
     window hide(None)
     pause 2.5
     window auto
