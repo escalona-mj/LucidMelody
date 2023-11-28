@@ -104,8 +104,14 @@ screen file_slots():
                             else:
                                 add "gui/phone/button/slot_idle.png"
 
-                        if ((FileLoadable(slot)) or (not FileLoadable(slot))):
-                            action SetVariable("slot_selected", slot)
+                        if main_menu:
+                            if FileLoadable(slot):
+                                action SetVariable("slot_selected", slot)
+                            elif not FileLoadable(slot):
+                                pass
+                        else:
+                            if ((FileLoadable(slot)) or (not FileLoadable(slot))):
+                                action SetVariable("slot_selected", slot)
 
                         frame:
                             background None
