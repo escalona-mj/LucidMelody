@@ -132,7 +132,7 @@ label chap2_dhannica:
         menu:
             dhannica_i "Uh..."
             "\"Oh no, we're just friends.\"":
-                $ alec_likePoints -= 5
+                $ Alec.remove(5)
                 nurse "Is that so? Well, I bet you're really good friends then?"
                 alec "Very much so, hahaha. Am I right?"
                 dhannica "Yeah, I don't even know this guy, hahaha."
@@ -176,6 +176,7 @@ label chap2_dhannica:
     $ dhannica_description = "{0}\n\nFirst day of school went horribly. Not only I was sent to a hospital due to negligence of my 'initally thought a small scratch that wouldn't be that much of a problem' turned out to be a big problem.".format(dhannica_description)
 
     scene bg hospital with long_dissolve
+    play ambient hospital volume 0.5 fadein 1.0
     "After quite some time, your mother picked you up from school and took you to a nearby hospital."
     girlMom "Didn't I tell you to just stay at home?"
     dhannica "Yes, but it was the first day I didn't want to mis-{nw}"
@@ -191,14 +192,14 @@ label chap2_dhannica:
     doctor "There, all done."
     "You look down and see your foot all wrapped up, and your pinky toe casted to prevent anymore damage."
     doctor "The damage wasn't that severe. Although there was a slight dislocation, it wasn't much to have caused actual damage that would take too much time to heal."
-    dhannica_i "Phew, thank God."
+    dhannica_i "Phew, thank goodness."
     doctor "Although you're going to have to wear that for 2 weeks."
     dhannica_i "Two weeks?"
     dhannica "{sc}Two weeks?{/sc} So I'd have to miss school for two weeks?" with vpunch
     doctor "Not necessarily. You can rest for a week."
     doctor "You can then proceed to attending your classes. But you'd still have the cast on the remaining week if you choose to attend school."
     doctor "A week would be enough time for your injury to recover a bit for you to be able to move around."
-    dhannica_i "So I can go back to school for after a week."
+    dhannica_i "So I can go back to school after a week."
     dhannica_i "Great, a week."
     dhannica_i "This is much worse than what I wanted to avoid. Just great."
     girlMom "You heard the doctor. No movements and no going outside for a week."
@@ -212,6 +213,7 @@ label chap2_dhannica:
     girlMom "Your bed is a mess.{w=0.1}{nw}" with vpunch
     girlMom "There's piles of clothes all over.{w=0.1}{nw}" with vpunch
     girlMom "How can you sleep with all th-{w=0.1}{nw}" with vpunch
+    stop ambient fadeout 1.0
     window hide(None)
     pause 2.5
     window auto
@@ -219,6 +221,7 @@ label chap2_dhannica:
     "You forgot about the doctor being present in the room and noticed him in your peripherals listening to both of you bickering about chores."
     dhannica "S-sorry, where are my manners."
     girlMom "Doctor, if you may."
+    play ambient hospital volume 0.2 fadein 1.0
     doctor "Oh! Yes."
     "The doctor begins to scribble down your prescription meds."
     doctor "Bring this down to the pharmacy downstairs. These are just pain killers to help with the pain."
@@ -230,6 +233,7 @@ label chap2_dhannica:
         girlMom "Alright, no more arguments. You need to rest."
     "You nodded, understanding the concern in her voice."
     "The doctor handed the prescription, and both of you left the hospital."
+    stop ambient fadeout 3.0
     scene bg living room with long_dissolve
 
     if beLate:
@@ -238,9 +242,9 @@ label chap2_dhannica:
         menu:
             dhannica_i "Maybe..."
             "\"There's more to Nick than meets the eye.\"":
-                $ nick_likePoints += 4
+                $ Nick.add(4)
             "\"I shouldn't read too much into it. He was probably just being polite.\"":
-                $ nick_likePoints -= 2
+                $ Nick.remove(2)
 
         dhannica_i "Ah nevermind about that. Who knows, only time will tell on what truly is he."
     else:
@@ -254,7 +258,7 @@ label chap2_dhannica:
         phone_alec "Hey, I'm planning to drop by in your house with some class notes and stuff. Is that cool?"
         dhannica_i "Oh crap! Already?"
         dhannica_i "But, this would be fine, right?"
-        dhannica_i "I get to study my missed discussions with someone, but I can just grab the modules online study alone..."
+        dhannica_i "I get to study my missed discussions with someone, but I can just grab the modules online and study alone..."
         menu:
             dhannica_i "What should I reply?"
             "\"Yes, that would be great.\"":
@@ -265,9 +269,11 @@ label chap2_dhannica:
                 dhannica_i "I don't know if Mom will let me bring a guy over to our house..."
                 dhannica_i "Hopefully Mom would understand, right?"
                 scene bg living room with long_dissolve
+                play music meet fadein 4.0
                 "It's been a few hours since you've invited him."
                 dhannica_i "It's good that Mom understood the assignment."
                 dhannica_i "But she'll be monitoring us, which I completely understand."
+                play sound knock
                 "Finally, a knock can be heard from the door."
                 offscr_alec "[Main]? I'm here."
                 offscr_alec "You know what, I'll just let myself in, I don't want you to walk here limping to open the door for me."
@@ -297,12 +303,13 @@ label chap2_dhannica:
                 dhannica "Yeah... take care on your way out."
                 alec "You too, take care."
                 hide alec at trans3
+                stop music fadeout 2.0
                 "Alec packs up his things and leaves your house."
                 girlMom "So, is this a new boyfriend?~"
                 dhannica "Ew Mom. We're just friends."
                 girlMom "Alright, if you say so."
             "\"I appreciate it, but I think I need some time alone.\"":
-                $ alec_likePoints -= 2
+                $ Alec.remove(2)
                 phone_dhannica "I appreciate it, but I think I need some time alone."
                 phone_alec "Ah, I see."
                 phone_alec "No worries, I get it. I'll just send it here."
@@ -315,6 +322,7 @@ label chap2_dhannica:
 
     scene bg school hallway with long_dissolve
     show screen time_intermission("{size=+15}A week later...")
+    play ambient schoolhallway fadein 1.0 volume 0.4
     "You prepared yourself mentally to return to school."
     "You're curious about how your interactions with the others would develop."
     dhannica_i "I hope everything goes well."
@@ -325,6 +333,7 @@ label chap2_dhannica:
     menu:
         alec "Great to see you back. Need help getting to class?"
         "\"Thanks, but I can manage.\"":
+            $ Alec.remove(2)
             dhannica "Thanks, Alec, but I can manage on my own."
             "Alec gave a nod of understanding, though you could tell he was slightly disappointed."
             alec "Alright, just let me know if you change your mind."
@@ -348,8 +357,7 @@ label chap2_dhannica:
             nick "Looks like you could use a hand. Mind if I walk with you to your next class?"
             "You were surprised by his offer. Despite your initial intent to manage on your own, you found yourself nodding."
             dhannica "Sure, thanks, Nick."
-            $ alec_likePoints -= 2
-            $ nick_likePoints += 3
+            $ Nick.add(3)
             "As you both walked, the pain in your foot became more bearable, not just because of the physical support, but also due to the unexpected companionship."
             if beLate:
                 "Nick's presence, once a source of annoyance, now offered a different kind of comfort."
@@ -364,17 +372,20 @@ label chap2_dhannica:
             else:
                 dhannica "Thanks, Alec."
                 "He chuckled for a moment."
-            $ alec_likePoints += 3
+            $ Alec.add(3)
             alec "Well, if you need a recap of what you've missed or just someone to hang with during lunch, I'm here."
             "His offer made you smile, a genuine sense of gratitude welling up inside you."
             dhannica "I might take you up on that. Thanks again, Alec."
+            hide alec at trans3
             "As he left, you felt a newfound appreciation for his friendship. It was nice that you had someone like Alec at school."
 
+    stop ambient fadeout 1.0
     jump classroom2
 
 label classroom2:
     scene bg classroom with scenefadehold
-    "As you settled into your seat, with the remnants of pain in your foot, your thoughts drifted back to the dream you had before the start of school."
+    play ambient classroom fadein 1.0 volume 0.2
+    "Settling into your seat, with the remnants of pain in your foot, your thoughts drifted back to the dream you had before the start of school."
     if a_hangOut:
         dhannica_i "I wonder if that was Alec. He did say he was in a band after all."
         dhannica_i "There's no mistaking it."

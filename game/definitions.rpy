@@ -30,6 +30,20 @@ init python:
             renpy.sound.stop(channel="voice")
         return alec_beep
 
+    def nick_beep(event, **kwargs):
+        if event == "show" or event == "show_done":
+            renpy.sound.play("audio/voice/nick.ogg", channel="voice", loop=True)
+        elif event == "slow_done" or event == "end":
+            renpy.sound.stop(channel="voice")
+        return nick_beep
+    
+    def nick_i_beep(event, **kwargs):
+        if event == "show" or event == "show_done":
+            renpy.sound.play("audio/voice/nick.ogg", channel="voice", loop=True, relative_volume=0.25)
+        elif event == "slow_done" or event == "end":
+            renpy.sound.stop(channel="voice")
+        return nick_i_beep
+
     class DisableSkip():
         def start():
             store._game_menu_screen = None
@@ -39,14 +53,6 @@ init python:
             store._game_menu_screen = 'emptymenu'
             config.allow_skipping = True
 
-    def DropShadow(d, color="#000", blur=5, offset=(0, 0)):
-        return Fixed(
-                Transform(d, matrixcolor=TintMatrix(color), blur=blur, offset=offset),
-                d,
-                fit_first=True
-            )
-
-
 ##########################################################################################################
 #                                               CHARACTERS                                               #
 ##########################################################################################################
@@ -55,7 +61,7 @@ define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_positi
 
 #thought MC
 define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#ff9b9b', image="dhannica", callback=dhannica_i_beep)
-define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#4076ff')
+define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#4076ff', callback=nick_i_beep)
 
 #characters
 default mcNamegirl = ""
@@ -64,7 +70,7 @@ define offscr_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="of
 define phone_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="offscr_dhannica", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31)
 
 default mcNameboy = ""
-define nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', image='nick')
+define nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', image='nick', callback=nick_beep)
 define offscr_nick = DynamicCharacter('mcNameboy', kind=nick, image='offscr_nick')
 
 default a_name = "Alec"
@@ -114,6 +120,9 @@ image bg school hallway:
 
 image bg classroom:
     im.Blur("images/bg/classroom.png", 2.5)
+
+image bg classroom2:
+    im.Blur("images/bg/classroom2.png", 2.5)
     
 image bg clinic:
     im.Blur("images/bg/clinic.jpg", 2.5)
@@ -310,7 +319,7 @@ define eye_scene = MultipleTransition([
 #BGM
 define audio.titlescreen = "audio/bgm/titlescreen.mp3"
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
-define audio.bgm1 = "audio/bgm/bgm1.mp3"
+define audio.meet = "<loop 04.024>audio/bgm/meet.ogg"
 
 #SFX
 define audio.alarm = "audio/sfx/alarm.mp3"
@@ -320,11 +329,15 @@ define audio.phone_notif = "audio/sfx/phone_notif.ogg"
 define audio.stomachgrowl = "audio/sfx/stomachgrowl.ogg"
 define audio.thump = "audio/sfx/thump.mp3"
 define audio.busopen = "audio/sfx/bus_open.ogg"
+define audio.knock = "audio/sfx/knock.ogg"
 
 #AMBIENT
 define audio.cheer = "audio/sfx/cheer.ogg"
 define audio.birds = "audio/ambient/birds.ogg"
 define audio.busengine = "audio/ambient/bus_engine.ogg" 
+define audio.classroom = "audio/ambient/classroom.ogg"
+define audio.schoolhallway = "audio/ambient/hallway.ogg"
+define audio.hospital = "audio/ambient/hospital.ogg"
 
 ###########################################################################################################
 #                                               SIDE IMAGES                                               #

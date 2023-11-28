@@ -4,7 +4,8 @@ image chapter_num = ParameterizedText(
     size=70,
     color='#ffffff',
     text_align=0.5,
-    outlines = [(3, "#16161d", 2, 2)]
+    outlines = [(3, "#16161d", 2, 2)],
+    font=gui.interface_text_font
 )
 
 image chapter_text = ParameterizedText(
@@ -13,7 +14,8 @@ image chapter_text = ParameterizedText(
     size=50,
     color='#ffffff',
     text_align=0.5,
-    outlines= [(3, "#16161d", 2, 2)]
+    outlines= [(3, "#16161d", 2, 2)],
+    font=gui.interface_text_font
 )
 
 default chapter = 0
@@ -27,6 +29,8 @@ default chapter_list = ['The Enigmatic Concert', #1
                 ]
 
 label chapter_transition:
+    if not config.developer:
+        $ renpy.block_rollback()
     $ DisableSkip.start()
     # scene black with fade
     $ chapter = chapter + 1

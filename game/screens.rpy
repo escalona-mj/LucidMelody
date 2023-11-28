@@ -378,7 +378,7 @@ transform nav_item:
     on show:
         alpha 0.0
         yoffset 100
-        time 1.0
+        time 1.5
         easein .75 alpha 1.0 yoffset 0
 
 screen navigation():
@@ -408,7 +408,7 @@ screen navigation():
             textbutton "SETTINGS" action ShowMenu("preferences")
             textbutton "EXTRAS" action ShowMenu("achievements")
             textbutton "ABOUT" action ShowMenu("about")
-            textbutton "QUIT" action Quit(confirm=True)
+            textbutton "EXIT" action Quit(confirm=True)
 
     else:
         hbox:
@@ -488,7 +488,7 @@ style navigation_button is gui_button
 style navigation_button_text:
     is gui_button_text
     xalign 0.5
-    font gui.interface_text_font
+    font gui.name_text_font
     text_align 0.5
     outlines [(5, "#16161d", 2, 2)]
 
@@ -553,28 +553,64 @@ init python:
 
 screen bg():
     add "gui/menu/sky1.png"
-    add "gui/menu/clouds2.png" at Pan((1920, 0), (0, 0), 200, repeat=True)
-    add "gui/menu/clouds1.png" at Pan((1920, 0), (0, 0), 50, repeat=True)
+    add "gui/menu/clouds2.png":
+        at Pan((1920, 0), (0, 0), 200, repeat=True)
+        at transform:
+            on show:
+                alpha 0.0
+                xoffset 0
+                time 0.5
+                easein .75 alpha 1.0 xoffset 50
+    add "gui/menu/clouds1.png":
+        at Pan((1920, 0), (0, 0), 50, repeat=True)
+        at transform:
+            on show:
+                alpha 0.0
+                xoffset 0
+                time 0.5
+                easein .75 alpha 1.0 xoffset 50
 
     default last_character = dynamicMCMenu()
     add last_character:
         xalign 0.875
         yalign 0.65
+        at transform:
+            on show:
+                alpha 0.0
+                xoffset 50
+                time 1.5
+                easein .75 alpha 1.0 xoffset 0
 
     add "gui/menu/grasshill.png":
         pos (0, 700)
         zoom 1.1
+        at transform:
+            on show:
+                alpha 0.0
+                yoffset 100
+                time 1.0
+                easein .75 alpha 1.0 yoffset 0
 
-    add "dandelions"
 
-    add "gui/menu/grassblur.png":
-        pos (0, 750)
-        zoom 1.5
+    add "dandelions":
+        at transform:
+                on show:
+                    alpha 0.0
+                    yoffset 100
+                    time 1.0
+                    easein .75 alpha 1.0 yoffset 0
+
+    # add "gui/menu/grassblur.png":
+    #     pos (0, 750)
+    #     zoom 1.5
+    #     at transform:
+    #         on show:
+    #             alpha 0.0
+    #             yoffset 100
+    #             time 1.0
+    #             easein .75 alpha 1.0 yoffset 0
 
     if renpy.get_screen("main_menu"):
-        # add "gui/menu/vigenette.png":
-        #     zoom 1.5
-        #     yalign 0.5
         add "gui/menu/logo.png":
             xalign 0.5
             yalign 0.5
@@ -583,7 +619,7 @@ screen bg():
                 subpixel True
                 on show:
                     zoom 1.03 alpha 0.0
-                    time 0.5
+                    time 2.0
                     ease 0.7 alpha 1.0 zoom 1.0
 
 screen fake_mainMenu():
@@ -600,20 +636,20 @@ screen fake_mainMenu():
 
 screen main_menu():
 
-    ## This ensures that any other menu screen is replaced.
     tag menu
 
     use bg
-
-    # add gui.main_menu_background
-
-    ## This empty frame darkens the main menu.
-    # frame:
-    #     style "main_menu_frame"
-
-    ## The use statement includes another screen inside this one. The actual
-    ## contents of the main menu are in the navigation screen.
     use navigation
+
+    add "gui/menu/grassblur.png":
+        pos (0, 750)
+        zoom 1.5
+        at transform:
+            on show:
+                alpha 0.0
+                yoffset 100
+                time 1.0
+                easein .75 alpha 1.0 yoffset 0
 
     if gui.show_name:
 
@@ -929,7 +965,7 @@ screen about():
                 frame style "empty_frame":
                     style_prefix "about_person"
                     has vbox
-                    text "{a=show:controls_modal}Mark John Escalona{/a}"
+                    text "Mark John Escalona"
             
             null height 100
 
@@ -962,6 +998,7 @@ screen about():
                         has vbox
                         text "Zenrich Jordan Keh"
                         text "Kaia Buenafe"
+                        text "Mark John Escalona"
 
             null height 100
 

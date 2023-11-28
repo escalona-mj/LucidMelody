@@ -12,7 +12,7 @@ label chap1_dhannica:
     $ all_chars = [MC, Dhannica, Nick, Alec]
     $ current_page = "[Main]" #set the default screen when opening the character book for the first time
 
-    $ nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff') #remove side image
+    $ nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', callback=nick_beep) #remove side image
     $ a_name = "???"
     $ mcNameboy = "???"
 
@@ -184,6 +184,7 @@ label chap1_dhannica:
         dhannica "I'm going, bye~"
         $ update_journal("Journal updated.")
         $ dhannica_description = "{0} Well, a bit tardy I suppose.".format(dhannica_description)
+        "You rushed outside."
     elif eatBreakfast:
         "You accidentally bumped your toe on the baluster."
         dhannica "Arrrrgh...this sucks, what the hell."
@@ -204,13 +205,13 @@ label chap1_dhannica:
         girlMom "Well, if you say so. Just make sure not to overexert yourself. We don't wanna spend money to the doctors now, do we?"
         hide mom at trans3
         dhannica "Yes mom, I won't~"
-        dhannica_i "My foot still hurts..."
+        dhannica_i "Though my foot still hurts..."
+        "You ate breakfast with your mother and went outside."
     
-    "You rushed outside."
     scene black with scenedissolve
     play sound doorclose
     scene bg highway with scenedissolve
-    play ambient birds
+    play ambient birds fadein 1.0
 
     if beLate:
         "Running frantically on a Monday morning with nothing to eat and an injured toe can surely do something to you."
@@ -564,19 +565,20 @@ label school:
         $ update_journal("Journal updated.")
         $ dhannica_description = "{0} Well, an early bird I suppose.".format(dhannica_description)
         "You finally reached the school, walking through the gates limping on your other foot."
-        dhannica_i "I look like a loser. That's just great."
-        dhannica_i "Is this how people are gonna remember me...? The limping kid on the first day of school."
+        dhannica_i "I look like a total loser. That's just great."
+        dhannica_i "Is this how people are gonna remember me...? The limping kid on the first day of school..."
         "You gaze before you a school, with an interesting color choice that seem be used redundantly everywhere."
         "..."
         "It didn't take long for you to finally realize what you're here for."
-        dhannica "Oh right, my class schedule."
+        dhannica "Right, my class schedule."
         "You rummaged through your bag, only to find out your outer pocket was open and your class schedule had fallen out."
-        dhannica_i "This day just gets better and better."
+        dhannica_i "Oh great! This day just gets better and better."
         "Sarcasm was the only thing that could sugarcoat this situation."
         "You start to trace back your previous steps, carefully searching for your schedule, with your eyes glued to the ground."
         "Suddenly...a hand appeared in your field of vision, holding a piece of paper."
         "You read, '{i}Purposive Communication - 7:15 am - 8-15 am{/i}'."
         "It was your schedule."
+        play music meet fadein 1.0
         $ meetAlec = True
         $ current_route = 'alec'
         $ update_journal("Character added.")
@@ -626,7 +628,7 @@ label school:
         $ update_journal("Character updated.")
         $ alec_description = "A really stylish guy. Had green eyes... Quite friendly and offered me help. Literally added me as his friend. Well, in real life."
         dhannica "I mean if you insist, how dare would I refuse hahaha."
-        alec "Let's go, we'll be late for first sub."
+        alec "Let's go, we'll be late for our first subject."
         hide alec at trans3
         "He offers his hand for you to hold unto as you both walk to your classroom."
     
@@ -634,7 +636,8 @@ label school:
     jump classroom
 
 label classroom:
-    scene bg classroom with scenefadehold
+    scene bg classroom2 with scenefadehold
+    play ambient2 classroom volume 0.5 fadein 1.0
     if beLate:
         "You hustle to class, pulling yourself towards the door with just a minute to spare before the teacher arrives."
         "Suddenly, a gentle touch on your arm catches your attention."
@@ -658,9 +661,12 @@ label classroom:
     prof "I expect you all to wear our school colors, its name, legacy, as well as your IDs."
     prof "Because believe me, the guards outside won't let you in without it. Hahaha."
     "The entire class laughs."
+    stop music fadeout 1.0
+    stop ambient2 fadeout 1.0
     prof "No, but seriously though, three strikes and you're out."
     prof "Alright, let's take attendance first before we discuss the school rules, shall we?"
     scene bg classroom with long_dissolve
+    play ambient2 classroom volume 0.5 fadein 1.0
     "As the professor continued with the lively discussion while inserting puns to keep the atmosphere engaging, you find it challenging to focus."
     "The pain in your left foot is intensifying, and you sense Alec noticing your discomfort."
     dhannica_i "When is he gonna stop blabbering?"
@@ -691,17 +697,19 @@ label classroom:
             trans3
             ease 1.0 offscreenleft
         "As you take a good look at your assigned escort, surprise washes over you."
+        stop ambient2 fadeout 1.0
         dhannica "{sc}It's YOU?!{/sc}" with vpunch
     else:
         prof "Aren't you going to bring your friend?"
         "Alec walks towards you to escort you to the nurse's room."
         dhannica "Thanks."
         offscr_alec "No problem."
+        stop ambient2 fadeout 1.0
         scene bg school hallway with scenefadehold
         show nick:
             offscreenright
             ease 1.0 xalign 0.5
-            pause .5
+            pause .1
             ease 1.0 offscreenleft
         "As you exited, a guy rushed towards the door, abruptly halting in front of you before swerving to enter."
         offscr_nick "Sorry, I'm late!"

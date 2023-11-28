@@ -114,7 +114,7 @@ screen file_slots():
                                 xfill True
                                 box_wrap_spacing 1250
                                 vbox:
-                                    yoffset 75
+                                    yoffset 80
                                     $ cur_chap = FileJson(slot, key='chapter')
                                     $ cur_chap_name = FileJson(slot, key='ch_name')
                                     text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nChapter [cur_chap]: [cur_chap_name]"), empty=_("")):
@@ -204,7 +204,7 @@ style slot_button is gui_button
 style slot_button_text is gui_button_text
 style slot_time_text:
     is slot_button_text
-    outlines [(3, "#16161d", 2, 2)]
+    outlines [(4, "#16161d", 2, 2)]
 
 style slot_name_text:
     is slot_button_text

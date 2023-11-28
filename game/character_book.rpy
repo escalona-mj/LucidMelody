@@ -294,6 +294,7 @@ screen journal():
 
 style page_text:
     color "#000"
+    font gui.journal_font
 
 style page_image_button:
     activate_sound "audio/sfx/journal_page_flip.ogg"
@@ -305,7 +306,7 @@ style bookmark_btn:
     text_align 0.5
     xalign 0.5
     yalign 0.5
-    font "fonts/MyPrettyCutie.ttf"
+    font gui.name_text_font
     color "#fff"
     size 45
 

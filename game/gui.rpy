@@ -57,6 +57,7 @@ define gui.interface_text_color = u'#ffffff'
 ## Fonts and Font Sizes ########################################################
 
 define gui.game_menu_label_font = "fonts/MyPrettyCutie.ttf"
+define gui.journal_font = "fonts/123Marker.ttf"
 
 ## The font used for in-game text.
 define gui.text_font = "fonts/123Marker.ttf"
@@ -210,7 +211,7 @@ define gui.choice_button_width = 1185
 define gui.choice_button_height = 119
 define gui.choice_button_tile = False
 define gui.choice_button_borders = Borders(150, 25, 150, 25)
-define gui.choice_button_text_font = "fonts/QuinnGothic.ttf"
+define gui.choice_button_text_font = gui.interface_text_font
 define gui.choice_button_text_size = gui.text_size
 define gui.choice_button_text_xalign = 0.5
 define gui.choice_button_text_idle_color = "#ffffff" #gui.accent_color
@@ -230,7 +231,7 @@ define gui.choice_button_text_hover_outlines = [ (10, "#6667ab", 2, 2) ]
 # define gui.slot_button_width = 414
 # define gui.slot_button_height = 233
 define gui.slot_button_borders = Borders(25,25,25,25)
-define gui.slot_button_text_size = 35
+define gui.slot_button_text_size = 30
 define gui.slot_button_text_xalign = 0.0
 define gui.slot_button_text_idle_color = u'#fff'
 # define gui.slot_button_text_selected_idle_color = gui.selected_color

@@ -235,6 +235,7 @@ style emptymenu_vbox is vbox:
 style emptymenu_text:
     xalign 0.5
     color '#fff'
+    font gui.interface_text_font
 
 screen time_intermission(txt):
     fixed:
