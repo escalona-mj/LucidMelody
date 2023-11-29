@@ -116,7 +116,7 @@ image bg bus:
     im.Blur("images/bg/bus.png", 2.5)
 
 image bg school hallway:
-    im.Blur("images/bg/schoolhallway.png", 2.5)
+    im.Blur("images/bg/schoolhallway.jpg", 2.5)
 
 image bg classroom:
     im.Blur("images/bg/classroom.png", 2.5)
