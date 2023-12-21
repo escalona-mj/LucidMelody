@@ -9,20 +9,20 @@ label chap2_dhannica:
         scene bg school hallway with scenefadehold
         "You both walk in the long hallways of the school, searching for the infirmary."
         "You tried to maintain your posture, but your limping slowed you down."
-        offscr_nick "Hey, slow down. You're going to hurt yourself more."
+        nick "Hey, slow down. You're going to hurt yourself more."
         dhannica "I know what I'm doing. I can manage."
-        offscr_nick "You know what? I'll walk with you. Just in case."
+        nick "You know what? I'll walk with you. Just in case."
         "You appreciate his concern, but you felt a bit embarrassed about being so dependent."
         "His insistence was comforting in a way."
-        offscr_nick "There's the infirmary."
-        offscr_nick "Let's get you there."
+        nick "There's the infirmary."
+        nick "Let's get you there."
         "As you both walked, the hallways were bustling with students and you noticed them stealing a glance at both of you, probably wondering about the unusual pair."
     else:
         dhannica_i "Sheesh, talk about being late..."
         dhannica_i "Glad I woke up in time."
         "You both walk in the long hallways of the school, searching for the infirmary."
-        offscr_alec "Ah, there it is."
-        offscr_alec "Let's get you there."
+        alec "Ah, there it is."
+        alec "Let's get you there."
         "He holds you from the side to offer support from your limping state."
         dhannica_i "Woah-"
         dhannica_i "Yep. Very upfront."
@@ -119,9 +119,9 @@ label chap2_dhannica:
             girlMom "[Main], you really need to be more careful. Why the rush this morning?"
         "You explained the situation, leaving out the part about Nick. Somehow, you weren't ready to share that detail yet."
     else:
-        offscr_alec "Eesh, that's painful."
-        offscr_alec "I remember it happening to me to the point I felt like I was dying."
-        offscr_alec "But yours looks worse. I can't imagine how you're feeling right now." 
+        alec "Eesh, that's painful."
+        alec "I remember it happening to me to the point I felt like I was dying."
+        alec "But yours looks worse. I can't imagine how you're feeling right now." 
         dhannica "Kinda meh. Gotten used to the pain."
         "You gave him a thumbs up and acted cool to hide the pain in front of him."
         show alec at trans3
@@ -275,8 +275,8 @@ label chap2_dhannica:
                 dhannica_i "But she'll be monitoring us, which I completely understand."
                 play sound knock
                 "Finally, a knock can be heard from the door."
-                offscr_alec "[Main]? I'm here."
-                offscr_alec "You know what, I'll just let myself in, I don't want you to walk here limping to open the door for me."
+                alec "[Main]? I'm here."
+                alec "You know what, I'll just let myself in, I don't want you to walk here limping to open the door for me."
                 "Alec came in with a stack of notes and some snacks, and a USB drive."#.with his band's music."
                 show alec at trans3
                 alec "Thought this might cheer you up a bit."
@@ -392,5 +392,5 @@ label classroom2:
         dhannica_i "The singer with the paper bag mask, and those vividly green eyes."
     "It felt surreal, almost a premonition of the complexities you were now facing in your waking life."
     "Alec, sitting next to you, leaned in with a whisper, breaking your reverie."
-    offscr_alec "You sure you're okay? You seem a bit... distant."
+    alec "You sure you're okay? You seem a bit... distant."
     

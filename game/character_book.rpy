@@ -78,7 +78,8 @@ screen love_bar(char): # char reference is all you need
 
 style love_bar_frame is default:
     xalign 0.5
-    yalign 0.0
+    yalign 0.1
+    yanchor 0.5
     yoffset -25
     background None
 

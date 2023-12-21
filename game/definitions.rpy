@@ -60,29 +60,26 @@ define narrator = Character(ctc="ctc", ctc_position='fixed')
 define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed", callback=narrator_beep)
 
 #thought MC
-define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#ff9b9b', image="dhannica", callback=dhannica_i_beep)
-define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}', what_suffix='{/i}', color='#4076ff', callback=nick_i_beep)
+define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}(', what_suffix='){/i}', color='#ff9b9b', image="dhannica", callback=dhannica_i_beep, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}(', what_suffix='){/i}', color='#4076ff', callback=nick_i_beep, namebox_background=Frame("gui/namebox/nick_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 #characters
 default mcNamegirl = ""
-define dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b', image="dhannica", callback=dhannica_beep)
-define offscr_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="offscr_dhannica")
-define phone_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="offscr_dhannica", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31)
+define dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b', image="dhannica", callback=dhannica_beep, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define phone_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="dhannica", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 default mcNameboy = ""
-define nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', image='nick', callback=nick_beep)
-define offscr_nick = DynamicCharacter('mcNameboy', kind=nick, image='offscr_nick')
+define nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', image='nick', callback=nick_beep, namebox_background=Frame("gui/namebox/nick_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 default a_name = "Alec"
-define alec = DynamicCharacter('a_name', kind=speak, color='#21a733', image="alec", callback=alec_beep)
-define offscr_alec = DynamicCharacter('a_name', kind=alec, image="offscr_alec")
-define phone_alec = DynamicCharacter('a_name', kind=alec, image="offscr_alec", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31)
+define alec = DynamicCharacter('a_name', kind=speak, color='#21a733', image="alec", callback=alec_beep, namebox_background=Frame("gui/namebox/alec_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define phone_alec = DynamicCharacter('a_name', kind=alec, image="alec", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31, namebox_background=Frame("gui/namebox/alec_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 #side characters
 define girlMom = Character('Mom', kind=speak)
 define d_singer = Character('Singer',kind=speak)
 define prof = Character('Prof', kind=speak)
-define unknown_guy = Character('???', kind=speak, image="unknown_guy")
+define unknown_guy = Character('???', kind=speak)
 define nurse = Character('Nurse', kind=speak)
 define doctor = Character('Doctor', kind=speak)
 define everyone = Character('Everyone', kind=speak)
@@ -243,14 +240,14 @@ transform scenefade(new_widget, old_widget):
         new_widget
         subpixel True
         truecenter
-        zoom 1.03 alpha 0.0
-        easein 1.0 alpha 1.0 zoom 1.0
+        zoom 1.03 alpha 0.0 blur 10
+        easein 1.0 alpha 1.0 zoom 1.0 blur 0
     contains:
         old_widget
         subpixel True
         truecenter
-        zoom 1.0 alpha 1.0
-        easein 0.5 zoom 1.03 alpha 0.0
+        zoom 1.0 alpha 1.0 blur 0
+        easein 0.5 zoom 1.03 alpha 0.0 blur 10
         pause 1.0
 
 transform scenefadehold(new_widget, old_widget):
@@ -260,14 +257,14 @@ transform scenefadehold(new_widget, old_widget):
         new_widget
         subpixel True
         truecenter
-        zoom 1.03 alpha 0.0
-        easein 1.0 alpha 1.0 zoom 1.0
+        zoom 1.03 alpha 0.0 blur 10
+        easein 1.0 alpha 1.0 zoom 1.0 blur 0
     contains:
         old_widget
         subpixel True
         truecenter
-        zoom 1.0 alpha 1.0
-        easein 0.5 zoom 1.03 alpha 0.0
+        zoom 1.0 alpha 1.0 blur 0
+        easein 0.5 zoom 1.03 alpha 0.0 blur 10
         pause 1.5
 
 transform scenedissolve(new_widget, old_widget):
@@ -276,14 +273,14 @@ transform scenedissolve(new_widget, old_widget):
         new_widget
         subpixel True
         truecenter
-        zoom 1.03 alpha 0.0
-        easein 0.5 alpha 1.0 zoom 1.0
+        zoom 1.03 alpha 0.0 blur 10
+        easein 0.5 alpha 1.0 zoom 1.0 blur 0
     contains:
         old_widget
         subpixel True
         truecenter
-        zoom 1.0 alpha 1.0
-        easein 0.5 alpha 0.0 zoom 1.03
+        zoom 1.0 alpha 1.0 blur 0
+        easein 0.5 alpha 0.0 zoom 1.03 blur 10
 
 
 ###########################################################################################################
@@ -344,34 +341,19 @@ define audio.hospital = "audio/ambient/hospital.ogg"
 ###########################################################################################################
 
 image side dhannica = LayeredImageMask("dhannica",
-    Transform(crop=(310, 120, 300, 300)),
+    Transform(crop=(315, 100, 300, 300)),
     background="gui/side_image/dhannica_bg_sideImage.png",
-    mask="gui/side_image/mask_sideImage.png",
-    foreground="gui/side_image/fg_sideImage.png")
-
-image side offscr_dhannica = LayeredImageMask("dhannica",
-    Transform(crop=(310, 120, 300, 300)),
-    background="gui/side_image/offscr_dhannica_bg.png",
-    mask="gui/side_image/offscr_mask.png",
-    foreground="gui/side_image/offscr_fg.png")
+    mask="gui/side_image/newMask_sideImage.png")
 
 image side nick = LayeredImageMask("nick",
-    Transform(crop=(340, 25, 330, 300)),
+    Transform(crop=(340, 20, 300, 300)),
     background="gui/side_image/nick_bg_sideImage.png",
-    mask="gui/side_image/mask_sideImage.png",
-    foreground="gui/side_image/fg_sideImage.png")
+    mask="gui/side_image/newMask_sideImage.png")
 
-image side offscr_nick = LayeredImageMask("nick",
-    Transform(crop=(340, 25, 330, 300)),
-    background="gui/side_image/offscr_nick_bg.png",
-    mask="gui/side_image/offscr_mask.png",
-    foreground="gui/side_image/offscr_fg.png")
-
-image side offscr_alec = LayeredImageMask("alec",
-    Transform(crop=(365, 80, 300, 300)),
-    background="gui/side_image/offscr_alec_bg.png",
-    mask="gui/side_image/offscr_mask.png",
-    foreground="gui/side_image/offscr_fg.png")
+image side alec = LayeredImageMask("alec",
+    Transform(crop=(365, 100, 300, 300)),
+    background="gui/side_image/alec_bg_sideImage.png",
+    mask="gui/side_image/newMask_sideImage.png")
 
 image side unknown_guy = "gui/side_image/unknown_guy_sideImage.png"
 

@@ -235,11 +235,12 @@ style emptymenu_vbox is vbox:
 style emptymenu_text:
     xalign 0.5
     color '#fff'
-    font gui.interface_text_font
+    font gui.text_font
+    outlines [(5, "#16161d", 3, 3)]
 
 screen time_intermission(txt):
     fixed:
-        add Text(txt, slow_cps=10, text_align=0.5, outlines= [(3, "#16161d", 2, 2)]) xalign 0.5 yalign 0.5:
+        add Text(txt, slow_cps=10, text_align=0.5, outlines= [(3, "#16161d", 2, 2)], color="#fff") xalign 0.5 yalign 0.5:
             at transform:
                 alpha 0.0
                 ease 1.0 alpha 1.0

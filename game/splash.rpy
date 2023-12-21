@@ -1,11 +1,12 @@
 image splash_white = '#ECECF4'
+image sky_color = '#008eff'
 image logo_studio = "gui/logo_studio.png"
 image renpy_logo = "gui/renpy-logo.png"
 
 image splash_text = ParameterizedText(
     xalign=0.5,
     yalign=0.5,
-    color='#000000',
+    color='#ffffff',
     text_align=0.5,
     font='fonts/QuinnGothic.ttf'
 )
@@ -26,10 +27,14 @@ label splashscreen:
         show logo_studio:
             truecenter
             on show:
-                alpha 0.0 zoom 1.03
+                alpha 0.0 zoom 1.5
                 easein_back 1.0 alpha 1.0 zoom 1.0
         pause 3.0
-        hide logo_studio with dissolve
+        hide logo_studio
+        show sky_color
+        show splash_text "Some text here that will be changed."
+        with dissolve
+        pause 2.0
         return
     else:
         jump notAndroid

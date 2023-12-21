@@ -105,6 +105,7 @@ screen say(who, what):
     style_prefix "say"
 
     window:
+        background Transform(persistent.textbox_bg, alpha=persistent.say_window_alpha)
         id "window"
 
         if who is not None:
@@ -112,16 +113,14 @@ screen say(who, what):
             window:
                 id "namebox"
                 style "namebox"
-                text who id "who"
+                text who outlines [(7, "#16161d", 2, 2)]
 
-        text what id "what"
+        text what id "what" outlines [(3, persistent.textbox_outlines, 0, 1)] color persistent.textbox_color font persistent.textbox_font
 
     use quick_menu
-    ## If there's a side image, display it above the text. Do not display on the
-    ## phone variant - there's no room.
-    # if not renpy.variant("small"):
-    add SideImage() xalign 0.0 yalign 1.0 xoffset 140 yoffset -7:
+    add SideImage() xalign 0.0 yalign 1.0 xoffset 120 yoffset -10:
         zoom 0.75
+        rotate -5
 
 ## Make the namebox available for styling through the Character object.
 init python:
@@ -142,7 +141,8 @@ style window:
     yalign gui.textbox_yalign
     ysize gui.textbox_height
 
-    background Image("gui/textbox.png", xalign=0.5, yalign=1.0)
+    # background Image(persistent.textbox_bg, xalign=0.5, yalign=1.0)
+    # background Image("gui/textbox.png", xalign=0.5, yalign=1.0)
 
 style namebox:
     xpos gui.name_xpos
@@ -151,21 +151,18 @@ style namebox:
     ypos gui.name_ypos
     ysize gui.namebox_height
 
-    # background Frame("gui/namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign)
-    # padding gui.namebox_borders.padding
+    background Frame("gui/namebox/namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign)
+    padding gui.namebox_borders.padding
 
-style say_label:
-    properties gui.text_properties("name", accent=True)
-    # xalign gui.name_xalign
-    xalign 0.5
+#previously style say_label but i removed the id for the who in the say screen
+style say_text:
+    properties gui.text_properties("name")
+    xalign gui.name_xalign
+    # xalign 0.5
     yalign 0.5
-    color u"#fff"
-    # outlines [(5, "#16161d", 2, 2)]
 
 style say_dialogue:
     properties gui.text_properties("dialogue")
-    # outlines [(5, "#16161d", 2, 2)]
-    # line_spacing -5
     xpos gui.dialogue_xpos
     xsize gui.dialogue_width
     ypos gui.dialogue_ypos
@@ -173,28 +170,15 @@ style say_dialogue:
     adjust_spacing False
 
 image ctc:
-    xalign 0.875 yalign 0.975 subpixel True alpha 0.0 zoom 1.03
-    "gui/ctc.png"
+    xalign 0.85 yalign 0.95 subpixel True alpha 0.0 zoom 1.03
+    ConditionSwitch(
+        "persistent.textbox_style == 'black'", "gui/ctc_black.png",
+        "persistent.textbox_style == 'white'", "gui/ctc_white.png",
+        )
     block:
         ease 0.5 alpha 1.0 yoffset 2
         ease 0.5 alpha 0.5 yoffset -5
         repeat
-
-# screen ctc(arg=None):
-#     imagebutton:
-#         xalign 0.975
-#         yalign 0.975
-#         at transform:
-#             subpixel True alpha 0.0 zoom 1.5
-#             block:
-#                 ease 0.5 alpha 1.0 yoffset 2
-#                 ease 0.5 alpha 0.5 yoffset -5
-#                 repeat
-#         idle "ctc"
-#         activate_sound "audio/sfx/click.mp3"
-#         action ToggleVariable("persistent.quick_menu_frame", True, False)
-#         tooltip "Menu"
-
 
 ## Input screen ################################################################
 ##
@@ -245,6 +229,16 @@ transform screen_appear:
     xalign 0.5
     # yalign 0.5
     on show:
+        zoom 0.1 alpha 0.0
+        easein_back .25 zoom 1.0 alpha 1.0
+    on hide:
+        ease .25 zoom 0.1 alpha 0.0
+
+transform choice_appear:
+    subpixel True
+    xalign 0.5
+    # yalign 0.5
+    on show:
         zoom 0.95 alpha 0.0
         easein .25 zoom 1.0 alpha 1.0
     on hide:
@@ -265,7 +259,7 @@ screen choice(items):
     style_prefix "choice"
 
     hbox:
-        at screen_appear
+        at choice_appear
         for i in items:
             textbutton i.caption action i.action:
                 at transform:
@@ -385,6 +379,12 @@ screen navigation():
 
     if renpy.get_screen("main_menu"):
         vbox:
+            at transform:
+                on show:
+                    alpha 0.0
+                    xoffset 100
+                    time 1.5
+                    easein .75 alpha 1.0 xoffset 0
             xalign 1.0
             xoffset -50
             yoffset 50
@@ -491,6 +491,7 @@ style navigation_button_text:
     font gui.name_text_font
     text_align 0.5
     outlines [(5, "#16161d", 2, 2)]
+    hover_outlines [(5, "#6667ab", 2, 2)]
 
 
 style navigation_btn_hover:
@@ -558,17 +559,15 @@ screen bg():
         at transform:
             on show:
                 alpha 0.0
-                xoffset 0
                 time 0.5
-                easein .75 alpha 1.0 xoffset 50
+                easein .75 alpha 1.0
     add "gui/menu/clouds1.png":
         at Pan((1920, 0), (0, 0), 50, repeat=True)
         at transform:
             on show:
                 alpha 0.0
-                xoffset 0
                 time 0.5
-                easein .75 alpha 1.0 xoffset 50
+                easein .75 alpha 1.0
 
     default last_character = dynamicMCMenu()
     add last_character:
@@ -1072,8 +1071,40 @@ style about_label_text:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#preferences
 
+image textboxbg = Crop((200, 600, 710, 160), "bg dhannica room")
+image textbox_black_crop = "gui/textbox_dark_preview.png"
+image textbox_white_crop = "gui/textbox_preview.png"
+
+
+init python:
+    def dynamicTextbox(newStyle):
+        return SetField(persistent,"textbox_style",newStyle), SetField(persistent,"textbox_bg",theme_dict[newStyle]['textbox']), SetField(persistent,"textbox_color", theme_dict[newStyle]['color']), SetField(persistent,"textbox_outlines", theme_dict[newStyle]['say_outline_color'])
+    def setFont(font):
+        return SetField(persistent,"textbox_font", font)
+    theme_dict = {
+        "black" : {
+            "textbox" : "gui/textbox_dark.png",
+            "color" : "#ffffff",
+            "say_outline_color" : "#16161d",
+            },
+
+        "white" : {
+            "textbox" : "gui/textbox.png",
+            "color" : "#000000",
+            "say_outline_color" : "#e5e5e5",
+            },
+    }
+
 default pref_text = True
 default pref_vol = False
+default pref_accessibility = False
+
+default persistent.say_window_alpha = 0.9
+default persistent.textbox_style = "white"
+default persistent.textbox_font = "fonts/playtime.ttf"
+default persistent.textbox_bg = "gui/textbox.png"
+default persistent.textbox_color = "#000000"
+default persistent.textbox_outlines = "#e5e5e5"
 
 screen preferences():
     tag menu
@@ -1082,17 +1113,35 @@ screen preferences():
         vbox:
             xfill True
             xalign 0.5
+            
             null height 25
+
             hbox:
                 style_prefix "header"
                 xalign 0.5
-                spacing 100
-                textbutton "TEXT" action [SetScreenVariable("pref_text", True),SetScreenVariable("pref_vol", False)]
-                textbutton "MUSIC" action [SetScreenVariable("pref_vol", True),SetScreenVariable("pref_text", False)]
+                spacing 25
+                imagebutton:
+                    auto "gui/navigation/pref_text_%s.png"
+                    foreground Text(_("Text"), style="header_btn")
+                    hover_foreground Text(_("Text"), style="header_btn_hover")
+                    selected_foreground Text(_("Text"), style="header_btn_selected")
+                    action [SetScreenVariable("pref_text", True),SetScreenVariable("pref_vol", False), SetScreenVariable("pref_accessibility", False), SelectedIf(pref_text==True)]
+                imagebutton:
+                    auto "gui/navigation/pref_access_%s.png"
+                    foreground Text(_("Acces."), style="header_btn")
+                    hover_foreground Text(_("Acces."), style="header_btn_hover")
+                    selected_foreground Text(_("Acces."), style="header_btn_selected")
+                    action [SetScreenVariable("pref_accessibility", True), SetScreenVariable("pref_text", False),SetScreenVariable("pref_vol", False), SelectedIf(pref_accessibility==True)]
+                imagebutton:
+                    auto "gui/navigation/pref_vol_%s.png"
+                    foreground Text(_("Audio"), style="header_btn")
+                    hover_foreground Text(_("Audio"), style="header_btn_hover")
+                    selected_foreground Text(_("Audio"), style="header_btn_selected")
+                    action [SetScreenVariable("pref_vol", True),SetScreenVariable("pref_text", False), SetScreenVariable("pref_accessibility", False), SelectedIf(pref_vol==True)]
 
             null height 25
 
-            if pref_text and not pref_vol:
+            showif pref_text:
 
                 vbox:
                     xalign 0.5
@@ -1135,7 +1184,7 @@ screen preferences():
                             style "bar"
                             tooltip "The speed of the automation per dialogue.\n(The lower it is, the faster it gets.)"
 
-            elif pref_vol and not pref_text: 
+            showif pref_vol: 
 
                 vbox:
                     xalign 0.5
@@ -1184,69 +1233,55 @@ screen preferences():
                         padding (75, 6, 6, 6)
                         xalign 0.5
 
-        #         ## Additional vboxes of type "radio_pref" or "check_pref" can be
-        #         ## added here, to add additional creator-defined preferences.
+            showif pref_accessibility:
+                vbox:
+                    xalign 0.5
+                    yalign 0.5
+                    spacing 25
+                    vbox:
+                        label "Preview"
+                        window:
+                            xsize 700
+                            ysize 150
+                            if persistent.textbox_style == "black":
+                                background Transform("textbox_black_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
+                            else:
+                                background Transform("textbox_white_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
+                            padding(25,25,25,25)
+                            add Text("A really really long sample text just to force the text to make a new line.", slow_cps=_preferences.text_cps, outlines=[(3, persistent.textbox_outlines, 0, 1)], color=persistent.textbox_color, font=persistent.textbox_font)
+                            add "ctc" xoffset 95
+                    vbox:
+                        style_prefix "slider"
+                        xsize 700
+                        label "Textbox Opacity"
+                        bar value FieldValue(persistent, 'say_window_alpha', 1.0, max_is_zero=False, offset=0):
+                            tooltip "Adjust the opacity of the textbox."
+                    vbox:
+                        hbox:
+                            spacing 150
+                            vbox:
+                                style_prefix "radio"
+                                label "Textbox Style"
+                                textbutton "Dark" action [dynamicTextbox(newStyle="black"),SelectedIf(persistent.textbox_style == "black")]:
+                                    tooltip "Set the textbox to dark and the text to white."    
+                                textbutton "Light" action [dynamicTextbox(newStyle="white"),SelectedIf(persistent.textbox_style == "white")]:
+                                    tooltip "Set the textbox to white and the text to dark."
+                            vbox:
+                                style_prefix "radio"
+                                label "Textbox Font"
+                                textbutton "{font=fonts/playtime.ttf}Default" action [setFont("fonts/playtime.ttf"), SelectedIf(persistent.textbox_font == "fonts/playtime.ttf")]
+                                textbutton "{font=fonts/123Marker.ttf}123Marker" action [setFont("fonts/123Marker.ttf"), SelectedIf(persistent.textbox_font == "fonts/123Marker.ttf")]
+                                textbutton "{font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible" action [setFont("fonts/Atkinson-Hyperlegible-Regular-102.ttf"), SelectedIf(persistent.textbox_font == "fonts/Atkinson-Hyperlegible-Regular-102.ttf")]
+style header_image_button:
+    activate_sound "audio/sfx/click.mp3"
 
-        #     # null height (4 * gui.pref_spacing)
+style header_btn_hover is navigation_btn_hover
 
-        #     # null height 400
+style header_btn_selected is navigation_btn_selected
 
-        #     label _("Music Settings"):
-        #         xalign 0.5
-
-        #     # null height 25
-
-        #     hbox:
-        #         style_prefix "slider"
-        #         spacing 50
-        #         vbox:
-        #             xsize 550
-        #             if config.has_music:
-        #                 label _("BGM Volume")
-        #                 bar value Preference("music volume"):
-        #                     style "bar"
-        #                     tooltip "The loudness of background music throughout the game."
-
-        #             if config.has_sound:
-        #                 label _("Sound Volume")
-        #                 vbox:
-        #                     bar value Preference("sound volume"):
-        #                         style "bar"
-        #                         tooltip "The loudness of sound effects throughout the game."
-
-        #                     if config.sample_sound:
-        #                         textbutton _("Test") action Play("sound", config.sample_sound)
-        #         vbox:
-        #             xsize 550
-        #             if config.has_voice:
-        #                 label _("Voice Volume")
-        #                 hbox:
-        #                     bar value Preference("voice volume"):
-        #                         style "bar"
-        #                         tooltip "The loudness of voice throughout the game."
-
-        #                     if config.sample_voice:
-        #                         textbutton _("Test") action Play("voice", config.sample_voice)
-
-        #             label _("Ambient Volume")
-        #             bar value Preference("ambient volume"):
-        #                 style "bar"
-        #                 tooltip "The loudness of ambience throughout the game."
-
-        #     null height 20
-
-        #     textbutton _("Mute All"):
-        #         action Preference("all mute", "toggle")
-        #         tooltip "Mute all sounds."
-        #         style "mute_all_button"
-        #         foreground "gui/phone/button/sound_[prefix_]foreground.png"
-        #         padding (75, 6, 6, 6)
-        #         xalign 0.5
-
-        #             # null height 35
-
-        #             # if config.has_music or config.has_sound or config.has_voice:
-        #             #     null height gui.pref_spacing
+style header_btn:
+    is navigation_btn
+    color gui.accent_color
 
 style pref_label is gui_label
 style pref_label_text is gui_label_text
@@ -1322,6 +1357,7 @@ style header_button_text:
     size 60
     font "fonts/MyPrettyCutie.ttf"
     outlines [(10, "#16161d", 2, 2)]
+    selected_outlines [(10, "#6667ab", 2, 2)]
 
 
 ## History screen ##############################################################
@@ -1365,7 +1401,8 @@ screen history():
                 $ what = renpy.filter_text_tags(h.what, allow=gui.history_allow_tags)
                 text what:
                     substitute False
-            
+                    font persistent.textbox_font
+                    
             null height 40
 
         if not _history_list:
@@ -1605,7 +1642,12 @@ screen confirm(message, yes_action, no_action):
     style_prefix "confirm"
 
     add "gui/overlay/confirm.png":
-        alpha 0.5
+        at transform:
+            alpha 0.0
+            on show:
+                easein .25 alpha 0.5
+            on hide:
+                easein .25 alpha 0.0
 
     frame:
         at screen_appear
@@ -1747,7 +1789,7 @@ style skip_frame is empty
 style skip_text:
     is gui_text
     # color gui.accent_color
-    outlines [(10, "#16161d", 2, 2)]
+    outlines [(10, "#16161d", 0, 2)]
     xalign 0.5
     text_align 0.5
 style skip_triangle is skip_text
@@ -1803,14 +1845,14 @@ transform notify_appear:
 style notify_frame is empty
 style notify_text:
     is gui_text
-    color gui.accent_color
-    # outlines [(5, "#000000b6", 2, 2)]
+    color "#ffffff"
+    outlines [(5, "#16161d", 0, 2)]
 
 style notify_frame:
-    ypos gui.notify_ypos
+    # ypos gui.notify_ypos
+    ypos 150
+    xpos 25
 
-    background Frame("gui/notify.png", Borders(60,10,60,10), tile=gui.frame_tile)
-    padding(50,35,50,35)
     # background Frame("gui/notify.png", gui.notify_frame_borders, tile=gui.frame_tile)
     # padding gui.notify_frame_borders.padding
 
@@ -2066,10 +2108,9 @@ screen quick_menu():
                 hbox:
                     spacing 50
                     xalign 1.0
-                    if config.developer:
-                        imagebutton auto _("gui/quickmenu/back_%s.png"):
-                            action Rollback()
-                            tooltip "Back"
+                    imagebutton auto _("gui/quickmenu/back_%s.png"):
+                        action Rollback()
+                        tooltip "Back"
                     imagebutton auto _("gui/quickmenu/settings_%s.png"):
                         action ShowMenu('emptymenu')
                         tooltip "Settings"
@@ -2128,11 +2169,11 @@ style tooltip_text:
     color u'#fff'
     yalign 0.5
     font gui.interface_text_font
-    outlines [(3, "#16161d", 2, 2)]
+    outlines [(5, "#16161d", 0, 2)]
 
-style window:
-    variant "mobile"
-    background "gui/phone/textbox.png"
+# style window:
+#     variant "mobile"
+#     background "gui/phone/textbox.png"
 
 style radio_button:
     variant "mobile"

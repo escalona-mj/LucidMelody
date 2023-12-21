@@ -103,15 +103,19 @@ screen file_slots():
                                     add AlphaMask(At(FileScreenshot(slot), save_idle),"gui/phone/button/slot_mask.png")
                             else:
                                 add "gui/phone/button/slot_idle.png"
+                                text "empty slot" xalign 0.5 yalign 0.5 yoffset 10 color "#ffffff47"
+                                if not main_menu:
+                                    if slot_selected == slot:
+                                        add "gui/phone/button/slot_overlay.png"
 
                         if main_menu:
                             if FileLoadable(slot):
-                                action SetVariable("slot_selected", slot)
+                                action SetScreenVariable("slot_selected", slot)
                             elif not FileLoadable(slot):
                                 pass
                         else:
                             if ((FileLoadable(slot)) or (not FileLoadable(slot))):
-                                action SetVariable("slot_selected", slot)
+                                action SetScreenVariable("slot_selected", slot)
 
                         frame:
                             background None
@@ -199,7 +203,7 @@ screen file_slots():
 style load_save_btn_button_text:
     color "#fff"
     font "fonts/MyPrettyCutie.ttf"
-    outlines [(5, "#16161d", 2, 2)]
+    outlines [(5, "#16161d", 0, 2)]
 
 style page_label is gui_label
 style page_label_text is gui_label_text
@@ -210,11 +214,11 @@ style slot_button is gui_button
 style slot_button_text is gui_button_text
 style slot_time_text:
     is slot_button_text
-    outlines [(4, "#16161d", 2, 2)]
+    outlines [(5, "#16161d", 0, 2)]
 
 style slot_name_text:
     is slot_button_text
-    outlines [(3, "#16161d", 2, 2)]
+    outlines [(5, "#16161d", 0, 2)]
 
 style page_label:
     xpadding 75
@@ -224,7 +228,7 @@ style page_label_text:
     textalign 0.5
     layout "subtitle"
     hover_color gui.hover_color
-    outlines [(3, "#16161d", 2, 2)]
+    outlines [(5, "#16161d", 0, 2)]
 
 style page_button:
     properties gui.button_properties("page_button")
@@ -232,8 +236,9 @@ style page_button:
 
 style page_button_text:
     textalign 0.5
-    selected_color u'#a8a8a8'
+    selected_color '#c4c4c4'
     properties gui.button_text_properties("page_button")
+    outlines [(5, "#16161d", 0, 2)]
 
 # style slot_button:
 #     properties gui.button_properties("slot_button")

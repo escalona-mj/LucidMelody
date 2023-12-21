@@ -12,8 +12,6 @@ label chap1_nick:
     $ all_chars = [MC, Dhannica, Nick, Alec]
     $ current_page = "[Main]" #set the default screen when opening the character book for the first time
 
-    $ dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b') #remove side image
-
     $ mcNamegirl = "???"
 
     "..."

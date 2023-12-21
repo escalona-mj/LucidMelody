@@ -134,10 +134,10 @@ define config.main_menu_music = audio.titlescreen
 define config.enter_transition = Dissolve(0.2)
 define config.exit_transition = Dissolve(0.2)
 
-define config.end_splash_transition = scenedissolve
+define config.end_splash_transition = dissolve
 
-define config.enter_yesno_transition = Dissolve(0.2)
-define config.exit_yesno_transition = Dissolve(0.2)
+# define config.enter_yesno_transition = Dissolve(0.2)
+# define config.exit_yesno_transition = Dissolve(0.2)
 define config.game_main_transition = scenefade
 
 ## Between screens of the game menu.
@@ -152,7 +152,7 @@ define config.after_load_transition = Dissolve(0.2)
 
 ## Used when entering the main menu after the game has ended.
 
-define config.end_game_transition = scenedissolve
+define config.end_game_transition = scenefade
 
 
 ## A variable to set the transition used when the game starts does not exist.

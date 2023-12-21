@@ -50,7 +50,7 @@ define gui.muted_color = u'#003d51'
 define gui.hover_muted_color = u'#005b7a'
 
 ## The colors used for dialogue and menu choice text.
-define gui.text_color = u'#fff' #u'#6667ab'
+define gui.text_color = "#ffffff"
 define gui.interface_text_color = u'#ffffff'
 
 
@@ -60,7 +60,7 @@ define gui.game_menu_label_font = "fonts/MyPrettyCutie.ttf"
 define gui.journal_font = "fonts/123Marker.ttf"
 
 ## The font used for in-game text.
-define gui.text_font = "fonts/123Marker.ttf"
+define gui.text_font = "fonts/playtime.ttf"
 
 ## The font used for character names.
 define gui.name_text_font = "fonts/MyPrettyCutie.ttf"
@@ -119,11 +119,11 @@ define gui.name_xalign = 0.0
 ## The width, height, and borders of the box containing the character's name, or
 ## None to automatically size it.
 define gui.namebox_width = None
-define gui.namebox_height = 41
+define gui.namebox_height = None
 
 ## The borders of the box containing the character's name, in left, top, right,
 ## bottom order.
-define gui.namebox_borders = Borders(35, 5, 35, 5)
+define gui.namebox_borders = Borders(15, 10, 15, 5)
 
 ## If True, the background of the namebox will be tiled, if False, the
 ## background of the namebox will be scaled.
@@ -217,8 +217,8 @@ define gui.choice_button_text_xalign = 0.5
 define gui.choice_button_text_idle_color = "#ffffff" #gui.accent_color
 define gui.choice_button_text_hover_color = "#ffffff"
 define gui.choice_button_text_insensitive_color = u'#8888887f'
-define gui.choice_button_text_outlines = [ (10, "#16161d", 2, 2) ]
-define gui.choice_button_text_hover_outlines = [ (10, "#6667ab", 2, 2) ]
+define gui.choice_button_text_outlines = [ (10, "#16161d", 0, 2) ]
+define gui.choice_button_text_hover_outlines = [ (10, "#6667ab", 0, 2) ]
 
 
 ## File Slot Buttons ###########################################################
@@ -444,18 +444,18 @@ init python:
 
         ## Adjust the location of the textbox.
         gui.textbox_height = 360
-        gui.name_xpos = 420
-        gui.name_ypos = 150
+        gui.name_xpos = 400
+        gui.name_ypos = 70
         gui.dialogue_xpos = 415
-        gui.dialogue_ypos = 210
-        gui.dialogue_width = 1200
+        gui.dialogue_ypos = 150
+        gui.dialogue_width = 1125
 
         ## Change the size and spacing of various things.
         gui.slider_size = 54
 
         gui.choice_button_width = 900
         gui.choice_button_height = None
-        gui.choice_button_text_size = 75
+        gui.choice_button_text_size = 60
         gui.choice_spacing = 10
 
         gui.navigation_spacing = 30

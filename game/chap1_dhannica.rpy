@@ -12,7 +12,6 @@ label chap1_dhannica:
     $ all_chars = [MC, Dhannica, Nick, Alec]
     $ current_page = "[Main]" #set the default screen when opening the character book for the first time
 
-    $ nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', callback=nick_beep) #remove side image
     $ a_name = "???"
     $ mcNameboy = "???"
 
@@ -83,7 +82,7 @@ label chap1_dhannica:
     $ dhannica_age = "18"
     $ dhannica_description = "There's not much to say anything about me."
     $ entry1 = "Entry No. 1\n\nThe dream was something else. A concert perhaps? The person in my dreams... I saw them. It felt familiar. Emerald eyes..."
-    $ add_entry(entry1)
+    $ journal_entries.append(entry1)
     window auto
     menu:
         "Get up and turn off the alarm":
@@ -287,6 +286,7 @@ label chap1_dhannica:
                 $ meetNick = True
                 $ current_route = 'nick'
                 $ update_journal("Character added.")
+                play music meet fadein 1.0
                 camera:
                     ease 1.0 zoom 1.5 truecenter
                 hide flask with Dissolve(0.2)
@@ -306,7 +306,7 @@ label chap1_dhannica:
                         ease_back 1.0 yalign 7.0 
                     "He applies the cold side of his flask to the affected area."
                     dhannica "H-hey, isn't this a bit too much?"
-                    offscr_nick "Just take it, or it'll get worse."
+                    nick "Just take it, or it'll get worse."
                     dhannica "But it'll get dirty!"
                     
                 elif n_refuseIcedTea:
@@ -324,22 +324,22 @@ label chap1_dhannica:
                         ease_back 1.0 yalign 7.0 
                     "He rose from his seat and knelt down to your level, leaving you confused."
                     dhannica "W-what are you doing?"
-                    offscr_nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
+                    nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
                     "You feel embarassed, after hearing his intentions."
                     dhannica "A-actually, it was my toe..."
-                    offscr_nick "What?"
+                    nick "What?"
                     dhannica "I stubbed my toe because I was running late."
                     "You explained with a hint of annoyance, which made him chuckled. But this only frustrated you even further."
                     dhannica "What's so funny?"
                     "He didn't answer. Instead, he removed your shoe and held the flask close to your foot."
                     dhannica "Wait!" with vpunch
-                    offscr_nick "What is it?"
+                    nick "What is it?"
                     dhannica "I-it'll get dirty."
 
                 dhannica "Aren't you bothered that I'm going to get your drink dirty from my foot?"
 
                 if n_takeIcedTea:
-                    offscr_nick "I'm not going to drink it from the side anyway. As long as the mouth of the flask isn't soiled, then it's fine."
+                    nick "I'm not going to drink it from the side anyway. As long as the mouth of the flask isn't soiled, then it's fine."
                     dhannica_i "Why is he so pushy?"
                     "He retrieved a hand towel from his bag that looked like it could cover the entire surface of a flask."
                     "He took the flask from your hands and started wrapping around it."
@@ -350,7 +350,7 @@ label chap1_dhannica:
                     "As you knelt down, tending to your swollen toe, you couldn't help but notice his shoes."
                     
                 else:
-                    offscr_nick "You have socks on. It's fine."
+                    nick "You have socks on. It's fine."
                     dhannica "It's not! It'll be gross!"
                     "With a sigh, he seemed to give in and took out a hand towel from his bag. He wrapped it around the flask, not too thick that it would insulate the cold, but not too thin that it would hurt."
                     "Gently, he handled your foot with caution, trying not to cause any pain, and positioned it on his knee."
@@ -376,7 +376,8 @@ label chap1_dhannica:
                 $ meetNick = True
                 $ current_route = 'nick'
                 $ update_journal("Character added.")
-                offscr_nick "Why are you looking at me like that?"
+                play music meet fadein 1.0
+                nick "Why are you looking at me like that?"
                 "You tried your best not to appear obvious and began to slowly make your way to a nearby bench, attempting not to limp to hide your injury."
                 "He continued to stand there, waiting for the next bus to arrive."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
@@ -414,7 +415,7 @@ label chap1_dhannica:
                 "Your eyes met him, and the only thought that entered your mind was about his eyes."
                 "He was gazing at you, with his laid back posture and his bleak expression before drifting his eyes to the ground."
                 "You hadn't even realized you were staring until you watched him rise from his seat, towering over you."
-                offscr_nick "Sit down."
+                nick "Sit down."
                 "He commanded with a strong yet mellow voice, which your body obeyed, and took a seat."
                 dhannica "U-uhm, okay."
                 "You were quite embarrassed, trying not to look at his face."
@@ -448,10 +449,10 @@ label chap1_dhannica:
                         hide nick at trans3
                         "However, your efforts were in vain, as he knelt down and took matters into his own hands."
                         dhannica "W-what are you doing?"
-                        offscr_nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
+                        nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
                         "As he glanced at you, you saw his eyes clearly."
                         "Blue and green, a peculiar and intriguing combination."
-                        offscr_nick "Remove the shoe."
+                        nick "Remove the shoe."
                         dhannica "O-oh, right."
                         "He carefully wrapped the bottle in his hand towel and gently placed your foot on his knee, applying the cold bottle to the sore area."
                         "You winced at the pain."
@@ -470,7 +471,7 @@ label chap1_dhannica:
                 ease 1.0 truecenter zoom 1.0
             show nick:
                 ease_back 1.0 yalign 1.0
-            offscr_nick "There, that should do it."
+            nick "There, that should do it."
             show nick at trans3
             nick "..."
             dhannica "..."
@@ -497,7 +498,7 @@ label chap1_dhannica:
 
         if n_takeFlask:
             show nick at trans3
-            offscr_nick "There, that should do it."
+            nick "There, that should do it."
             nick "..."
             dhannica "..."
             nick "Err...keep that until the cold is gone. Just give it back to me when you're done."
@@ -676,7 +677,7 @@ label classroom:
         prof "Ah, first day and he's already late."
     "Suddenly, Alec raises his hand, catching the professor's attention."
     prof "Yes, Mr. Boyband with the grunge style. What's up?"
-    offscr_alec "My friend here has sprained herself on the way to school and she wanted to ask if she could go to the nurse's office to get it checked out."
+    alec "My friend here has sprained herself on the way to school and she wanted to ask if she could go to the nurse's office to get it checked out."
     prof "Well, why didn't you go there before class started?"
     if beLate:
         dhannica "Uhh..."
@@ -703,7 +704,7 @@ label classroom:
         prof "Aren't you going to bring your friend?"
         "Alec walks towards you to escort you to the nurse's room."
         dhannica "Thanks."
-        offscr_alec "No problem."
+        alec "No problem."
         stop ambient2 fadeout 1.0
         scene bg school hallway with scenefadehold
         show nick:
@@ -712,5 +713,5 @@ label classroom:
             pause .1
             ease 1.0 offscreenleft
         "As you exited, a guy rushed towards the door, abruptly halting in front of you before swerving to enter."
-        offscr_nick "Sorry, I'm late!"
+        nick "Sorry, I'm late!"
     jump chap2_dhannica

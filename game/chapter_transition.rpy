@@ -15,7 +15,7 @@ image chapter_text = ParameterizedText(
     color='#ffffff',
     text_align=0.5,
     outlines= [(3, "#16161d", 2, 2)],
-    font=gui.interface_text_font
+    font=gui.text_font
 )
 
 default chapter = 0
