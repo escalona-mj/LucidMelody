@@ -23,7 +23,8 @@ style hyperlink_text:
     font gui.interface_text_font
     # hover_underline True
     underline True
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style gui_text:
     properties gui.text_properties("interface")
@@ -31,12 +32,14 @@ style gui_text:
 
 style button:
     properties gui.button_properties("button")
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style button_text is gui_text:
     properties gui.text_properties("button")
     yalign 0.5
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 
 style label_text is gui_text:
@@ -285,7 +288,8 @@ style choice_hbox:
 
 style choice_button is default:
     properties gui.button_properties("choice_button")
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
     yalign 0.5
 
 style choice_button_text is default:
@@ -313,7 +317,7 @@ style choice_button_text is default:
 
 # style choice_button is default:
 #     properties gui.button_properties("choice_button")
-#     activate_sound "audio/sfx/click.mp3"
+#     activate_sound "audio/sfx/click.ogg"
 
 # style choice_button_text is default:
 #     properties gui.button_text_properties("choice_button")
@@ -390,7 +394,8 @@ screen navigation():
             yoffset 50
             imagebutton:
                 auto "gui/navigation/controls_%s.png"
-                activate_sound "audio/sfx/click.mp3"
+                activate_sound "audio/sfx/click.ogg"
+                hover_sound "audio/sfx/hover.ogg"
                 focus_mask True
                 action Show("controls_modal")
             if not persistent.seen_controls:
@@ -482,7 +487,8 @@ screen navigation():
         #textbutton _("Help") action ShowMenu("help")
 
 style navigation_image_button:
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style navigation_button is gui_button
 style navigation_button_text:
@@ -813,7 +819,8 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     imagebutton:
         auto "gui/navigation/return_%s.png"
-        activate_sound "audio/sfx/click.mp3"
+        activate_sound "audio/sfx/click.ogg"
+        hover_sound "audio/sfx/hover.ogg"
         focus_mask True
         xalign 0.0
         yalign 0.0
@@ -1273,7 +1280,8 @@ screen preferences():
                                 textbutton "{font=fonts/123Marker.ttf}123Marker" action [setFont("fonts/123Marker.ttf"), SelectedIf(persistent.textbox_font == "fonts/123Marker.ttf")]
                                 textbutton "{font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible" action [setFont("fonts/Atkinson-Hyperlegible-Regular-102.ttf"), SelectedIf(persistent.textbox_font == "fonts/Atkinson-Hyperlegible-Regular-102.ttf")]
 style header_image_button:
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style header_btn_hover is navigation_btn_hover
 
@@ -1683,7 +1691,8 @@ screen confirm(message, yes_action, no_action):
     key "game_menu" action no_action
 
 style confirm_image_button:
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style confirm_btn_hover:
     color u"#fff"
@@ -2158,7 +2167,8 @@ style quickmenu_button_text:
     color gui.accent_color
 
 style quickmenu_image_button:
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style tooltip_frame:
     background None
@@ -2212,7 +2222,8 @@ style bar:
     ysize gui.bar_size
     left_bar Frame("gui/phone/bar/left.png", gui.bar_borders, tile=gui.bar_tile)
     right_bar Frame("gui/phone/bar/right.png", gui.bar_borders, tile=gui.bar_tile)
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style vbar:
     variant "mobile"

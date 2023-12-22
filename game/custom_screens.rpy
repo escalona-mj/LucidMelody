@@ -162,7 +162,8 @@ screen chooseMC():
             action (Show(screen='name_input',_layer="front", ok_action=(Hide(screen='name_input',_layer="front"),Call("chooseFemale")), back_action=Hide(screen='name_input',_layer="front")))
             tooltip "I'm a girl."
             focus_mask True
-            activate_sound "audio/sfx/click.mp3"
+            activate_sound "audio/sfx/click.ogg"
+            hover_sound "audio/sfx/hover.ogg"
             at showButtons(-0.5, 0.0)
         imagebutton:
             xalign 1.0
@@ -171,7 +172,8 @@ screen chooseMC():
             action (Show(screen='name_input',_layer="front", ok_action=(Hide(screen='name_input',_layer="front"),Call("chooseMale")), back_action=Hide(screen='name_input',_layer="front")))
             tooltip "I'm a boy."
             focus_mask True
-            activate_sound "audio/sfx/click.mp3"
+            activate_sound "audio/sfx/click.ogg"
+            hover_sound "audio/sfx/hover.ogg"
             at showButtons(1.5, 1.0)
 
     $ tooltip = GetTooltip(screen="chooseMC")

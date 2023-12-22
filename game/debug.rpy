@@ -108,7 +108,7 @@ screen dev_screen():
             at transform:
                 zoom 0.5
             idle "gui/dev_tools.png"
-            activate_sound "audio/sfx/click.mp3"
+            activate_sound "audio/sfx/click.ogg"
             action ToggleLocalVariable("devtools", True, False)
 
 

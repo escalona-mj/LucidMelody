@@ -159,7 +159,8 @@ screen file_slots():
                             if slot_selected == i:
                                 if FileLoadable(slot):
                                     imagebutton auto "gui/phone/button/delete_save_%s.png" action FileDelete(slot) xpos -25 ypos -25:
-                                        activate_sound "audio/sfx/click.mp3"
+                                        activate_sound "audio/sfx/click.ogg"
+                                        hover_sound "audio/sfx/hover.ogg"
                             
 
             ## Buttons to access other pages.
@@ -203,7 +204,8 @@ screen file_slots():
 style load_save_btn_button_text:
     color "#fff"
     font "fonts/MyPrettyCutie.ttf"
-    outlines [(5, "#16161d", 0, 2)]
+    outlines [(7, "#16161d", 0, 2)]
+    hover_outlines [(7, "#6667ab", 0, 2)]
 
 style page_label is gui_label
 style page_label_text is gui_label_text
@@ -232,7 +234,8 @@ style page_label_text:
 
 style page_button:
     properties gui.button_properties("page_button")
-    activate_sound "audio/sfx/click.mp3"
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style page_button_text:
     textalign 0.5

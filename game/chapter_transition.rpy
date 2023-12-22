@@ -4,7 +4,7 @@ image chapter_num = ParameterizedText(
     size=70,
     color='#ffffff',
     text_align=0.5,
-    outlines = [(3, "#16161d", 2, 2)],
+    outlines = [(10, "#16161d", 2, 2)],
     font=gui.interface_text_font
 )
 
@@ -14,7 +14,7 @@ image chapter_text = ParameterizedText(
     size=50,
     color='#ffffff',
     text_align=0.5,
-    outlines= [(3, "#16161d", 2, 2)],
+    outlines= [(10, "#16161d", 2, 2)],
     font=gui.text_font
 )
 
