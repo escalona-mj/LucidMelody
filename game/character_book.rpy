@@ -113,15 +113,19 @@ transform value_appear:
     pause 2.5
     easein 0.5 yoffset -25 alpha 0.0
 
-transform book_appear:
+transform book_appear_pc:
     subpixel True
     on show:
-        rotate 2
-        zoom 0.95 alpha 0.0
-        easein .25 zoom 1.0 alpha 1.0 rotate -2
-    on hide:
-        rotate -2
-        easein .25 zoom 0.95 alpha 0.0 rotate 2
+        yoffset 500
+        zoom 0.5 alpha 0.0
+        easein .25 zoom 0.85 alpha 1.0 yoffset 0
+
+transform book_appear_touch:
+    subpixel True
+    on show:
+        yoffset 500
+        zoom 0.5 alpha 0.0
+        easein .25 zoom 1.0 alpha 1.0 yoffset 0
 
 
 transform page_flip:
@@ -131,17 +135,20 @@ transform page_flip:
 screen journal():
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/journal_open.ogg")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master"), Play("sfx2", "audio/sfx/journal_close.ogg")
-    # dismiss action Return()
+    
+    if renpy.variant("pc"):
+        dismiss action Return()
 
     add "gui/overlay/confirm.png":
         alpha 0.65
 
-    frame:
-        background None
-        xoffset 50
-        yoffset 25
-        imagebutton auto _("gui/quickmenu/back_%s.png"):
-            action Return()
+    if renpy.variant("touch"):
+        frame:
+            background None
+            xoffset 50
+            yoffset 25
+            imagebutton auto _("gui/quickmenu/back_%s.png"):
+                action Return()
 
     for char in all_chars:
         if current_page == char.name:
@@ -159,7 +166,12 @@ screen journal():
                 $ LoveMeter = True
 
     frame:
-        at book_appear
+        modal True
+        if renpy.variant("pc"):
+            at book_appear_pc
+        elif renpy.variant("touch"):
+            at book_appear_touch
+
         background Frame("gui/journal/journal.png")
         xalign 0.5
         yalign 0.5
@@ -223,7 +235,6 @@ screen journal():
                         vbox:
                             if not current_page == "Journal":
                                 text name
-                                text age
                                 null height 10
                                 text description
                             else:
@@ -300,6 +311,7 @@ screen journal():
 style page_text:
     color "#000"
     font gui.journal_font
+    size 35
 
 style page_image_button:
     activate_sound "audio/sfx/journal_page_flip.ogg"
@@ -314,6 +326,7 @@ style bookmark_btn:
     font gui.name_text_font
     color "#fff"
     size 45
+    outlines [(5, "#16161d", 0, 2)]
 
 style page_vscrollbar:
     base_bar Frame("gui/scrollbar/vertical_journal_bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)

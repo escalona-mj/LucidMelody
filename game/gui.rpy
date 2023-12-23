@@ -69,22 +69,22 @@ define gui.name_text_font = "fonts/MyPrettyCutie.ttf"
 define gui.interface_text_font = "fonts/QuinnGothic.ttf"
 
 ## The size of normal dialogue text.
-define gui.text_size = 35
+define gui.text_size = 33
 
 ## The size of character names.
-define gui.name_text_size = 50
+define gui.name_text_size = 45
 
 ## The size of text in the game's user interface.
-define gui.interface_text_size = 40
+define gui.interface_text_size = 33
 
 ## The size of labels in the game's user interface.
-define gui.label_text_size = 40
+define gui.label_text_size = 36
 
 ## The size of text on the notify screen.
-define gui.notify_text_size = 38
+define gui.notify_text_size = 33
 
 ## The size of the game's title.
-define gui.title_text_size = 90
+define gui.title_text_size = 75
 
 
 ## Main and Game Menus #########################################################
@@ -183,9 +183,9 @@ define gui.button_text_xalign = 0.0
 ##
 ## These customizations are used by the default interface:
 
-define gui.radio_button_borders = Borders(70, 6, 6, 6)
+define gui.radio_button_borders = Borders(70, 12, 6, 6)
 
-define gui.check_button_borders = Borders(70, 6, 6, 6)
+define gui.check_button_borders = Borders(70, 12, 6, 6)
 
 define gui.confirm_button_text_xalign = 0.5
 
@@ -212,7 +212,7 @@ define gui.choice_button_height = None
 define gui.choice_button_tile = False
 define gui.choice_button_borders = Borders(150, 25, 150, 25)
 define gui.choice_button_text_font = gui.interface_text_font
-define gui.choice_button_text_size = 60
+define gui.choice_button_text_size = (gui.text_size + 25)
 define gui.choice_button_text_xalign = 0.5
 define gui.choice_button_text_idle_color = "#ffffff" #gui.accent_color
 define gui.choice_button_text_hover_color = "#ffffff"
@@ -231,9 +231,13 @@ define gui.choice_button_text_hover_outlines = [ (10, "#6667ab", 0, 2) ]
 # define gui.slot_button_width = 414
 # define gui.slot_button_height = 233
 define gui.slot_button_borders = Borders(25,25,25,25)
-define gui.slot_button_text_size = 30
+define gui.slot_button_text_size = gui.interface_text_size
 define gui.slot_button_text_xalign = 0.0
 define gui.slot_button_text_idle_color = u'#fff'
+define gui.slot_button_text_outlines = [ (3, "#16161d", 0, 1) ]
+
+define gui.page_button_text_outlines = [ (3, "#16161d", 0, 1) ]
+define gui.notify_text_outlines = [ (3, "#16161d", 0, 1) ]
 # define gui.slot_button_text_selected_idle_color = gui.selected_color
 # define gui.slot_button_text_selected_hover_color = gui.hover_color
 
@@ -405,6 +409,10 @@ define gui.nvl_thought_xalign = 0.0
 define gui.nvl_button_xpos = 675
 define gui.nvl_button_xalign = 0.0
 
+define gui.load_save_button_text_font = gui.game_menu_label_font
+define gui.load_save_button_text_idle_color = "#fff"
+define gui.load_save_button_text_outlines = [(5, "#16161d", 0, 2)]
+define gui.load_save_button_text_hover_outlines = [(5, "#6667ab", 0, 2)]
 
 ## Localization ################################################################
 
@@ -413,3 +421,30 @@ define gui.nvl_button_xalign = 0.0
 ## www.renpy.org/doc/html/style_properties.html#style-property-language
 
 define gui.language = "unicode"
+
+################################################################################
+## Mobile devices
+################################################################################
+
+init python:
+
+    ## This increases the size of the quick buttons to make them easier to touch
+    ## on tablets and phones.
+    @gui.variant
+    def touch():
+        gui.text_size = 40
+        gui.name_text_size = 50
+        gui.notify_text_size = 38
+        gui.interface_text_size = 40
+        gui.button_text_size = 40
+        gui.label_text_size = 40
+        gui.title_text_size = 90
+        
+        gui.radio_button_borders = Borders(70, 6, 6, 6)
+        gui.check_button_borders = Borders(70, 6, 6, 6)
+
+        gui.slot_button_text_outlines = [(5, "#16161d", 0, 2)]
+        gui.page_button_text_outlines = [(5, "#16161d", 0, 2)]
+        gui.notify_text_outlines = [ (5, "#16161d", 0, 2) ]
+        gui.load_save_button_text_outlines = [(7, "#16161d", 2, 2)]
+        gui.load_save_button_text_hover_outlines = [(7, "#6667ab", 2, 2)]

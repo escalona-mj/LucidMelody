@@ -15,6 +15,7 @@ init python:
     renpy.music.register_channel("ambient", mixer="ambient", loop=True, tight=True)
     renpy.music.register_channel("ambient2", mixer="ambient", loop=True, tight=True)
     renpy.music.register_channel("sfx2", mixer="sfx", loop=False)
+    renpy.music.register_channel("sfx3", mixer="sfx", loop=False)
     renpy.music.register_channel("notif", mixer="sfx", loop=False, tight=True)
     renpy.music.register_channel("notif2", mixer="sfx", loop=False, tight=True)
 
@@ -57,10 +58,9 @@ define config.quicksave_slots = 0
 define _dismiss_pause = config.developer
 define _game_menu_screen = 'emptymenu'
 define config.menu_include_disabled = False
-define config.minimum_presplash_time = 0.0
 define config.gl2 = True
 define config.gl_resize = False
-define config.has_sync = False
+define config.has_sync = True
 
 define config.gestures = {"s" : "game_menu"}
 define config.dispatch_gesture = None

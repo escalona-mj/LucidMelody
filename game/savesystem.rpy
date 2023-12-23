@@ -63,7 +63,7 @@ screen file_slots():
     default page_name_value = FilePageNameInputValue(pattern=_("Page {}"), auto=_("Automatic saves"), quick=_("Quick saves"))
 
     use game_menu("Saves"):
-        
+    
         vbox:
             button:
                 style "page_label"
@@ -103,7 +103,7 @@ screen file_slots():
                                     add AlphaMask(At(FileScreenshot(slot), save_idle),"gui/button/slot_mask.png")
                             else:
                                 add "gui/button/slot_idle.png"
-                                text "empty slot" xalign 0.5 yalign 0.5 yoffset 10 color "#ffffff47"
+                                text "empty slot" xalign 0.5 yalign 0.5 yoffset 10 color "#ffffff47" font gui.interface_text_font
                                 if not main_menu:
                                     if slot_selected == slot:
                                         add "gui/button/slot_overlay.png"
@@ -136,8 +136,8 @@ screen file_slots():
                                     xoffset 20
                                     xalign 1.0
                                     spacing 20
-                                    style_prefix "load_save_btn"
-                                    if slot_selected == i:
+                                    style_prefix "load_save"
+                                    if slot_selected == slot:
                                         if main_menu:
                                             if FileLoadable(slot):
                                                 textbutton "LOAD" action FileLoad(slot)
@@ -189,23 +189,263 @@ screen file_slots():
                         textbutton "[page]" action FilePage(page)
 
                     textbutton _(">") action FilePageNext()
+    
+    fixed:
+        vbox:
+            xalign 0.025
+            yalign 0.5
+            style_prefix "header"
+            if config.has_sync:
+                imagebutton:
+                    auto "gui/navigation/cloud_%s.png"
+                    foreground Text(_("Cloud"), style="header_btn")
+                    hover_foreground Text(_("Cloud"), style="header_btn_hover")
+                    selected_foreground Text(_("Cloud"), style="header_btn_selected")
+                    action Show("cloud_modal", message="What do you want to do with saves?", first_btn="Upload", first_action=UploadSync(), second_btn="Download", second_action=DownloadSync())
+                    tooltip "Access your saves via cloud."
+                
+screen cloud_modal(message, first_btn, second_btn, first_action, second_action):
+    on "show" action Play("sfx3", "audio/sfx/modal_open.ogg")
 
-                if config.has_sync:
-                    if CurrentScreenName() == "save":
-                        textbutton _("Upload Sync"):
-                            action UploadSync()
-                            xalign 0.5
-                    else:
-                        textbutton _("Download Sync"):
-                            action DownloadSync()
-                            xalign 0.5
+    modal True
 
+    zorder 200
 
-style load_save_btn_button_text:
-    color "#fff"
-    font "fonts/MyPrettyCutie.ttf"
-    outlines [(7, "#16161d", 0, 2)]
-    hover_outlines [(7, "#6667ab", 0, 2)]
+    dismiss action Hide()
+
+    style_prefix "confirm"
+
+    add "gui/overlay/confirm.png":
+        at transform:
+            on show:
+                alpha 0.0
+                easein .25 alpha 0.5
+            on hide:
+                alpha 0.5
+                easein .25 alpha 0.0
+
+    frame at screen_appear:
+        has vbox:
+            xalign .5
+            yalign .5
+            spacing 30
+        label _(message):
+            style "confirm_prompt"
+            xalign 0.5
+        hbox:
+            xalign 0.5
+            spacing 100
+
+            imagebutton:
+                auto "gui/navigation/confirm_btn_%s.png"
+                foreground Text(first_btn, style="confirm_btn")
+                hover_foreground Text(first_btn, style="confirm_btn_hover")
+                selected_foreground Text(first_btn, style="confirm_btn_selected")
+                action first_action
+
+            imagebutton:
+                auto "gui/navigation/confirm_btn_%s.png"
+                foreground Text(second_btn, style="confirm_btn")
+                hover_foreground Text(second_btn, style="confirm_btn_hover")
+                selected_foreground Text(second_btn, style="confirm_btn_selected")
+                action second_action
+
+    key "game_menu" action Hide()
+
+init -1:
+    screen sync_confirm():
+        on "show" action Play("sfx3", "audio/sfx/modal_open.ogg")
+
+        modal True
+
+        zorder 100
+
+        style_prefix "confirm"
+
+        add "gui/overlay/confirm.png"
+
+        frame:
+            at screen_appear
+
+            vbox:
+                xalign .5
+                yalign .5
+                spacing 45
+
+                label _("This will upload your saves to the {a=https://sync.renpy.org}Ren'Py Sync Server{/a}.\nDo you want to continue?"):
+                    style "confirm_prompt"
+                    xalign 0.5
+
+                hbox:
+                    xalign 0.5
+                    spacing 150
+                    imagebutton:
+                        auto "gui/navigation/confirm_btn_%s.png"
+                        foreground Text(_("Yes"), style="confirm_btn")
+                        hover_foreground Text(_("Yes"), style="confirm_btn_hover")
+                        selected_foreground Text(_("Yes"), style="confirm_btn_selected")
+                        action Return(True)
+                    imagebutton:
+                        auto "gui/navigation/confirm_btn_%s.png"
+                        foreground Text(_("No"), style="confirm_btn")
+                        hover_foreground Text(_("No"), style="confirm_btn_hover")
+                        selected_foreground Text(_("No"), style="confirm_btn_selected")
+                        action Return(False)
+
+        ## Right-click and escape answer "no".
+        key "game_menu" action Return(False)
+
+    screen sync_prompt(prompt):
+        on "show" action Play("sfx3", "audio/sfx/modal_open.ogg")
+
+        modal True
+
+        zorder 100
+
+        style_prefix "confirm"
+
+        add "gui/overlay/confirm.png"
+        
+        frame:
+            at screen_appear
+
+            vbox:
+                xalign .5
+                yalign .5
+                spacing 45
+
+                vbox:
+                    label _("Enter Sync ID"):
+                        style "confirm_prompt"
+                        xalign 0.5
+
+                    text prompt:
+                        xalign 0.5
+                        textalign 0.5
+                        color gui.accent_color
+                    
+                    null height 25
+                    
+                    input:
+                        id "input"
+                        xalign 0.5
+                        yalign 0.5
+                        color u'#000'
+                        size 69
+                    
+                    null height 25
+
+                    text _("This will contact the {a=https://sync.renpy.org}Ren'Py Sync Server{/a}."):
+                        xalign 0.5
+                        textalign 0.5
+                        color gui.accent_color
+                
+                imagebutton:
+                    xalign 0.5
+                    auto "gui/navigation/confirm_btn_%s.png"
+                    foreground Text(_("Return"), style="confirm_btn")
+                    hover_foreground Text(_("Return"), style="confirm_btn_hover")
+                    selected_foreground Text(_("Return"), style="confirm_btn_selected")
+                    action Return("")
+
+        ## Right-click and escape answer "no".
+        key "game_menu" action Return(False)
+
+    screen sync_success(sync_id):
+        on "show" action Play("sfx3", "audio/sfx/modal_open.ogg")
+
+        modal True
+
+        zorder 100
+
+        style_prefix "confirm"
+
+        add "gui/overlay/confirm.png"
+
+        frame:
+            at screen_appear
+
+            vbox:
+                xalign 0.5
+                yalign 0.5
+                spacing 45
+
+                vbox:
+                    xalign 0.5
+                    label _("Sync Success"):
+                        style "confirm_prompt"
+                        xalign 0.5
+
+                    text _("The Sync ID is:"):
+                        xalign 0.5
+                        color gui.accent_color
+
+                text sync_id:
+                    xalign 0.5
+                    color u'#000'
+                    font gui.game_menu_label_font
+                    size 69
+
+                text _("You can use this ID to download your save on another device.\nThis sync will expire in an hour.\nRen'Py Sync is supported by {a=https://www.renpy.org/sponsors.html}Ren'Py's Sponsors{/a}."):
+                    xalign 0.5
+                    textalign 0.5
+                    color gui.accent_color
+
+                imagebutton:
+                    xalign 0.5
+                    auto "gui/navigation/confirm_btn_%s.png"
+                    foreground Text(_("Continue"), style="confirm_btn")
+                    hover_foreground Text(_("Continue"), style="confirm_btn_hover")
+                    selected_foreground Text(_("Continue"), style="confirm_btn_selected")
+                    action Return(True)
+
+        ## Right-click and escape answer "no".
+        key "game_menu" action Return(False)
+
+    screen sync_error(message):
+        on "show" action Play("sfx3", "audio/sfx/modal_open.ogg")
+
+        modal True
+
+        zorder 100
+
+        style_prefix "confirm"
+
+        add "gui/overlay/confirm.png"
+
+        frame:
+            at screen_appear
+
+            vbox:
+                xalign .5
+                yalign .5
+                spacing 45
+
+                vbox:
+                    label _("Sync Error"):
+                        style "confirm_prompt"
+                        xalign 0.5
+
+                    text message:
+                        xalign 0.5
+                        textalign 0.5
+                        color gui.accent_color
+
+                imagebutton:
+                    xalign 0.5
+                    auto "gui/navigation/confirm_btn_%s.png"
+                    foreground Text(_("Continue"), style="confirm_btn")
+                    hover_foreground Text(_("Continue"), style="confirm_btn_hover")
+                    selected_foreground Text(_("Continue"), style="confirm_btn_selected")
+                    action Return(True)
+
+        ## Right-click and escape answer "no".
+        key "game_menu" action Return(False)
+
+style load_save_button_text:
+    properties gui.button_text_properties("load_save_button")
+    # color "#fff"
+    # font "fonts/MyPrettyCutie.ttf"
 
 style page_label is gui_label
 style page_label_text is gui_label_text
@@ -216,11 +456,9 @@ style slot_button is gui_button
 style slot_button_text is gui_button_text
 style slot_time_text:
     is slot_button_text
-    outlines [(5, "#16161d", 0, 2)]
 
 style slot_name_text:
     is slot_button_text
-    outlines [(5, "#16161d", 0, 2)]
 
 style page_label:
     xpadding 75
@@ -230,7 +468,7 @@ style page_label_text:
     textalign 0.5
     layout "subtitle"
     hover_color gui.hover_color
-    outlines [(5, "#16161d", 0, 2)]
+    outlines [(3, "#16161d", 0, 1)]
 
 style page_button:
     properties gui.button_properties("page_button")
@@ -241,7 +479,6 @@ style page_button_text:
     textalign 0.5
     selected_color '#c4c4c4'
     properties gui.button_text_properties("page_button")
-    outlines [(5, "#16161d", 0, 2)]
 
 # style slot_button:
 #     properties gui.button_properties("slot_button")

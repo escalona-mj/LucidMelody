@@ -25,9 +25,29 @@ init python:
     def RemoveDream():
         remove_entry(entry1)
 
+style test_text:
+    outlines [(3, "#16161d", 0, 1)]
+
 screen dev_screen():
     default devtools = False
     zorder 1000
+
+    vbox:
+        at transform:
+            alpha 0.5
+        style_prefix "test"
+        $ small_output = renpy.variant("small")
+        text "Is Small Variant?: [small_output]"
+        $ pc_output = renpy.variant("pc")
+        text "Is PC Variant?: [pc_output]"
+        $ mobile_output = renpy.variant("mobile")
+        text "Is Mobile Variant?: [mobile_output]"
+        $ touch_output = renpy.variant("touch")
+        text "Is Touch Variant?: [mobile_output]"
+        $ android_output = renpy.variant("android")
+        text "Is Android Variant?: [android_output]"
+        text "Alec points = {0}".format(alec_likePoints)
+        text "Nick points = {0}".format(nick_likePoints)
 
     showif devtools:
         add "gui/overlay/confirm.png":
@@ -94,10 +114,6 @@ screen dev_screen():
                         textbutton "Remove 10pts to Alec" action Function(removePointToAlec)
                         textbutton "Add 10pts to Nick" action Function(addPointToNick)
                         textbutton "Remove 10pts to Alec" action Function(removePointToNick)
-                    vbox:
-                        yalign 0.5
-                        text "Alec points = {0}".format(alec_likePoints) color "#fff"
-                        text "Nick points = {0}".format(nick_likePoints) color "#fff"
                 
     fixed:
         imagebutton:

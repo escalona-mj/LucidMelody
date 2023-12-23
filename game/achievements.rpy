@@ -218,8 +218,8 @@ screen achievement_toast(a, tag, num):
                 add a.unlocked_image fit "contain" ysize 100
             vbox:
                 yalign 0.5
+                text "Achievement Get!"
                 label a.name
-                text a.description
 
     #hide the screen after 5 seconds
     timer 5.0 action [Hide("achievement_toast"), Show('finish_animating_achievement', num=num, _tag=tag+"1")]
@@ -279,23 +279,26 @@ style achievements_vbox is vbox
 
 style achievements_label_text: #unlocked achievement name
     yalign 0.5
-    outlines [(5, "#6667ab", 2, 2)]
+    outlines [(5, "#6667ab", 0, 2)]
+    font gui.game_menu_label_font
     color '#fff'
+    size (gui.interface_text_size + 5)
 
 style achievements_text: #unlocked achievement description
+    is gui_text
     yalign 0.5
     font gui.interface_text_font
     color gui.accent_color
-    size 30
-
+    
 style locked_label_text: #locked achievement name
+    is gui_label_text
     yalign 0.5
     color u'#b5b5b5'
-
+    
 style locked_text: #locked description
+    is gui_text
     yalign 0.5
     color u'#b5b5b5'
-    size 30
 
 style achievements_button:
     background Frame("gui/achievements/achievement_frame.png", gui.achievement_frame_borders, tile=gui.frame_tile)

@@ -1,5 +1,5 @@
 screen dialog(message, ok_btn, ok_action):
-    on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx3", "audio/sfx/modal_open.ogg")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
     modal True
     zorder 200
@@ -42,9 +42,9 @@ default Main = ''
 
 #custom name input
 screen name_input(ok_action, back_action):
-    dismiss action back_action
-    on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="screens")
+    on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="screens"), Play("sfx3", "audio/sfx/modal_open.ogg")
     on "hide" action Function(renpy.show_layer_at, dialogue_noBlur, layer="screens")
+    dismiss action back_action
     zorder 200
     style_prefix "confirm"
     key "K_RETURN" action [ok_action]
@@ -58,9 +58,10 @@ screen name_input(ok_action, back_action):
             spacing 30
 
         vbox:
-            # spacing 10
-            text "What is your name?"
-            text "(Press Enter without typing your name to use default name.)" size 30
+            spacing 10
+            vbox:
+                text "What is your name?"
+                text "(Press Enter without typing your name to use default name.)" size 30
 
         input default "" value VariableInputValue("Main") length 12 allow "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
             color u'#000'
@@ -226,6 +227,7 @@ screen emptymenu:
     use game_menu(""):
         vbox:
             text "Chapter [chapter]":
+                font gui.interface_text_font
                 size 90
             text "[chapter_name]":
                 size 70
@@ -237,7 +239,6 @@ style emptymenu_vbox is vbox:
 style emptymenu_text:
     xalign 0.5
     color '#fff'
-    font gui.text_font
     outlines [(5, "#16161d", 3, 3)]
 
 screen time_intermission(txt):
@@ -251,6 +252,8 @@ screen time_intermission(txt):
 
 
 screen controls_modal():
+    on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="screens"), Play("sfx3", "audio/sfx/modal_open.ogg")
+    on "hide" action Function(renpy.show_layer_at, dialogue_noBlur, layer="screens")
     $ persistent.seen_controls = True
     if main_menu:
         dismiss action Hide()
@@ -313,15 +316,19 @@ screen controls_modal():
                                 yalign 0.5
                         text "Rolls back to earlier dialogue.":
                             yalign 0.5
-    
-            hbox:
-                hbox:
-                    style_prefix "gesture"
-                    label "Swipe Down"
-                    add "gui/swipe_down.png":
-                        yalign 0.5
-                text "Accesses the game menu\nwhile in-game."
 
+                hbox:
+                    hbox:
+                        style_prefix "gesture"
+                        if renpy.variant("mobile"):
+                            label "Swipe Down"
+                            add "gui/swipe_down.png":
+                                yalign 0.5
+                        elif renpy.variant("pc"):
+                            label "Right Click"
+                            add "gui/tap.png":
+                                yalign 0.5
+                    text "Accesses the game menu\nwhile in-game."
 
             if not main_menu:
                 null height 25

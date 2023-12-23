@@ -8,7 +8,8 @@ image splash_text = ParameterizedText(
     yalign=0.5,
     color='#ffffff',
     text_align=0.5,
-    font='fonts/QuinnGothic.ttf'
+    font='fonts/QuinnGothic.ttf',
+    size=gui.interface_text_size
 )
 
 label splashscreen:

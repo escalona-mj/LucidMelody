@@ -19,7 +19,7 @@ style input:
 
 style hyperlink_text:
     # properties gui.text_properties("hyperlink", accent=True)
-    properties gui.text_properties("hyperlink", accent=False)
+    properties gui.text_properties("hyperlink", accent=True)
     font gui.interface_text_font
     # hover_underline True
     underline True
@@ -120,7 +120,7 @@ screen say(who, what):
             window:
                 id "namebox"
                 style "namebox"
-                text who outlines [(7, "#16161d", 2, 2)]
+                text who outlines [(5, "#16161d", 0, 2)]
 
         text what id "what" outlines [(3, persistent.textbox_outlines, 0, 1)] color persistent.textbox_color font persistent.textbox_font
 
@@ -332,59 +332,91 @@ style choice_button_text is default:
 ## The quick menu is displayed in-game to provide easy access to the out-of-game
 ## menus.
 
+
 screen quick_menu():
     style_prefix "quickmenu"
     zorder 1000
 
-    if quick_menu:
-        frame:
-            hbox:
-                xfill True
-                box_wrap_spacing 1920
-                hbox:
-                    spacing 50
-                    imagebutton auto _("gui/quickmenu/history_%s.png"):
-                        action ShowMenu('history')
-                        tooltip "History"
-                    imagebutton auto _("gui/quickmenu/hide_%s.png"):
-                        action HideInterface()
-                        tooltip "Hide"
-                    # imagebutton auto _("gui/quickmenu/load_%s.png"):
-                    #     action ShowMenu('load')
-                    #     tooltip "Load"
-                    imagebutton auto _("gui/quickmenu/save_%s.png"):
-                        action ShowMenu('file_slots')
-                        tooltip "Saves"
+    if renpy.variant("touch"):
 
+        if quick_menu:
+            frame:
+                hbox:
+                    xfill True
+                    box_wrap_spacing 1920
+                    hbox:
+                        spacing 50
+                        imagebutton auto _("gui/quickmenu/history_%s.png"):
+                            action ShowMenu('history')
+                            tooltip "History"
+                        imagebutton auto _("gui/quickmenu/hide_%s.png"):
+                            action HideInterface()
+                            tooltip "Hide"
+                        imagebutton auto _("gui/quickmenu/save_%s.png"):
+                            action ShowMenu('file_slots')
+                            tooltip "Saves"
+
+                    hbox:
+                        spacing 50
+                        xalign 1.0
+                        imagebutton auto _("gui/quickmenu/back_%s.png"):
+                            action Rollback()
+                            tooltip "Back"
+                        imagebutton auto _("gui/quickmenu/settings_%s.png"):
+                            action ShowMenu('emptymenu')
+                            tooltip "Settings"
+                        imagebutton auto _("gui/quickmenu/auto_%s.png"):
+                            action Preference("auto-forward", "toggle")
+                            tooltip "Auto"
+                        imagebutton auto _("gui/quickmenu/skip_%s.png"):
+                            action Skip() alternate Skip(fast=True, confirm=True)
+                            tooltip "Skip"
+
+
+    elif renpy.variant("pc"):
+        if quick_menu:
+            frame:
+                at transform:
+                    zoom 0.75
+                xalign 1.0
+                yalign 0.75
+                xoffset -250
                 hbox:
                     spacing 50
-                    xalign 1.0
                     imagebutton auto _("gui/quickmenu/back_%s.png"):
                         action Rollback()
                         tooltip "Back"
-                    imagebutton auto _("gui/quickmenu/settings_%s.png"):
-                        action ShowMenu('emptymenu')
-                        tooltip "Settings"
+                    imagebutton auto _("gui/quickmenu/history_%s.png"):
+                        action ShowMenu('history')
+                        tooltip "History"
+                    imagebutton auto _("gui/quickmenu/save_%s.png"):
+                        action ShowMenu('file_slots')
+                        tooltip "Saves"
+                    imagebutton auto _("gui/quickmenu/hide_%s.png"):
+                        action HideInterface()
+                        tooltip "Hide"
                     imagebutton auto _("gui/quickmenu/auto_%s.png"):
                         action Preference("auto-forward", "toggle")
                         tooltip "Auto"
                     imagebutton auto _("gui/quickmenu/skip_%s.png"):
                         action Skip() alternate Skip(fast=True, confirm=True)
                         tooltip "Skip"
+                    imagebutton auto _("gui/quickmenu/settings_%s.png"):
+                        action ShowMenu('emptymenu')
+                        tooltip "Settings"
 
-        frame:
-            yoffset 890
-            xoffset -35
-            xalign 1.0
-            if journal:
-                vbox:
-                    imagebutton auto _("gui/quickmenu/journal_%s.png"):
-                        action [ShowMenu('journal'), SetVariable("notify_journal", False)]
-                        tooltip "Journal"
-                        activate_sound None
-                    if notify_journal:
-                        add "gui/notif_dot.png" xoffset 45 yoffset -80
-
+    frame:
+        yoffset -50
+        xoffset -50
+        yalign 1.0
+        xalign 1.0
+        if journal:
+            imagebutton auto _("gui/quickmenu/journal_%s.png"):
+                action [ShowMenu('journal'), SetVariable("notify_journal", False)]
+                foreground If(notify_journal, true=Image("gui/notif_dot.png", xoffset=45), false=None)
+                tooltip "Journal"
+                activate_sound None
+                
     # This has to be the last thing shown in the screen.
 
     $ tooltip = GetTooltip()
@@ -397,9 +429,8 @@ screen quick_menu():
             prefer_top True
             frame:
                 xalign 0.5
-                # yoffset 125
                 text tooltip:
-                    size 35
+                    size gui.interface_text_size
 
 default quick_menu = True
 
@@ -429,7 +460,7 @@ style tooltip_text:
     color u'#fff'
     yalign 0.5
     font gui.interface_text_font
-    outlines [(5, "#16161d", 0, 2)]
+    outlines [(3, "#16161d", 0, 2)]
 
 ################################################################################
 ## Main and Game Menu Screens
@@ -466,7 +497,7 @@ screen navigation():
                 activate_sound "audio/sfx/click.ogg"
                 hover_sound "audio/sfx/hover.ogg"
                 focus_mask True
-                action Show("controls_modal")
+                action Show("controls_modal", _layer="front")
             if not persistent.seen_controls:
                 add "gui/notif_dot.png" xoffset 65 yoffset -100
                 
@@ -564,6 +595,7 @@ style navigation_button_text:
     is gui_button_text
     xalign 0.5
     font gui.name_text_font
+    size (gui.interface_text_size + 5)
     text_align 0.5
     outlines [(5, "#16161d", 2, 2)]
     hover_outlines [(5, "#6667ab", 2, 2)]
@@ -574,21 +606,21 @@ style navigation_btn_hover:
     yalign 0.5
     xpos 95
     font gui.interface_text_font
-    size 40
+    size gui.interface_text_size
 
 style navigation_btn_selected:
     color u"#fff"
     yalign 0.5
     xpos 95
     font gui.interface_text_font
-    size 40
+    size gui.interface_text_size
 
 style navigation_btn:
     yalign 0.5
     color u"#fff"
     xpos 95
     font gui.interface_text_font
-    size 40
+    size gui.interface_text_size
 
 style navigation_button:
     size_group "navigation"
@@ -1125,7 +1157,6 @@ style empty_frame:
 
 style about_title_label_text:
     font "fonts/MyPrettyCutie.ttf"
-    outlines [(10, "#16161d", 2, 2)]
     size 60
     text_align 0.5
     xalign 0.5
@@ -1134,13 +1165,13 @@ style about_role_label:
     xalign 0.5
 
 style about_role_label_text:
-    size 45
+    size (gui.interface_text_size + 5)
     text_align 0.5
     xalign 0.5
 
 style about_person_text:
     font gui.interface_text_font
-    size 35
+    size gui.interface_text_size
     text_align 0.5
     xalign 0.5
 
@@ -1339,7 +1370,7 @@ screen pref_vol():
             tooltip "Mute all sounds."
             style "mute_all_button"
             foreground "gui/button/sound_[prefix_]foreground.png"
-            padding (75, 6, 6, 6)
+            padding gui.check_button_borders.padding
             xalign 0.5
 
 screen pref_accessibility():
@@ -1556,7 +1587,6 @@ style history_name_text:
     textalign gui.history_name_xalign
     # font gui.text_font
     font gui.name_text_font
-    size 50
 
 style history_text:
     xpos gui.history_text_xpos
@@ -1751,6 +1781,7 @@ style help_label_text:
 ## https://www.renpy.org/doc/html/screen_special.html#confirm
 
 screen confirm(message, yes_action, no_action):
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx3", "audio/sfx/modal_open.ogg")
     
     ## Ensure other screens do not get input while this screen is displayed.
     modal True
@@ -1809,21 +1840,21 @@ style confirm_btn_hover:
     xalign 0.5
     yalign 0.5
     size gui.interface_text_size
-    font gui.interface_text_font
+    font gui.game_menu_label_font
 
 style confirm_btn_selected:
     color u"#fff"
     xalign 0.5
     yalign 0.5
     size gui.interface_text_size
-    font gui.interface_text_font
+    font gui.game_menu_label_font
 
 style confirm_btn:
     color gui.accent_color
     xalign 0.5
     yalign 0.5
     size gui.interface_text_size
-    font gui.interface_text_font
+    font gui.game_menu_label_font
 
 style confirm_frame is gui_frame
 style confirm_prompt is gui_prompt
