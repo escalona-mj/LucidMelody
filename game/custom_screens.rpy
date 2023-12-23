@@ -1,4 +1,4 @@
-screen dialog(message, ok_action):
+screen dialog(message, ok_btn, ok_action):
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
     modal True
@@ -29,9 +29,9 @@ screen dialog(message, ok_action):
 
             imagebutton:
                 auto "gui/navigation/confirm_btn_%s.png"
-                foreground Text(_("OK"), style="confirm_btn")
-                hover_foreground Text(_("OK"), style="confirm_btn_hover")
-                selected_foreground Text(_("OK"), style="confirm_btn_selected")
+                foreground Text(ok_btn, style="confirm_btn")
+                hover_foreground Text(ok_btn, style="confirm_btn_hover")
+                selected_foreground Text(ok_btn, style="confirm_btn_selected")
                 action ok_action
 
 ############################
@@ -286,18 +286,33 @@ screen controls_modal():
                         yalign 0.5
                 text "Advances dialogue."
 
-            if not preferences.mobile_rollback_side == "disable":
-                hbox:
+            if renpy.variant("mobile"):
+                if not preferences.mobile_rollback_side == "disable":
                     hbox:
-                        style_prefix "gesture"
-                        if preferences.mobile_rollback_side == "left":
-                            label "Tap Left Screen"
-                        else:
-                            label "Tap Right Screen"
-                        add "gui/tap.png":
+                        hbox:
+                            style_prefix "gesture"
+                            if preferences.mobile_rollback_side == "left":
+                                label "Tap Left Screen"
+                            else:
+                                label "Tap Right Screen"
+                            add "gui/tap.png":
+                                yalign 0.5
+                        text "Rolls back to earlier dialogue.":
                             yalign 0.5
-                    text "Rolls back to earlier dialogue.":
-                        yalign 0.5
+            
+            elif renpy.variant("pc"):
+                if not preferences.desktop_rollback_side == "disable":
+                    hbox:
+                        hbox:
+                            style_prefix "gesture"
+                            if preferences.desktop_rollback_side == "left":
+                                label "Tap Left Screen"
+                            else:
+                                label "Tap Right Screen"
+                            add "gui/tap.png":
+                                yalign 0.5
+                        text "Rolls back to earlier dialogue.":
+                            yalign 0.5
     
             hbox:
                 hbox:

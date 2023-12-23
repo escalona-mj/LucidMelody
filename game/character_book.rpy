@@ -213,12 +213,14 @@ screen journal():
                 background None
                 padding(80,30,30,90)
                 vbox:
+                    style_prefix "page"
                     viewport:
                         xsize 600
                         ysize 800
                         draggable True
+                        mousewheel True
+                        scrollbars "vertical"
                         vbox:
-                            style_prefix "page"
                             if not current_page == "Journal":
                                 text name
                                 text age
@@ -239,12 +241,14 @@ screen journal():
                 background None
                 padding(30,30,90,60)
                 vbox:
+                    style_prefix "page"
                     viewport:
                         xsize 600
                         ysize 800
                         draggable True
+                        mousewheel True
+                        scrollbars "vertical"
                         vbox:
-                            style_prefix "page"
                             if not current_page == "Journal":
                                 add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
                                 if LoveMeter == True:
@@ -310,6 +314,11 @@ style bookmark_btn:
     font gui.name_text_font
     color "#fff"
     size 45
+
+style page_vscrollbar:
+    base_bar Frame("gui/scrollbar/vertical_journal_bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
+    thumb Frame("gui/scrollbar/vertical_journal_thumb.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
+    unscrollable gui.unscrollable
 
 style dream_bookmark_image_button is bookmark_image_button
 style dream_bookmark_btn is bookmark_btn

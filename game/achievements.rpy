@@ -273,6 +273,8 @@ screen achievements():
                                 text a.description
                 # null height 10
         
+style achievements_button is empty
+
 style achievements_vbox is vbox
 
 style achievements_label_text: #unlocked achievement name

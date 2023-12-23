@@ -80,7 +80,7 @@ label chap2_dhannica:
         nick "Well yeah, it's a genetic thing. Nothing special."
         "You sense a hint of defensiveness in his tone, like he had to downplay it. It made you curious."
         dhannica "So, why were you late this morning? Is it a habit or just bad luck today?"
-        "Nick hesitated for a moment, as if weighing whether to share."
+        "He hesitated for a moment, as if weighing whether to share."
         nick "Just one of those days, I guess. Overslept, missed the alarm."
         "You wanted to probe further but decided against it. You both sat in silence for a moment, before you realized you haven't properly introduced yourself."
         dhannica "I'm [Main], by the way."

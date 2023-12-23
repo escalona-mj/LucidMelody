@@ -12,7 +12,9 @@ image splash_text = ParameterizedText(
 )
 
 label splashscreen:
-    if renpy.variant("android") and not renpy.variant("tv"):
+    if not renpy.variant("tv"):
+        if renpy.variant("pc"):
+            call screen dialog(message="The game has detected that you're running on a PC. The UI was initially\nmeant for small devices, so UI components might look big.", ok_btn="I understand.", ok_action=Return())
         $ renpy.music.play(config.main_menu_music)
         scene splash_white with None
         # show renpy_logo at truecenter:
@@ -37,12 +39,8 @@ label splashscreen:
         pause 2.0
         return
     else:
-        jump notAndroid
+        jump detectTV
 
-label notAndroid:
-    # no
-    if renpy.variant("tv"):
-        call screen dialog(message="This game is only playable on Android devices.\n\nExcluding Android TV devices.", ok_action=Quit(confirm=False))
-    else:
-        call screen dialog(message="This game is only playable on Android devices.", ok_action=Quit(confirm=False))
+label detectTV:
+    call screen dialog(message="This game cannot be played on Android TV devices.", ok_btn="OK", ok_action=Quit(confirm=False))
     return

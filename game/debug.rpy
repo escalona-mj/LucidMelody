@@ -1,6 +1,5 @@
 init python:
-    if not renpy.variant("pc"):
-        config.always_shown_screens = ["dev_screen"]
+    config.always_shown_screens = ["dev_screen"]
 
     def delete_all_saves():
         for i in renpy.list_saved_games(fast=True):

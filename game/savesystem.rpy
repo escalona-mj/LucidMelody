@@ -94,19 +94,19 @@ screen file_slots():
 
                         frame:
                             background None 
-                            add "gui/phone/button/slot_shadow.png"
+                            add "gui/button/slot_shadow.png"
                             if FileLoadable(slot):
                                 if slot_selected == slot:
-                                    add AlphaMask(At(FileScreenshot(slot), save_hover),"gui/phone/button/slot_mask.png")
-                                    add "gui/phone/button/slot_overlay.png"
+                                    add AlphaMask(At(FileScreenshot(slot), save_hover),"gui/button/slot_mask.png")
+                                    add "gui/button/slot_overlay.png"
                                 else:
-                                    add AlphaMask(At(FileScreenshot(slot), save_idle),"gui/phone/button/slot_mask.png")
+                                    add AlphaMask(At(FileScreenshot(slot), save_idle),"gui/button/slot_mask.png")
                             else:
-                                add "gui/phone/button/slot_idle.png"
+                                add "gui/button/slot_idle.png"
                                 text "empty slot" xalign 0.5 yalign 0.5 yoffset 10 color "#ffffff47"
                                 if not main_menu:
                                     if slot_selected == slot:
-                                        add "gui/phone/button/slot_overlay.png"
+                                        add "gui/button/slot_overlay.png"
 
                         if main_menu:
                             if FileLoadable(slot):
@@ -156,9 +156,9 @@ screen file_slots():
                             elif cur_route == 'nick':
                                 add 'save_nick_indicator' xpos 1085 ypos -25
                             
-                            if slot_selected == i:
+                            if slot_selected == slot:
                                 if FileLoadable(slot):
-                                    imagebutton auto "gui/phone/button/delete_save_%s.png" action FileDelete(slot) xpos -25 ypos -25:
+                                    imagebutton auto "gui/button/delete_save_%s.png" action FileDelete(slot) xpos -25 ypos -25:
                                         activate_sound "audio/sfx/click.ogg"
                                         hover_sound "audio/sfx/hover.ogg"
                             

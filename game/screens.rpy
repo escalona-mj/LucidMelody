@@ -54,6 +54,8 @@ style bar:
     ysize gui.bar_size
     left_bar Frame("gui/bar/left.png", gui.bar_borders, tile=gui.bar_tile)
     right_bar Frame("gui/bar/right.png", gui.bar_borders, tile=gui.bar_tile)
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
 
 style vbar:
     xsize gui.bar_size
@@ -64,11 +66,13 @@ style scrollbar:
     ysize gui.scrollbar_size
     base_bar Frame("gui/scrollbar/horizontal_[prefix_]bar.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
     thumb Frame("gui/scrollbar/horizontal_[prefix_]thumb.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
+    thumb_offset 4
 
 style vscrollbar:
     xsize gui.scrollbar_size
     base_bar Frame("gui/scrollbar/vertical_[prefix_]bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
     thumb Frame("gui/scrollbar/vertical_[prefix_]thumb.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
+    thumb_offset 4
 
 style slider:
     ysize gui.slider_size
@@ -269,7 +273,7 @@ screen choice(items):
                     on idle:
                         easein .25 zoom 1.0
                     on hover:
-                        easein .25 zoom 1.25
+                        easein .25 zoom 1.1
 
 style choice_hbox is hbox
 style choice_button is button
@@ -329,26 +333,73 @@ style choice_button_text is default:
 ## menus.
 
 screen quick_menu():
-
-    ## Ensure this appears on top of other screens.
-    zorder 100
+    style_prefix "quickmenu"
+    zorder 1000
 
     if quick_menu:
+        frame:
+            hbox:
+                xfill True
+                box_wrap_spacing 1920
+                hbox:
+                    spacing 50
+                    imagebutton auto _("gui/quickmenu/history_%s.png"):
+                        action ShowMenu('history')
+                        tooltip "History"
+                    imagebutton auto _("gui/quickmenu/hide_%s.png"):
+                        action HideInterface()
+                        tooltip "Hide"
+                    # imagebutton auto _("gui/quickmenu/load_%s.png"):
+                    #     action ShowMenu('load')
+                    #     tooltip "Load"
+                    imagebutton auto _("gui/quickmenu/save_%s.png"):
+                        action ShowMenu('file_slots')
+                        tooltip "Saves"
 
-        hbox:
-            style_prefix "quick"
+                hbox:
+                    spacing 50
+                    xalign 1.0
+                    imagebutton auto _("gui/quickmenu/back_%s.png"):
+                        action Rollback()
+                        tooltip "Back"
+                    imagebutton auto _("gui/quickmenu/settings_%s.png"):
+                        action ShowMenu('emptymenu')
+                        tooltip "Settings"
+                    imagebutton auto _("gui/quickmenu/auto_%s.png"):
+                        action Preference("auto-forward", "toggle")
+                        tooltip "Auto"
+                    imagebutton auto _("gui/quickmenu/skip_%s.png"):
+                        action Skip() alternate Skip(fast=True, confirm=True)
+                        tooltip "Skip"
 
-            xalign 0.5
-            yalign 1.0
+        frame:
+            yoffset 890
+            xoffset -35
+            xalign 1.0
+            if journal:
+                vbox:
+                    imagebutton auto _("gui/quickmenu/journal_%s.png"):
+                        action [ShowMenu('journal'), SetVariable("notify_journal", False)]
+                        tooltip "Journal"
+                        activate_sound None
+                    if notify_journal:
+                        add "gui/notif_dot.png" xoffset 45 yoffset -80
 
-            textbutton _("Back") action Rollback()
-            textbutton _("History") action ShowMenu('history')
-            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
-            textbutton _("Save") action ShowMenu('save')
-            textbutton _("Q.Save") action QuickSave()
-            textbutton _("Q.Load") action QuickLoad()
-            textbutton _("Prefs") action ShowMenu('preferences')
+    # This has to be the last thing shown in the screen.
+
+    $ tooltip = GetTooltip()
+
+    if tooltip:
+
+        nearrect:
+            focus "tooltip"
+            style_prefix "tooltip"
+            prefer_top True
+            frame:
+                xalign 0.5
+                # yoffset 125
+                text tooltip:
+                    size 35
 
 default quick_menu = True
 
@@ -361,6 +412,24 @@ style quick_button:
 style quick_button_text:
     properties gui.button_text_properties("quick_button")
 
+style quickmenu_frame:
+    background None
+    padding(50,50,50,50)
+
+style quickmenu_image_button:
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
+
+style tooltip_frame:
+    background None
+    padding(25,15,25,15)
+
+style tooltip_text:
+    xalign 0.5
+    color u'#fff'
+    yalign 0.5
+    font gui.interface_text_font
+    outlines [(5, "#16161d", 0, 2)]
 
 ################################################################################
 ## Main and Game Menu Screens
@@ -632,11 +701,22 @@ screen fake_mainMenu():
 
     use bg
 
+    add "gui/menu/grassblur.png":
+        pos (0, 750)
+        zoom 1.5
+        at transform:
+            on show:
+                alpha 0.0
+                yoffset 100
+                time 1.0
+                easein .75 alpha 1.0 yoffset 0
+
     fixed:
         textbutton "":
             xfill True
             yfill True
             activate_sound None
+            hover_sound None
             action [Show(screen="main_menu",transition=dissolve), Hide(screen="fake_mainMenu")]
 
 screen main_menu():
@@ -838,6 +918,7 @@ screen game_menu(title, scroll=None, yinitial=0.0):
             background None
             xalign 1.0
             yalign 0.15
+            xmaximum 550
             text tooltip:
                 size 35
                 textalign 1.0
@@ -859,8 +940,7 @@ style game_menu_label_text is gui_label_text
 style return_button is navigation_button
 style return_button_text is navigation_button_text
 
-# style game_menu_outer_frame:
-    # background "gui/overlay/game_menu.png"
+style game_menu_outer_frame is empty
 
 style game_menu_navigation_frame:
     xsize 420
@@ -1148,137 +1228,167 @@ screen preferences():
 
             null height 25
 
-            showif pref_text:
+            if pref_text:
+                use pref_text
 
+            if pref_accessibility:
+                use pref_accessibility
+
+            if pref_vol: 
+                use pref_vol
+
+screen pref_text():
+    vbox:
+        xalign 0.5
+        yalign 0.5
+        spacing 50
+        xfill True
+
+        hbox:
+            xalign 0.5
+            spacing 100
+            vbox:
+                style_prefix "check"
+                label _("Text")
+                textbutton _("Unseen Text") action Preference("skip", "toggle"):
+                    tooltip "Skips the dialogue regardless if seen or unseen."
+                textbutton _("After Choices") action Preference("after choices", "toggle"):
+                    tooltip "Keeps skipping, even on choices."
+                textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
+                    tooltip "Adds a slight delay per comma."
+
+            vbox:
+                style_prefix "radio"
+                label _("Rollback Side")
+                textbutton _("Disable") action Preference("rollback side", "disable"):
+                    tooltip "Disable rollback entirely."
+                textbutton _("Left") action Preference("rollback side", "left"):
+                    tooltip "Tapping the left side of the screen will rollback to a previous dialogue."
+                textbutton _("Right") action Preference("rollback side", "right"):
+                    tooltip "Tapping the right side of the screen will rollback to a previous dialogue."
+
+            if renpy.variant("pc"):
                 vbox:
-                    xalign 0.5
-                    yalign 0.5
-                    spacing 50
-                    hbox:
-                        spacing 100
-                        vbox:
-                            # xsize 550
-                            style_prefix "check"
-                            label _("Text")
-                            textbutton _("Unseen Text") action Preference("skip", "toggle"):
-                                tooltip "Skips the dialogue regardless\nif seen or unseen."
-                            textbutton _("After Choices") action Preference("after choices", "toggle"):
-                                tooltip "Keeps skipping, even on choices."
-                            textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
-                                tooltip "Adds a slight delay per comma."
+                    style_prefix "radio"
+                    label _("Display")
+                    textbutton _("Window") action Preference("display", "window"):
+                        tooltip "Set the game on a windowed mode."
+                    textbutton _("Fullscreen") action Preference("display", "fullscreen"):
+                        tooltip "Set the game on a fullscreen mode."
 
-                        vbox:
-                            style_prefix "radio"
-                            label _("Rollback Side")
-                            textbutton _("Disable") action Preference("rollback side", "disable"):
-                                tooltip "Disable rollback entirely."
-                            textbutton _("Left") action Preference("rollback side", "left"):
-                                tooltip "Tapping the left side of the screen will\nrollback to a previous dialogue."
-                            textbutton _("Right") action Preference("rollback side", "right"):
-                                tooltip "Tapping the right side of the screen will\nrollback to a previous dialogue."
+        vbox:
+            xalign 0.5
+            xsize 850
+            style_prefix "slider"
+            label _("Text Speed")
+            bar value Preference("text speed"):
+                style "bar"
+                tooltip "The speed of the in-game dialogue text."
 
-                    vbox:
-                        xalign 0.5
-                        xsize 700
-                        style_prefix "slider"
-                        label _("Text Speed")
-                        bar value Preference("text speed"):
-                            style "bar"
-                            tooltip "The speed of the in-game dialogue text."
+            label _("Auto-Forward Time")
+            bar value Preference("auto-forward time"):
+                style "bar"
+                tooltip "The speed of the automation per dialogue. {i}(The lower it is, the faster it gets.){/i}"
 
-                        label _("Auto-Forward Time")
-                        bar value Preference("auto-forward time"):
-                            style "bar"
-                            tooltip "The speed of the automation per dialogue.\n(The lower it is, the faster it gets.)"
+screen pref_vol():
+    vbox:
+        xalign 0.5
+        yalign 0.5
+        spacing 50
+        xfill True
 
-            showif pref_vol: 
+        style_prefix "slider"
+        vbox:
+            xalign 0.5
+            xsize 850
+            if config.has_music:
+                label _("BGM Volume")
+                bar value Preference("music volume"):
+                    style "bar"
+                    tooltip "The loudness of background music throughout the game."
 
+            if config.has_sound:
+                label _("Sound Volume")
                 vbox:
-                    xalign 0.5
-                    yalign 0.5
-                    spacing 50
-                    style_prefix "slider"
-                    vbox:
-                        xsize 700
-                        if config.has_music:
-                            label _("BGM Volume")
-                            bar value Preference("music volume"):
-                                style "bar"
-                                tooltip "The loudness of background music throughout the game."
+                    bar value Preference("sound volume"):
+                        style "bar"
+                        tooltip "The loudness of sound effects throughout the game."
 
-                        if config.has_sound:
-                            label _("Sound Volume")
-                            vbox:
-                                bar value Preference("sound volume"):
-                                    style "bar"
-                                    tooltip "The loudness of sound effects throughout the game."
+                    if config.sample_sound:
+                        textbutton _("Test") action Play("sound", config.sample_sound)
+        vbox:
+            xalign 0.5
+            xsize 850
+            if config.has_voice:
+                label _("Voice Volume")
+                hbox:
+                    bar value Preference("voice volume"):
+                        style "bar"
+                        tooltip "The loudness of voice throughout the game."
 
-                                if config.sample_sound:
-                                    textbutton _("Test") action Play("sound", config.sample_sound)
-                    vbox:
-                        xsize 700
-                        if config.has_voice:
-                            label _("Voice Volume")
-                            hbox:
-                                bar value Preference("voice volume"):
-                                    style "bar"
-                                    tooltip "The loudness of voice throughout the game."
+                    if config.sample_voice:
+                        textbutton _("Test") action Play("voice", config.sample_voice)
 
-                                if config.sample_voice:
-                                    textbutton _("Test") action Play("voice", config.sample_voice)
+            label _("Ambient Volume")
+            bar value Preference("ambient volume"):
+                style "bar"
+                tooltip "The loudness of ambience throughout the game."
 
-                        label _("Ambient Volume")
-                        bar value Preference("ambient volume"):
-                            style "bar"
-                            tooltip "The loudness of ambience throughout the game."
+        textbutton _("Mute All"):
+            action Preference("all mute", "toggle")
+            tooltip "Mute all sounds."
+            style "mute_all_button"
+            foreground "gui/button/sound_[prefix_]foreground.png"
+            padding (75, 6, 6, 6)
+            xalign 0.5
 
-                    textbutton _("Mute All"):
-                        action Preference("all mute", "toggle")
-                        tooltip "Mute all sounds."
-                        style "mute_all_button"
-                        foreground "gui/phone/button/sound_[prefix_]foreground.png"
-                        padding (75, 6, 6, 6)
-                        xalign 0.5
-
-            showif pref_accessibility:
+screen pref_accessibility():
+    vbox:
+        xalign 0.5
+        yalign 0.5
+        spacing 25
+        xfill True
+        vbox:
+            xalign 0.5
+            label "Preview"
+            window:
+                xsize 700
+                ysize 150
+                if persistent.textbox_style == "black":
+                    background Transform("textbox_black_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
+                else:
+                    background Transform("textbox_white_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
+                padding(25,25,25,25)
+                add Text("A really really long sample text just to force the text to make a new line.", slow_cps=_preferences.text_cps, outlines=[(3, persistent.textbox_outlines, 0, 1)], color=persistent.textbox_color, font=persistent.textbox_font)
+                add "ctc" xoffset 95
+        vbox:
+            xalign 0.5
+            style_prefix "slider"
+            xsize 700
+            label "Textbox Opacity"
+            bar value FieldValue(persistent, 'say_window_alpha', 1.0, max_is_zero=False, offset=0):
+                tooltip "Adjust the opacity of the textbox."
+        vbox:
+            xalign 0.5
+            hbox:
+                xalign 0.5
+                spacing 150
                 vbox:
-                    xalign 0.5
-                    yalign 0.5
-                    spacing 25
-                    vbox:
-                        label "Preview"
-                        window:
-                            xsize 700
-                            ysize 150
-                            if persistent.textbox_style == "black":
-                                background Transform("textbox_black_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
-                            else:
-                                background Transform("textbox_white_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
-                            padding(25,25,25,25)
-                            add Text("A really really long sample text just to force the text to make a new line.", slow_cps=_preferences.text_cps, outlines=[(3, persistent.textbox_outlines, 0, 1)], color=persistent.textbox_color, font=persistent.textbox_font)
-                            add "ctc" xoffset 95
-                    vbox:
-                        style_prefix "slider"
-                        xsize 700
-                        label "Textbox Opacity"
-                        bar value FieldValue(persistent, 'say_window_alpha', 1.0, max_is_zero=False, offset=0):
-                            tooltip "Adjust the opacity of the textbox."
-                    vbox:
-                        hbox:
-                            spacing 150
-                            vbox:
-                                style_prefix "radio"
-                                label "Textbox Style"
-                                textbutton "Dark" action [dynamicTextbox(newStyle="black"),SelectedIf(persistent.textbox_style == "black")]:
-                                    tooltip "Set the textbox to dark and the text to white."    
-                                textbutton "Light" action [dynamicTextbox(newStyle="white"),SelectedIf(persistent.textbox_style == "white")]:
-                                    tooltip "Set the textbox to white and the text to dark."
-                            vbox:
-                                style_prefix "radio"
-                                label "Textbox Font"
-                                textbutton "{font=fonts/playtime.ttf}Default" action [setFont("fonts/playtime.ttf"), SelectedIf(persistent.textbox_font == "fonts/playtime.ttf")]
-                                textbutton "{font=fonts/123Marker.ttf}123Marker" action [setFont("fonts/123Marker.ttf"), SelectedIf(persistent.textbox_font == "fonts/123Marker.ttf")]
-                                textbutton "{font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible" action [setFont("fonts/Atkinson-Hyperlegible-Regular-102.ttf"), SelectedIf(persistent.textbox_font == "fonts/Atkinson-Hyperlegible-Regular-102.ttf")]
+                    style_prefix "radio"
+                    label "Textbox Style"
+                    textbutton "Dark" action [dynamicTextbox(newStyle="black"),SelectedIf(persistent.textbox_style == "black")]:
+                        tooltip "Set the textbox to dark and the text to white."    
+                    textbutton "Light" action [dynamicTextbox(newStyle="white"),SelectedIf(persistent.textbox_style == "white")]:
+                        tooltip "Set the textbox to white and the text to dark."
+                vbox:
+                    style_prefix "radio"
+                    label "Textbox Font"
+                    textbutton "{font=fonts/playtime.ttf}Playtime" action [setFont("fonts/playtime.ttf"), SelectedIf(persistent.textbox_font == "fonts/playtime.ttf")]:
+                        tooltip "Set the typeface to {font=fonts/playtime.ttf}Playtime{/font}. (Default)"
+                    # textbutton "{font=fonts/123Marker.ttf}123Marker" action [setFont("fonts/123Marker.ttf"), SelectedIf(persistent.textbox_font == "fonts/123Marker.ttf")]
+                    textbutton "{font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible" action [setFont("fonts/Atkinson-Hyperlegible-Regular-102.ttf"), SelectedIf(persistent.textbox_font == "fonts/Atkinson-Hyperlegible-Regular-102.ttf")]:
+                        tooltip "Set the typeface to {font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible{/font}."
+
 style header_image_button:
     activate_sound "audio/sfx/click.ogg"
     hover_sound "audio/sfx/hover.ogg"
@@ -1325,7 +1435,7 @@ style pref_label_text:
     yalign 1.0
 
 style pref_vbox:
-    xsize 338
+    xsize None
 
 style radio_vbox:
     spacing gui.pref_button_spacing
@@ -1359,7 +1469,7 @@ style slider_button_text:
     properties gui.button_text_properties("slider_button")
 
 style slider_vbox:
-    xsize 675
+    xsize None
 
 style header_button_text:
     size 60
@@ -2074,193 +2184,3 @@ define bubble.expand_area = {
     "top_right" : (0, 22, 0, 0),
     "thought" : (0, 0, 0, 0),
 }
-
-
-
-################################################################################
-## Mobile Variants
-################################################################################
-
-style pref_vbox:
-    variant "medium"
-    xsize 675
-
-## Since a mouse may not be present, we replace the quick menu with a version
-## that uses fewer and bigger buttons that are easier to touch.
-
-
-screen quick_menu():
-    variant "mobile"
-    style_prefix "quickmenu"
-    zorder 1000
-
-    if quick_menu:
-        frame:
-            hbox:
-                xfill True
-                box_wrap_spacing 1920
-                hbox:
-                    spacing 50
-                    imagebutton auto _("gui/quickmenu/history_%s.png"):
-                        action ShowMenu('history')
-                        tooltip "History"
-                    imagebutton auto _("gui/quickmenu/hide_%s.png"):
-                        action HideInterface()
-                        tooltip "Hide"
-                    # imagebutton auto _("gui/quickmenu/load_%s.png"):
-                    #     action ShowMenu('load')
-                    #     tooltip "Load"
-                    imagebutton auto _("gui/quickmenu/save_%s.png"):
-                        action ShowMenu('file_slots')
-                        tooltip "Saves"
-
-                hbox:
-                    spacing 50
-                    xalign 1.0
-                    imagebutton auto _("gui/quickmenu/back_%s.png"):
-                        action Rollback()
-                        tooltip "Back"
-                    imagebutton auto _("gui/quickmenu/settings_%s.png"):
-                        action ShowMenu('emptymenu')
-                        tooltip "Settings"
-                    imagebutton auto _("gui/quickmenu/auto_%s.png"):
-                        action Preference("auto-forward", "toggle")
-                        tooltip "Auto"
-                    imagebutton auto _("gui/quickmenu/skip_%s.png"):
-                        action Skip() alternate Skip(fast=True, confirm=True)
-                        tooltip "Skip"
-
-        frame:
-            yoffset 890
-            xoffset -35
-            xalign 1.0
-            if journal:
-                vbox:
-                    imagebutton auto _("gui/quickmenu/journal_%s.png"):
-                        action [ShowMenu('journal'), SetVariable("notify_journal", False)]
-                        tooltip "Journal"
-                        activate_sound None
-                    if notify_journal:
-                        add "gui/notif_dot.png" xoffset 45 yoffset -80
-
-    # This has to be the last thing shown in the screen.
-
-    $ tooltip = GetTooltip()
-
-    if tooltip:
-
-        nearrect:
-            focus "tooltip"
-            style_prefix "tooltip"
-            prefer_top True
-            frame:
-                xalign 0.5
-                # yoffset 125
-                text tooltip:
-                    size 35
-
-style quickmenu_frame:
-    background None
-    padding(50,50,50,50)
-
-style quickmenu_button_text:
-    color gui.accent_color
-
-style quickmenu_image_button:
-    activate_sound "audio/sfx/click.ogg"
-    hover_sound "audio/sfx/hover.ogg"
-
-style tooltip_frame:
-    background None
-    padding(25,15,25,15)
-
-style tooltip_text:
-    xalign 0.5
-    color u'#fff'
-    yalign 0.5
-    font gui.interface_text_font
-    outlines [(5, "#16161d", 0, 2)]
-
-# style window:
-#     variant "mobile"
-#     background "gui/phone/textbox.png"
-
-style radio_button:
-    variant "mobile"
-    foreground "gui/phone/button/radio_[prefix_]foreground.png"
-
-style check_button:
-    variant "mobile"
-    foreground "gui/phone/button/check_[prefix_]foreground.png"
-
-style nvl_window:
-    variant "mobile"
-    background "gui/phone/nvl.png"
-
-style main_menu_frame:
-    variant "mobile"
-    background "gui/phone/overlay/main_menu.png"
-
-style game_menu_outer_frame:
-    variant "mobile"
-    # background "gui/phone/overlay/game_menu.png"
-
-style game_menu_navigation_frame:
-    variant "mobile"
-    xsize 420
-
-style game_menu_content_frame:
-    variant "mobile"
-    # top_margin 0
-
-style pref_vbox:
-    variant "mobile"
-    xsize None
-
-style bar:
-    variant "mobile"
-    ysize gui.bar_size
-    left_bar Frame("gui/phone/bar/left.png", gui.bar_borders, tile=gui.bar_tile)
-    right_bar Frame("gui/phone/bar/right.png", gui.bar_borders, tile=gui.bar_tile)
-    activate_sound "audio/sfx/click.ogg"
-    hover_sound "audio/sfx/hover.ogg"
-
-style vbar:
-    variant "mobile"
-    xsize gui.bar_size
-    top_bar Frame("gui/phone/bar/top.png", gui.vbar_borders, tile=gui.bar_tile)
-    bottom_bar Frame("gui/phone/bar/bottom.png", gui.vbar_borders, tile=gui.bar_tile)
-
-style scrollbar:
-    variant "mobile"
-    ysize gui.scrollbar_size
-    base_bar Frame("gui/phone/scrollbar/horizontal_[prefix_]bar.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
-    thumb Frame("gui/phone/scrollbar/horizontal_[prefix_]thumb.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
-    thumb_offset 4
-
-style vscrollbar:
-    variant "mobile"
-    xsize gui.scrollbar_size
-    base_bar Frame("gui/phone/scrollbar/vertical_[prefix_]bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
-    thumb Frame("gui/phone/scrollbar/vertical_[prefix_]thumb.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
-    thumb_offset 4
-
-style slider:
-    variant "mobile"
-    ysize gui.slider_size
-    base_bar Frame("gui/phone/slider/horizontal_[prefix_]bar.png", gui.slider_borders, tile=gui.slider_tile)
-    thumb "gui/phone/slider/horizontal_[prefix_]thumb.png"
-
-style vslider:
-    variant "mobile"
-    xsize gui.slider_size
-    base_bar Frame("gui/phone/slider/vertical_[prefix_]bar.png", gui.vslider_borders, tile=gui.slider_tile)
-    thumb "gui/phone/slider/vertical_[prefix_]thumb.png"
-
-style slider_vbox:
-    variant "mobile"
-    xsize None
-
-style slider_slider:
-    variant "mobile"
-    xsize 525

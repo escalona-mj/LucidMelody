@@ -16,5 +16,5 @@ label chap1_nick:
 
     "..."
     play sound phone_notif
-    call screen dialog(message="Nick's route is not available at the moment.", ok_action=Return())
+    call screen dialog(message="Nick's route is not available at the moment.", ok_btn="OK", ok_action=Return())
     return
