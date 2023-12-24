@@ -289,7 +289,7 @@ screen controls_modal():
                         yalign 0.5
                 text "Advances dialogue."
 
-            if renpy.variant("mobile"):
+            if renpy.variant("touch"):
                 if not preferences.mobile_rollback_side == "disable":
                     hbox:
                         hbox:
@@ -317,18 +317,18 @@ screen controls_modal():
                         text "Rolls back to earlier dialogue.":
                             yalign 0.5
 
+            hbox:
                 hbox:
-                    hbox:
-                        style_prefix "gesture"
-                        if renpy.variant("mobile"):
-                            label "Swipe Down"
-                            add "gui/swipe_down.png":
-                                yalign 0.5
-                        elif renpy.variant("pc"):
-                            label "Right Click"
-                            add "gui/tap.png":
-                                yalign 0.5
-                    text "Accesses the game menu\nwhile in-game."
+                    style_prefix "gesture"
+                    if renpy.variant("touch"):
+                        label "Swipe Down"
+                        add "gui/swipe_down.png":
+                            yalign 0.5
+                    elif renpy.variant("pc"):
+                        label "Right Click"
+                        add "gui/tap.png":
+                            yalign 0.5
+                text "Accesses the game menu\nwhile in-game."
 
             if not main_menu:
                 null height 25

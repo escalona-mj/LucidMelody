@@ -251,80 +251,93 @@ transform choice_appear:
     on hide:
         easein .25 zoom 0.95 alpha 0.0
 
-screen choice(items):
+screen choice(items, mode="unimportant"):
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
 
-    add "gui/overlay/menu_overlay.png":
-        at transform:
-            alpha 0.0
-            on show:
-                easein .25 alpha 0.5
-            on hide:
-                easein .25 alpha 0.0
+    if mode == "important":
 
-    style_prefix "choice"
+        add "gui/overlay/menu_overlay.png":
+            at transform:
+                alpha 0.0
+                on show:
+                    easein .25 alpha 0.5
+                on hide:
+                    easein .25 alpha 0.0
 
-    hbox:
-        at choice_appear
-        for i in items:
-            textbutton i.caption action i.action:
-                at transform:
-                    on idle:
-                        easein .25 zoom 1.0
-                    on hover:
-                        easein .25 zoom 1.1
+        style_prefix "important_choice"
+        hbox:
+            at choice_appear
+            for i in items:
+                textbutton i.caption action i.action:
+                    at transform:
+                        on idle:
+                            easein .25 zoom 1.0
+                        on hover:
+                            easein .25 zoom 1.1
+    else:
 
-style choice_hbox is hbox
+        add "gui/overlay/menu_overlay.png":
+            at transform:
+                alpha 0.0
+                on show:
+                    easein .25 alpha 0.25
+                on hide:
+                    easein .25 alpha 0.0
+
+        style_prefix "choice"
+        vbox:
+            at choice_appear
+            for i in items:
+                textbutton i.caption action i.action:
+                    at transform:
+                        xalign 0.5
+                        on idle:
+                            easein .25 zoom 1.0
+                        on hover:
+                            easein .25 zoom 1.1
+
+style important_choice_hbox is hbox
+style important_choice_button is button
+style important_choice_button_text:
+    is button_text
+    yalign 0.5
+
+style important_choice_hbox:
+    xanchor 0.5
+    xalign 0.5
+    yalign 0.5
+
+    spacing 10
+
+style important_choice_button is default:
+    properties gui.button_properties("important_choice_button")
+    activate_sound "audio/sfx/click.ogg"
+    hover_sound "audio/sfx/hover.ogg"
+    yalign 0.5
+
+style important_choice_button_text is default:
+    properties gui.button_text_properties("important_choice_button")
+
+style choice_vbox is vbox
 style choice_button is button
 style choice_button_text:
     is button_text
     yalign 0.5
 
-style choice_hbox:
-    xanchor 0.5
+style choice_vbox:
     xalign 0.5
-    # ypos 405
-    yalign 0.5
-    # yanchor 0.5
-
-    spacing gui.choice_spacing
+    ypos 405
+    yanchor 0.5
+    spacing 10
 
 style choice_button is default:
     properties gui.button_properties("choice_button")
     activate_sound "audio/sfx/click.ogg"
     hover_sound "audio/sfx/hover.ogg"
-    yalign 0.5
 
 style choice_button_text is default:
     properties gui.button_text_properties("choice_button")
-    # outlines [(10, "#16161d", 2, 2)]
-
-#     style_prefix "choice"
-
-#     vbox:
-#         for i in items:
-#             textbutton i.caption action i.action
-
-# style choice_vbox is vbox
-# style choice_button is button
-# style choice_button_text:
-#     is button_text
-#     yalign 0.5
-
-# style choice_vbox:
-#     xalign 0.5
-#     ypos 405
-#     yanchor 0.5
-
-#     spacing gui.choice_spacing
-
-# style choice_button is default:
-#     properties gui.button_properties("choice_button")
-#     activate_sound "audio/sfx/click.ogg"
-
-# style choice_button_text is default:
-#     properties gui.button_text_properties("choice_button")
 
 
 ## Quick Menu screen ###########################################################

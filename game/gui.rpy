@@ -60,7 +60,7 @@ define gui.game_menu_label_font = "fonts/MyPrettyCutie.ttf"
 define gui.journal_font = "fonts/123Marker.ttf"
 
 ## The font used for in-game text.
-define gui.text_font = "fonts/playtime.ttf"
+define gui.text_font = persistent.textbox_font
 
 ## The font used for character names.
 define gui.name_text_font = "fonts/MyPrettyCutie.ttf"
@@ -207,18 +207,29 @@ define gui.quick_button_text_selected_color = gui.accent_color
 ##
 ## Choice buttons are used in the in-game menus.
 
-define gui.choice_button_width = 900
+define gui.important_choice_button_width = 960
+define gui.important_choice_button_height = None
+define gui.important_choice_button_tile = False
+define gui.important_choice_button_borders = Borders(150, 25, 150, 25)
+define gui.important_choice_button_text_font = gui.interface_text_font
+define gui.important_choice_button_text_size = (gui.text_size + 25)
+define gui.important_choice_button_text_xalign = 0.5
+define gui.important_choice_button_text_idle_color = "#ffffff" #gui.accent_color
+define gui.important_choice_button_text_hover_color = "#ffffff"
+define gui.important_choice_button_text_insensitive_color = u'#8888887f'
+define gui.important_choice_button_text_outlines = [ (10, "#16161d", 0, 2) ]
+define gui.important_choice_button_text_hover_outlines = [ (10, "#6667ab", 0, 2) ]
+
+define gui.choice_button_width = None
 define gui.choice_button_height = None
-define gui.choice_button_tile = False
-define gui.choice_button_borders = Borders(150, 25, 150, 25)
 define gui.choice_button_text_font = gui.interface_text_font
-define gui.choice_button_text_size = (gui.text_size + 25)
+define gui.choice_button_text_size = (gui.text_size + 15)
 define gui.choice_button_text_xalign = 0.5
-define gui.choice_button_text_idle_color = "#ffffff" #gui.accent_color
-define gui.choice_button_text_hover_color = "#ffffff"
-define gui.choice_button_text_insensitive_color = u'#8888887f'
-define gui.choice_button_text_outlines = [ (10, "#16161d", 0, 2) ]
-define gui.choice_button_text_hover_outlines = [ (10, "#6667ab", 0, 2) ]
+define gui.choice_button_text_idle_color = "#fff"
+define gui.choice_button_text_hover_color = "#fff"
+define gui.choice_button_text_insensitive_color = '#8888887f'
+define gui.choice_button_text_outlines = [ (5, "#16161d", 0, 2) ]
+define gui.choice_button_text_hover_outlines = [ (5, "#6667ab", 0, 2) ]
 
 
 ## File Slot Buttons ###########################################################
@@ -264,9 +275,6 @@ define gui.skip_ypos = 0
 
 ## The vertical position of the notify screen.
 define gui.notify_ypos = 125
-
-## The spacing between menu choices.
-define gui.choice_spacing = 10
 
 ## Buttons in the navigation section of the main and game menus.
 define gui.navigation_spacing = 30
@@ -442,6 +450,10 @@ init python:
         
         gui.radio_button_borders = Borders(70, 6, 6, 6)
         gui.check_button_borders = Borders(70, 6, 6, 6)
+
+        gui.choice_button_text_size = (gui.text_size + 15)
+        gui.choice_button_text_outlines = [ (7, "#16161d", 0, 2) ]
+        gui.choice_button_text_hover_outlines = [ (7, "#6667ab", 0, 2) ]
 
         gui.slot_button_text_outlines = [(5, "#16161d", 0, 2)]
         gui.page_button_text_outlines = [(5, "#16161d", 0, 2)]

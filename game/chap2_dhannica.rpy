@@ -259,9 +259,9 @@ label chap2_dhannica:
         dhannica_i "Oh crap! Already?"
         dhannica_i "But, this would be fine, right?"
         dhannica_i "I get to study my missed discussions with someone, but I can just grab the modules online and study alone..."
-        menu:
+        menu(mode="important"):
             dhannica_i "What should I reply?"
-            "\"Yes, that would be great.\"":
+            "\"That'd be great, actually.\"":
                 $ a_hangOut = True
                 $ Alec.add(5)
                 phone_dhannica "That'd be great, actually."

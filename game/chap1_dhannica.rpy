@@ -84,7 +84,7 @@ label chap1_dhannica:
     $ entry1 = "Entry No. 1\n\nThe dream was something else. A concert perhaps? The person in my dreams... I saw them. It felt familiar. Emerald eyes..."
     $ journal_entries.append(entry1)
     window auto
-    menu:
+    menu(mode="important"):
         "Get up and turn off the alarm":
             camera at dizzy
             scene bg dhannica room with eye_open
@@ -100,7 +100,7 @@ label chap1_dhannica:
             dhannica_i "Huh? My phone..."
             dhannica_i "..."
             dhannica_i "It won't hurt to peek right?"
-            menu:
+            menu(mode="important"):
                 "Check your phone":
                     $ usePhone = True
                     $ beLate = True
