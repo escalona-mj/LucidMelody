@@ -337,9 +337,8 @@ screen quick_menu():
     style_prefix "quickmenu"
     zorder 1000
 
-    if renpy.variant("touch"):
-
-        if quick_menu:
+    if quick_menu:
+        if renpy.variant("touch"):
             frame:
                 hbox:
                     xfill True
@@ -355,7 +354,6 @@ screen quick_menu():
                         imagebutton auto _("gui/quickmenu/save_%s.png"):
                             action ShowMenu('file_slots')
                             tooltip "Saves"
-
                     hbox:
                         spacing 50
                         xalign 1.0
@@ -372,12 +370,22 @@ screen quick_menu():
                             action Skip() alternate Skip(fast=True, confirm=True)
                             tooltip "Skip"
 
+            frame:
+                yoffset -50
+                xoffset -50
+                yalign 1.0
+                xalign 1.0
+                if journal:
+                    imagebutton auto _("gui/quickmenu/journal_%s.png"):
+                        action [ShowMenu('journal'), SetVariable("notify_journal", False)]
+                        foreground If(notify_journal, true=Image("gui/notif_dot.png", xoffset=45), false=None)
+                        tooltip "Journal"
+                        activate_sound None
 
-    elif renpy.variant("pc"):
-        if quick_menu:
+        elif renpy.variant("pc"):
             frame:
                 at transform:
-                    zoom 0.75
+                    zoom 0.65
                 xalign 1.0
                 yalign 0.75
                 xoffset -250
@@ -404,18 +412,12 @@ screen quick_menu():
                     imagebutton auto _("gui/quickmenu/settings_%s.png"):
                         action ShowMenu('emptymenu')
                         tooltip "Settings"
-
-    frame:
-        yoffset -50
-        xoffset -50
-        yalign 1.0
-        xalign 1.0
-        if journal:
-            imagebutton auto _("gui/quickmenu/journal_%s.png"):
-                action [ShowMenu('journal'), SetVariable("notify_journal", False)]
-                foreground If(notify_journal, true=Image("gui/notif_dot.png", xoffset=45), false=None)
-                tooltip "Journal"
-                activate_sound None
+                    if journal:
+                        imagebutton auto _("gui/quickmenu/journal_%s.png"):
+                            action [ShowMenu('journal'), SetVariable("notify_journal", False)]
+                            foreground If(notify_journal, true=Image("gui/notif_dot.png", xoffset=45), false=None)
+                            tooltip "Journal"
+                            activate_sound None
                 
     # This has to be the last thing shown in the screen.
 
@@ -515,70 +517,72 @@ screen navigation():
             textbutton "EXIT" action Quit(confirm=True)
 
     else:
-        hbox:
-            style_prefix "navigation"
+        frame:
+            background Image("gui/overlay/game_menu_bg.png", xalign=0.5, yalign=0.5)
             xalign 0.5
-            yalign 0.985
-            spacing 0
-
-            if not main_menu:
-                imagebutton:
-                    auto "gui/navigation/history_%s.png"
-                    foreground Text(_("History"), style="navigation_btn")
-                    hover_foreground Text(_("History"), style="navigation_btn_hover")
-                    selected_foreground Text(_("History"), style="navigation_btn_selected")
-                    action ShowMenu("history")
-                    
-            imagebutton:
-                auto "gui/navigation/save_%s.png"
-                foreground Text(_("Saves"), style="navigation_btn")
-                hover_foreground Text(_("Saves"), style="navigation_btn_hover")
-                selected_foreground Text(_("Saves"), style="navigation_btn_selected")
-                action ShowMenu('file_slots')
-
-            imagebutton:
-                auto "gui/navigation/preferences_%s.png"
-                foreground Text(_("Settings"), style="navigation_btn")
-                hover_foreground Text(_("Settings"), style="navigation_btn_hover")
-                selected_foreground Text(_("Settings"), style="navigation_btn_selected")
-                action ShowMenu("preferences")
-
-            if main_menu:
-                imagebutton:
-                    auto "gui/navigation/extras_%s.png"
-                    foreground Text(_("Extras"), style="navigation_btn")
-                    hover_foreground Text(_("Extras"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Extras"), style="navigation_btn_selected")
-                    action ShowMenu("achievements")
+            yalign 0.99
+            hbox:
+                style_prefix "navigation"
+                spacing 0
+                
+                if not main_menu:
+                    imagebutton:
+                        auto "gui/navigation/history_%s.png"
+                        foreground Text(_("History"), style="navigation_btn")
+                        hover_foreground Text(_("History"), style="navigation_btn_hover")
+                        selected_foreground Text(_("History"), style="navigation_btn_selected")
+                        action ShowMenu("history")
 
                 imagebutton:
-                    auto "gui/navigation/about_%s.png"
-                    foreground Text(_("About"), style="navigation_btn")
-                    hover_foreground Text(_("About"), style="navigation_btn_hover")
-                    selected_foreground Text(_("About"), style="navigation_btn_selected")
-                    action ShowMenu("about")
+                    auto "gui/navigation/save_%s.png"
+                    foreground Text(_("Saves"), style="navigation_btn")
+                    hover_foreground Text(_("Saves"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Saves"), style="navigation_btn_selected")
+                    action ShowMenu('file_slots')
 
-            if not main_menu:
                 imagebutton:
-                    auto "gui/navigation/mainmenu_%s.png"
-                    foreground Text(_("Title"), style="navigation_btn")
-                    hover_foreground Text(_("Title"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Title"), style="navigation_btn_selected")
-                    action MainMenu()
+                    auto "gui/navigation/preferences_%s.png"
+                    foreground Text(_("Settings"), style="navigation_btn")
+                    hover_foreground Text(_("Settings"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Settings"), style="navigation_btn_selected")
+                    action ShowMenu("preferences")
 
-            imagebutton:
-                auto "gui/navigation/quit_%s.png"
-                foreground Text(_("Quit"), style="navigation_btn")
-                hover_foreground Text(_("Quit"), style="navigation_btn_hover")
-                selected_foreground Text(_("Quit"), style="navigation_btn_selected")
-                action Quit(confirm=True)
+                if main_menu:
+                    imagebutton:
+                        auto "gui/navigation/extras_%s.png"
+                        foreground Text(_("Extras"), style="navigation_btn")
+                        hover_foreground Text(_("Extras"), style="navigation_btn_hover")
+                        selected_foreground Text(_("Extras"), style="navigation_btn_selected")
+                        action ShowMenu("achievements")
 
-            if _in_replay:
+                    imagebutton:
+                        auto "gui/navigation/about_%s.png"
+                        foreground Text(_("About"), style="navigation_btn")
+                        hover_foreground Text(_("About"), style="navigation_btn_hover")
+                        selected_foreground Text(_("About"), style="navigation_btn_selected")
+                        action ShowMenu("about")
+
+                if not main_menu:
+                    imagebutton:
+                        auto "gui/navigation/mainmenu_%s.png"
+                        foreground Text(_("Title"), style="navigation_btn")
+                        hover_foreground Text(_("Title"), style="navigation_btn_hover")
+                        selected_foreground Text(_("Title"), style="navigation_btn_selected")
+                        action MainMenu()
+
                 imagebutton:
-                    auto "gui/navigation/gallery_%s.png"
-                    foreground Text(_("End Replay"), style="navigation_btn")
-                    hover_foreground Text(_("End Replay"), style="navigation_btn_hover")
-                    action EndReplay(confirm=True)
+                    auto "gui/navigation/quit_%s.png"
+                    foreground Text(_("Quit"), style="navigation_btn")
+                    hover_foreground Text(_("Quit"), style="navigation_btn_hover")
+                    selected_foreground Text(_("Quit"), style="navigation_btn_selected")
+                    action Quit(confirm=True)
+
+                # if _in_replay:
+                #     imagebutton:
+                #         auto "gui/navigation/gallery_%s.png"
+                #         foreground Text(_("End Replay"), style="navigation_btn")
+                #         hover_foreground Text(_("End Replay"), style="navigation_btn_hover")
+                #         action EndReplay(confirm=True)
 
     #if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
 
@@ -1530,6 +1534,7 @@ screen history():
         for h in _history_list:
 
             window:
+                # background Frame("gui/test_frame.png")
 
                 ## This lays things out properly if history_height is None.
                 has fixed:
@@ -1550,8 +1555,11 @@ screen history():
                 text what:
                     substitute False
                     font persistent.textbox_font
-                    
-            null height 40
+            
+            if renpy.variant("pc"):
+                null height 20
+            elif renpy.variant("touch"):
+                null height 40
 
         if not _history_list:
             label _("The dialogue history is empty.")
@@ -1586,6 +1594,7 @@ style history_name_text:
     textalign gui.history_name_xalign
     # font gui.text_font
     font gui.name_text_font
+    outlines [(5, "#16161d", 0, 2)]
 
 style history_text:
     xpos gui.history_text_xpos

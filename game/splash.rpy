@@ -31,7 +31,7 @@ label splashscreen:
             truecenter
             on show:
                 alpha 0.0 zoom 1.5
-                easein_back 1.0 alpha 1.0 zoom 1.0
+                easein_back 1.0 alpha 1.0 zoom 0.75
         pause 3.0
         hide logo_studio
         show sky_color
