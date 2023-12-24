@@ -355,7 +355,25 @@ image side alec = LayeredImageMask("alec",
     background="gui/side_image/alec_bg_sideImage.png",
     mask="gui/side_image/newMask_sideImage.png")
 
-image side unknown_guy = "gui/side_image/unknown_guy_sideImage.png"
+transform cloud2:
+    xoffset -1920
+    linear 200 xoffset 0
+    repeat
+
+transform cloud1:
+    xoffset -1920
+    linear 50 xoffset 0
+    repeat
+
+image menu_bg = Composite(
+    (1920, 1080),
+    (0, 0), "gui/menu/sky1.png",
+    (0, 0), At("gui/menu/clouds2.png", cloud2),
+    (0, 0), At("gui/menu/clouds1.png", cloud1),
+    (0, 700), "gui/menu/grasshill.png",
+    (0, 0), "dandelions",
+    (-2, 825), "gui/menu/grassblur.png"
+    )
 
 ##############################################################################################################
 #                                               LAYERED IMAGES                                               #

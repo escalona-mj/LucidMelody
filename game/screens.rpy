@@ -494,12 +494,11 @@ screen navigation():
             yoffset 50
             imagebutton:
                 auto "gui/navigation/controls_%s.png"
+                foreground If(persistent.seen_controls, true=None, false=Image("gui/notif_dot.png", xoffset=65))
                 activate_sound "audio/sfx/click.ogg"
                 hover_sound "audio/sfx/hover.ogg"
                 focus_mask True
                 action Show("controls_modal", _layer="front")
-            if not persistent.seen_controls:
-                add "gui/notif_dot.png" xoffset 65 yoffset -100
                 
         hbox at nav_item:
             style_prefix "navigation"

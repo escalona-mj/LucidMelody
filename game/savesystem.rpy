@@ -192,8 +192,8 @@ screen file_slots():
     
     fixed:
         vbox:
-            xalign 0.025
-            yalign 0.5
+            xalign 0.98
+            yalign 0.25
             style_prefix "header"
             if config.has_sync:
                 imagebutton:
@@ -262,7 +262,16 @@ init -1:
 
         style_prefix "confirm"
 
-        add "gui/overlay/confirm.png"
+        add "menu_bg"
+
+        add "gui/overlay/confirm.png":
+            at transform:
+                on show:
+                    alpha 0.0
+                    easein .25 alpha 0.5
+                on hide:
+                    alpha 0.5
+                    easein .25 alpha 0.0
 
         frame:
             at screen_appear
@@ -304,7 +313,16 @@ init -1:
 
         style_prefix "confirm"
 
-        add "gui/overlay/confirm.png"
+        add "menu_bg"
+
+        add "gui/overlay/confirm.png":
+            at transform:
+                on show:
+                    alpha 0.0
+                    easein .25 alpha 0.5
+                on hide:
+                    alpha 0.5
+                    easein .25 alpha 0.0
         
         frame:
             at screen_appear
@@ -360,7 +378,16 @@ init -1:
 
         style_prefix "confirm"
 
-        add "gui/overlay/confirm.png"
+        add "menu_bg"
+
+        add "gui/overlay/confirm.png":
+            at transform:
+                on show:
+                    alpha 0.0
+                    easein .25 alpha 0.5
+                on hide:
+                    alpha 0.5
+                    easein .25 alpha 0.0
 
         frame:
             at screen_appear
@@ -411,7 +438,16 @@ init -1:
 
         style_prefix "confirm"
 
-        add "gui/overlay/confirm.png"
+        add "menu_bg"
+
+        add "gui/overlay/confirm.png":
+            at transform:
+                on show:
+                    alpha 0.0
+                    easein .25 alpha 0.5
+                on hide:
+                    alpha 0.5
+                    easein .25 alpha 0.0
 
         frame:
             at screen_appear
