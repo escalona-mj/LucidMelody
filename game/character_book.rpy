@@ -135,20 +135,11 @@ transform page_flip:
 screen journal():
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/journal_open.ogg")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master"), Play("sfx2", "audio/sfx/journal_close.ogg")
-    
-    if renpy.variant("pc"):
-        dismiss action Return()
+
+    dismiss action Return()
 
     add "gui/overlay/confirm.png":
         alpha 0.65
-
-    if renpy.variant("touch"):
-        frame:
-            background None
-            xoffset 50
-            yoffset 25
-            imagebutton auto _("gui/quickmenu/back_%s.png"):
-                action Return()
 
     for char in all_chars:
         if current_page == char.name:
@@ -167,10 +158,10 @@ screen journal():
 
     frame:
         modal True
-        if renpy.variant("pc"):
-            at book_appear_pc
-        elif renpy.variant("touch"):
+        if renpy.variant("small"):
             at book_appear_touch
+        else:
+            at book_appear_pc
 
         background Frame("gui/journal/journal.png")
         xalign 0.5

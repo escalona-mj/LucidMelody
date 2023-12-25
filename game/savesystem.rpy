@@ -193,7 +193,7 @@ screen file_slots():
     fixed:
         vbox:
             xalign 0.98
-            yalign 0.25
+            yalign 0.24
             style_prefix "header"
             if config.has_sync:
                 imagebutton:

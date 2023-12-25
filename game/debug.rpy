@@ -1,5 +1,6 @@
 init python:
-    config.always_shown_screens = ["dev_screen"]
+    if config.developer:
+        config.always_shown_screens = ["dev_screen"]
 
     def delete_all_saves():
         for i in renpy.list_saved_games(fast=True):
@@ -36,16 +37,16 @@ screen dev_screen():
         at transform:
             alpha 0.5
         style_prefix "test"
-        # $ small_output = renpy.variant("small")
-        # text "Is Small Variant?: [small_output]"
-        # $ pc_output = renpy.variant("pc")
-        # text "Is PC Variant?: [pc_output]"
-        # $ mobile_output = renpy.variant("mobile")
-        # text "Is Mobile Variant?: [mobile_output]"
-        # $ touch_output = renpy.variant("touch")
-        # text "Is Touch Variant?: [mobile_output]"
-        # $ android_output = renpy.variant("android")
-        # text "Is Android Variant?: [android_output]"
+        $ small_output = renpy.variant("small")
+        text "Is Small Variant?: [small_output]"
+        $ pc_output = renpy.variant("pc")
+        text "Is PC Variant?: [pc_output]"
+        $ mobile_output = renpy.variant("mobile")
+        text "Is Mobile Variant?: [mobile_output]"
+        $ touch_output = renpy.variant("touch")
+        text "Is Touch Variant?: [touch_output]"
+        $ android_output = renpy.variant("android")
+        text "Is Android Variant?: [android_output]"
         text "Alec points = {0}".format(alec_likePoints)
         text "Nick points = {0}".format(nick_likePoints)
 

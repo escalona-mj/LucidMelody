@@ -23,7 +23,6 @@ init python:
 
 # default preferences.voice_after_game_menu = True
 default preferences.voice_sustain = True
-default preferences.mobile_rollback_side = "left"
 
 # Comma pause
 default persistent.comma_pause = False
@@ -36,8 +35,18 @@ init python:
             return s
         else:
             return s
+
+    def toggle_pause():
+        if persistent.dismiss_pause:
+            store._dismiss_pause = True
+        else:
+            store._dismiss_pause = False
+
     
 define config.say_menu_text_filter = comma_pause
+
+default persistent.dismiss_pause = True
+
 
 
 ## Basics ######################################################################
@@ -55,7 +64,6 @@ define config.autosave_on_quit = False
 define config.autosave_slots = 0
 define config.has_quicksave = False
 define config.quicksave_slots = 0
-define _dismiss_pause = config.developer
 define _game_menu_screen = 'emptymenu'
 define config.menu_include_disabled = False
 define config.gl2 = True
@@ -65,9 +73,9 @@ define config.has_sync = True
 define config.gestures = {"s" : "game_menu"}
 define config.dispatch_gesture = None
 
-define config.layers = [ 'master', 'choice_menu', 'transient', 'screens', 'overlay', 'front' ]
+define config.layers = [ 'master', 'choice_menu', 'transient', 'dream', 'screens', 'overlay', 'front' ]
 define config.choice_layer = "choice_menu"
-define config.menu_clear_layers = ['front', 'choice_menu']
+define config.menu_clear_layers = ['front', 'choice_menu', 'dream']
 
 define config.transparent_tile = False
 

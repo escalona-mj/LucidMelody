@@ -16,6 +16,7 @@ label splashscreen:
     if not renpy.variant("tv"):
         if renpy.variant("pc"):
             call screen dialog(message="The game has detected that you're running on a PC. The UI was initially\nmeant for small devices, so UI components might look big.", ok_btn="I understand.", ok_action=Return())
+        $ config.rollback_enabled = False
         $ renpy.music.play(config.main_menu_music)
         scene splash_white with None
         # show renpy_logo at truecenter:
@@ -27,17 +28,25 @@ label splashscreen:
         # hide renpy_logo
         # hide splash_text
         # with dissolve
-        show logo_studio:
-            truecenter
-            on show:
-                alpha 0.0 zoom 1.5
-                easein_back 1.0 alpha 1.0 zoom 0.75
+        if renpy.variant("small"):
+            show logo_studio:
+                truecenter
+                on show:
+                    alpha 0.0 zoom 1.5
+                    easein_back 1.0 alpha 1.0 zoom 1.0
+        else:
+            show logo_studio:
+                truecenter
+                on show:
+                    alpha 0.0 zoom 1.5
+                    easein_back 1.0 alpha 1.0 zoom 0.75
         pause 3.0
         hide logo_studio
         show sky_color
         show splash_text "Some text here that will be changed."
         with dissolve
         pause 2.0
+        $ config.rollback_enabled = True
         return
     else:
         jump detectTV

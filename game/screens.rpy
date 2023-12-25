@@ -109,25 +109,54 @@ style frame:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#say
 screen say(who, what):
-    style_prefix "say"
 
-    window:
-        background Transform(persistent.textbox_bg, alpha=persistent.say_window_alpha)
-        id "window"
+    if current_scene == None:
+        style_prefix "say"
+
+        window:
+            background Transform(gui.textbox_style, alpha=persistent.say_window_alpha)
+            id "window"
+
+            if who is not None:
+
+                window:
+                    id "namebox"
+                    style "namebox"
+                    text who
+
+            text what id "what"
+
+        use quick_menu
+        add SideImage() xalign 0.0 yalign 1.0 xoffset 120 yoffset -10:
+            zoom 0.75
+            rotate -5
+
+    elif current_scene == "dream":
+        style_prefix "dream"
 
         if who is not None:
-
             window:
-                id "namebox"
-                style "namebox"
-                text who outlines [(5, "#16161d", 0, 2)]
+                xalign 0.5
+                yalign 0.05
+                text who:
+                    size gui.name_text_size
+                    font gui.name_text_font
 
-        text what id "what" outlines [(3, persistent.textbox_outlines, 0, 1)] color persistent.textbox_color font persistent.textbox_font
+        window:
+            xfill True
+            xalign 0.5
+            yalign 1.0
+            ysize 145
+            padding(25, 0, 25, 0)
 
-    use quick_menu
-    add SideImage() xalign 0.0 yalign 1.0 xoffset 120 yoffset -10:
-        zoom 0.75
-        rotate -5
+            text what id "what":
+                yalign 0.5
+                xalign 0.5
+                color "#fff"
+                outlines [ (0, "#00000000", 0, 0) ]
+                textalign 0.5
+                xsize 1920
+    
 
 ## Make the namebox available for styling through the Character object.
 init python:
@@ -142,7 +171,7 @@ style namebox is default
 style namebox_label is say_label
 
 
-style window:
+style say_window:
     xalign 0.5
     xfill True
     yalign gui.textbox_yalign
@@ -165,6 +194,8 @@ style namebox:
 style say_text:
     properties gui.text_properties("name")
     xalign gui.name_xalign
+    outlines gui.namebox_outline
+    color "#fff"
     # xalign 0.5
     yalign 0.5
 
@@ -174,13 +205,17 @@ style say_dialogue:
     xsize gui.dialogue_width
     ypos gui.dialogue_ypos
 
-    adjust_spacing False
+    color gui.dialogue_color
+    outlines gui.dialogue_outline
+
+    adjust_spacing True
 
 image ctc:
     xalign 0.85 yalign 0.95 subpixel True alpha 0.0 zoom 1.03
     ConditionSwitch(
+        "current_scene == 'dream'", "gui/NONE.png",
         "persistent.textbox_style == 'black'", "gui/ctc_black.png",
-        "persistent.textbox_style == 'white'", "gui/ctc_white.png",
+        "persistent.textbox_style == 'white'", "gui/ctc_white.png"
         )
     block:
         ease 0.5 alpha 1.0 yoffset 2
@@ -251,7 +286,7 @@ transform choice_appear:
     on hide:
         easein .25 zoom 0.95 alpha 0.0
 
-screen choice(items, mode="unimportant"):
+screen choice(items, mode="important"):
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
 
@@ -351,7 +386,7 @@ screen quick_menu():
     zorder 1000
 
     if quick_menu:
-        if renpy.variant("touch"):
+        if renpy.variant("small"):
             frame:
                 hbox:
                     xfill True
@@ -395,7 +430,7 @@ screen quick_menu():
                         tooltip "Journal"
                         activate_sound None
 
-        elif renpy.variant("pc"):
+        else:
             frame:
                 at transform:
                     zoom 0.65
@@ -652,14 +687,7 @@ style navigation_button_text:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#main-menu
 
-transform dandelion_spin:
-    xpos 0.5
-    ypos 0.5
-    linear 5 rotate 360
-    rotate 0
-    repeat
-
-image dandelions = SnowBlossom(At("gui/menu/dandelion.png", dandelion_spin), count=10, xspeed=(100,250), yspeed=(-150,-90), fast=True, horizontal=False)
+image particle = SnowBlossom("gui/menu/particle.png", count=10, xspeed=(100,250), yspeed=(-150,-90), fast=True, horizontal=False)
 
 init python:
     def dynamicMCMenu():
@@ -714,7 +742,7 @@ screen bg():
                 easein .75 alpha 1.0 yoffset 0
 
 
-    add "dandelions":
+    add "particle":
         at transform:
                 on show:
                     alpha 0.0
@@ -1205,40 +1233,9 @@ style about_label_text:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#preferences
 
-image textboxbg = Crop((200, 600, 710, 160), "bg dhannica room")
-image textbox_black_crop = "gui/textbox_dark_preview.png"
-image textbox_white_crop = "gui/textbox_preview.png"
-
-
-init python:
-    def dynamicTextbox(newStyle):
-        return SetField(persistent,"textbox_style",newStyle), SetField(persistent,"textbox_bg",theme_dict[newStyle]['textbox']), SetField(persistent,"textbox_color", theme_dict[newStyle]['color']), SetField(persistent,"textbox_outlines", theme_dict[newStyle]['say_outline_color'])
-    def setFont(font):
-        return SetField(persistent,"textbox_font", font)
-    theme_dict = {
-        "black" : {
-            "textbox" : "gui/textbox_dark.png",
-            "color" : "#ffffff",
-            "say_outline_color" : "#16161d",
-            },
-
-        "white" : {
-            "textbox" : "gui/textbox.png",
-            "color" : "#000000",
-            "say_outline_color" : "#e5e5e5",
-            },
-    }
-
-default pref_text = True
+default pref_general = True
 default pref_vol = False
-default pref_accessibility = False
-
-default persistent.say_window_alpha = 0.9
-default persistent.textbox_style = "white"
-default persistent.textbox_font = "fonts/playtime.ttf"
-default persistent.textbox_bg = "gui/textbox.png"
-default persistent.textbox_color = "#000000"
-default persistent.textbox_outlines = "#e5e5e5"
+default pref_text = False
 
 screen preferences():
     tag menu
@@ -1248,94 +1245,93 @@ screen preferences():
             xfill True
             xalign 0.5
             
-            null height 25
-
-            hbox:
-                style_prefix "header"
-                xalign 0.5
-                spacing 25
-                imagebutton:
-                    auto "gui/navigation/pref_text_%s.png"
-                    foreground Text(_("Text"), style="header_btn")
-                    hover_foreground Text(_("Text"), style="header_btn_hover")
-                    selected_foreground Text(_("Text"), style="header_btn_selected")
-                    action [SetScreenVariable("pref_text", True),SetScreenVariable("pref_vol", False), SetScreenVariable("pref_accessibility", False), SelectedIf(pref_text==True)]
-                imagebutton:
-                    auto "gui/navigation/pref_access_%s.png"
-                    foreground Text(_("Acces."), style="header_btn")
-                    hover_foreground Text(_("Acces."), style="header_btn_hover")
-                    selected_foreground Text(_("Acces."), style="header_btn_selected")
-                    action [SetScreenVariable("pref_accessibility", True), SetScreenVariable("pref_text", False),SetScreenVariable("pref_vol", False), SelectedIf(pref_accessibility==True)]
-                imagebutton:
-                    auto "gui/navigation/pref_vol_%s.png"
-                    foreground Text(_("Audio"), style="header_btn")
-                    hover_foreground Text(_("Audio"), style="header_btn_hover")
-                    selected_foreground Text(_("Audio"), style="header_btn_selected")
-                    action [SetScreenVariable("pref_vol", True),SetScreenVariable("pref_text", False), SetScreenVariable("pref_accessibility", False), SelectedIf(pref_vol==True)]
-
-            null height 25
+            if pref_general:
+                label "GENERAL SETTINGS" xalign 0.5 style_prefix "header_text"
+                null height 25
+                use pref_general
 
             if pref_text:
+                label "TEXT SETTINGS" xalign 0.5 style_prefix "header_text"
+                null height 25
                 use pref_text
 
-            if pref_accessibility:
-                use pref_accessibility
-
             if pref_vol: 
+                label "AUDIO SETTINGS" xalign 0.5 style_prefix "header_text"
+                null height 25
                 use pref_vol
 
-screen pref_text():
-    vbox:
+    fixed:
+        vbox:
+            style_prefix "header"
+            xalign 0.98
+            yalign 0.5
+            imagebutton:
+                auto "gui/navigation/pref_general_%s.png"
+                foreground Text(_("General"), style="header_btn")
+                hover_foreground Text(_("General"), style="header_btn_hover")
+                selected_foreground Text(_("General"), style="header_btn_selected")
+                action [SetScreenVariable("pref_general", True),SetScreenVariable("pref_vol", False), SetScreenVariable("pref_text", False), SelectedIf(pref_general==True)]
+            imagebutton:
+                auto "gui/navigation/pref_text_%s.png"
+                foreground Text(_("Text"), style="header_btn")
+                hover_foreground Text(_("Text"), style="header_btn_hover")
+                selected_foreground Text(_("Text"), style="header_btn_selected")
+                action [SetScreenVariable("pref_text", True), SetScreenVariable("pref_general", False),SetScreenVariable("pref_vol", False), SelectedIf(pref_text==True)]
+            imagebutton:
+                auto "gui/navigation/pref_vol_%s.png"
+                foreground Text(_("Audio"), style="header_btn")
+                hover_foreground Text(_("Audio"), style="header_btn_hover")
+                selected_foreground Text(_("Audio"), style="header_btn_selected")
+                action [SetScreenVariable("pref_vol", True),SetScreenVariable("pref_general", False), SetScreenVariable("pref_text", False), SelectedIf(pref_vol==True)]
+
+style header_text_label_text:
+    outlines [(5, "#16161d", 0, 2)]
+    font gui.name_text_font
+    size (gui.interface_text_size +15)
+
+screen pref_general():
+    grid 2 2:
         xalign 0.5
         yalign 0.5
         spacing 50
-        xfill True
-
-        hbox:
-            xalign 0.5
-            spacing 100
-            vbox:
-                style_prefix "check"
-                label _("Text")
-                textbutton _("Unseen Text") action Preference("skip", "toggle"):
-                    tooltip "Skips the dialogue regardless if seen or unseen."
-                textbutton _("After Choices") action Preference("after choices", "toggle"):
-                    tooltip "Keeps skipping, even on choices."
-                textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
-                    tooltip "Adds a slight delay per comma."
-
-            vbox:
-                style_prefix "radio"
-                label _("Rollback Side")
-                textbutton _("Disable") action Preference("rollback side", "disable"):
-                    tooltip "Disable rollback entirely."
-                textbutton _("Left") action Preference("rollback side", "left"):
-                    tooltip "Tapping the left side of the screen will rollback to a previous dialogue."
-                textbutton _("Right") action Preference("rollback side", "right"):
-                    tooltip "Tapping the right side of the screen will rollback to a previous dialogue."
-
-            if renpy.variant("pc"):
-                vbox:
-                    style_prefix "radio"
-                    label _("Display")
-                    textbutton _("Window") action Preference("display", "window"):
-                        tooltip "Set the game on a windowed mode."
-                    textbutton _("Fullscreen") action Preference("display", "fullscreen"):
-                        tooltip "Set the game on a fullscreen mode."
 
         vbox:
-            xalign 0.5
-            xsize 850
-            style_prefix "slider"
-            label _("Text Speed")
-            bar value Preference("text speed"):
-                style "bar"
-                tooltip "The speed of the in-game dialogue text."
+            style_prefix "check"
+            label _("Skip")
+            textbutton _("Unseen Text") action Preference("skip", "toggle"):
+                tooltip "Skips the dialogue regardless if seen or unseen."
+            textbutton _("After Choices") action Preference("after choices", "toggle"):
+                tooltip "Keeps skipping, even on choices."
+            textbutton "Toggle developer mode" action ToggleVariable("config.developer", True, False)
 
-            label _("Auto-Forward Time")
-            bar value Preference("auto-forward time"):
-                style "bar"
-                tooltip "The speed of the automation per dialogue. {i}(The lower it is, the faster it gets.){/i}"
+        vbox:
+            style_prefix "radio"
+            label _("Rollback Side")
+            textbutton _("Disable") action Preference("rollback side", "disable"):
+                tooltip "Disable rollback entirely."
+            textbutton _("Left") action Preference("rollback side", "left"):
+                tooltip "Tapping the left side of the screen will rollback to a previous dialogue."
+            textbutton _("Right") action Preference("rollback side", "right"):
+                tooltip "Tapping the right side of the screen will rollback to a previous dialogue."
+
+        vbox:
+            style_prefix "check"
+            label "Animations"
+            textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle")):
+                tooltip "Disables the animations between screens."
+            textbutton "Dismiss Pause" action ToggleField(persistent, "dismiss_pause"), Function(toggle_pause):
+                tooltip "Enable to dismiss juicy animations. {i}(May not work properly.){/i}"
+            textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
+                tooltip "Adds a slight delay per comma."
+        
+        if renpy.variant("pc"):
+            vbox:
+                style_prefix "radio"
+                label _("Display")
+                textbutton _("Window") action Preference("display", "window"):
+                    tooltip "Set the game on a windowed mode."
+                textbutton _("Fullscreen") action Preference("display", "fullscreen"):
+                    tooltip "Set the game on a fullscreen mode."
 
 screen pref_vol():
     vbox:
@@ -1389,52 +1385,88 @@ screen pref_vol():
             padding gui.check_button_borders.padding
             xalign 0.5
 
-screen pref_accessibility():
-    vbox:
+image textboxbg = Crop((200, 600, 710, 160), "bg dhannica room")
+image textbox_black_crop = "gui/textbox_dark_preview.png"
+image textbox_white_crop = "gui/textbox_preview.png"
+
+python early:
+    theme_dict = {
+        "black" : {
+            "textbox_bg" : "gui/textbox_dark.png",
+            "textbox_color" : "#ffffff",
+            "textbox_outline" : "#16161d",
+            },
+
+        "white" : {
+            "textbox_bg" : "gui/textbox.png",
+            "textbox_color" : "#16161d",
+            "textbox_outline" : "#e5e5e5",
+            }
+    }
+
+init python:
+    def dynamicTextbox(newStyle):
+        return SetField(persistent,"textbox_style",newStyle), gui.SetPreference("textbox_bg", theme_dict[newStyle]['textbox_bg']), gui.SetPreference("textbox_color", theme_dict[newStyle]['textbox_color']), gui.SetPreference("textbox_outline", theme_dict[newStyle]['textbox_outline'])
+
+
+default persistent.say_window_alpha = 0.9
+default persistent.textbox_style = "white"
+
+screen pref_text():
+    hbox:
         xalign 0.5
         yalign 0.5
-        spacing 25
+        spacing 0
         xfill True
         vbox:
-            xalign 0.5
-            label "Preview"
-            window:
+            spacing 50
+            vbox:
+                label "Preview"
+                window:
+                    xsize 700
+                    ysize 150
+                    if persistent.textbox_style == "black":
+                        background Transform("textbox_black_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
+                    else:
+                        background Transform("textbox_white_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
+                    padding(25,25,25,25)
+                    add Text("A really really long sample text just to force the text to make a new line.", slow_cps=_preferences.text_cps, color=gui.dialogue_color, font=gui.text_font, outlines=gui.dialogue_outline)
+                    add "ctc" xoffset 95
+
+            vbox:
+                style_prefix "slider"
                 xsize 700
-                ysize 150
-                if persistent.textbox_style == "black":
-                    background Transform("textbox_black_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
-                else:
-                    background Transform("textbox_white_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
-                padding(25,25,25,25)
-                add Text("A really really long sample text just to force the text to make a new line.", slow_cps=_preferences.text_cps, outlines=[(3, persistent.textbox_outlines, 0, 1)], color=persistent.textbox_color, font=persistent.textbox_font)
-                add "ctc" xoffset 95
+                label "Textbox Opacity"
+                bar value FieldValue(persistent, 'say_window_alpha', 1.0, max_is_zero=False, offset=0):
+                    tooltip "Adjust the opacity of the textbox."
+                label _("Text Speed")
+                bar value Preference("text speed"):
+                    style "bar"
+                    tooltip "The speed of the in-game dialogue text."
+                label _("Auto-Forward Time")
+                bar value Preference("auto-forward time"):
+                    style "bar"
+                    tooltip "The speed of the automation per dialogue. {i}(The lower it is, the faster it gets.){/i}"
+                
         vbox:
-            xalign 0.5
-            style_prefix "slider"
-            xsize 700
-            label "Textbox Opacity"
-            bar value FieldValue(persistent, 'say_window_alpha', 1.0, max_is_zero=False, offset=0):
-                tooltip "Adjust the opacity of the textbox."
-        vbox:
-            xalign 0.5
-            hbox:
-                xalign 0.5
-                spacing 150
-                vbox:
-                    style_prefix "radio"
-                    label "Textbox Style"
-                    textbutton "Dark" action [dynamicTextbox(newStyle="black"),SelectedIf(persistent.textbox_style == "black")]:
-                        tooltip "Set the textbox to dark and the text to white."    
-                    textbutton "Light" action [dynamicTextbox(newStyle="white"),SelectedIf(persistent.textbox_style == "white")]:
-                        tooltip "Set the textbox to white and the text to dark."
-                vbox:
-                    style_prefix "radio"
-                    label "Textbox Font"
-                    textbutton "{font=fonts/playtime.ttf}Playtime" action [setFont("fonts/playtime.ttf"), SelectedIf(persistent.textbox_font == "fonts/playtime.ttf")]:
-                        tooltip "Set the typeface to {font=fonts/playtime.ttf}Playtime{/font}. (Default)"
-                    # textbutton "{font=fonts/123Marker.ttf}123Marker" action [setFont("fonts/123Marker.ttf"), SelectedIf(persistent.textbox_font == "fonts/123Marker.ttf")]
-                    textbutton "{font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible" action [setFont("fonts/Atkinson-Hyperlegible-Regular-102.ttf"), SelectedIf(persistent.textbox_font == "fonts/Atkinson-Hyperlegible-Regular-102.ttf")]:
-                        tooltip "Set the typeface to {font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible{/font}."
+            spacing 50
+            vbox:
+                style_prefix "radio"
+                label "Textbox Style"
+                textbutton "Dark" action [dynamicTextbox(newStyle="black"),SelectedIf(persistent.textbox_style == "black")]:
+                    tooltip "Set the textbox to dark and the text to white."    
+                textbutton "Light" action [dynamicTextbox(newStyle="white"),SelectedIf(persistent.textbox_style == "white")]:
+                    tooltip "Set the textbox to white and the text to dark."
+            vbox:
+                style_prefix "radio"
+                label "Textbox Font"
+                textbutton "{font=fonts/playtime.ttf}Playtime" action [gui.SetPreference("font", "fonts/playtime.ttf"), SetVariable("persistent.typeface", "Playtime")]:
+                    tooltip "Set the typeface to {font=fonts/playtime.ttf}Playtime{/font}. (Default)"
+                textbutton "{font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible" action [gui.SetPreference("font", "fonts/Atkinson-Hyperlegible-Regular-102.ttf"), SetVariable("persistent.typeface", "Hyperlegible")]:
+                    tooltip "Set the typeface to {font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible{/font}."
+                textbutton "{font=fonts/123Marker.ttf}123Marker" action [gui.SetPreference("font", "fonts/123Marker.ttf"), SetVariable("persistent.typeface", "123Marker")]:
+                    tooltip "Set the typeface to {font=fonts/123Marker.ttf}123Marker{/font}."
+                # 123Marker.ttf
 
 style header_image_button:
     activate_sound "audio/sfx/click.ogg"
@@ -1567,12 +1599,11 @@ screen history():
                 $ what = renpy.filter_text_tags(h.what, allow=gui.history_allow_tags)
                 text what:
                     substitute False
-                    font persistent.textbox_font
             
-            if renpy.variant("pc"):
-                null height 20
-            elif renpy.variant("touch"):
+            if renpy.variant("small"):
                 null height 40
+            else:
+                null height 20
 
         if not _history_list:
             label _("The dialogue history is empty.")
@@ -1607,7 +1638,7 @@ style history_name_text:
     textalign gui.history_name_xalign
     # font gui.text_font
     font gui.name_text_font
-    outlines [(5, "#16161d", 0, 2)]
+    outlines gui.namebox_outline
 
 style history_text:
     xpos gui.history_text_xpos
@@ -1802,7 +1833,7 @@ style help_label_text:
 ## https://www.renpy.org/doc/html/screen_special.html#confirm
 
 screen confirm(message, yes_action, no_action):
-    on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx3", "audio/sfx/modal_open.ogg")
+    on "show" action Play("sfx3", "audio/sfx/modal_open.ogg")
     
     ## Ensure other screens do not get input while this screen is displayed.
     modal True

@@ -3,9 +3,10 @@ default persistent.first_gameplay = False
 default persistent.seen_controls = False
 default journal = False
 default notify_journal = True
-default notify_dhannica = False
-default notify_alec = False
-default notify_nick = False
+default current_scene = None
+# default notify_dhannica = False
+# default notify_alec = False
+# default notify_nick = False
 default journal_entries = []
 default first_page = 1
 default second_page = 2
@@ -17,7 +18,6 @@ default usePhone = False
 default eatBreakfast = False
 default dhannica_likePoints = 10
 default dhannica_likePointsMax = 100
-default dhannica_age = ""
 default dhannica_description = ""
 
 #NICK VARIABLES
@@ -29,7 +29,6 @@ default n_takeFlask = False
 default n_takeBus = False
 default nick_likePoints = 10
 default nick_likePointsMax = 100
-default nick_age = ""
 default nick_description = ""
 
 #ALEC VARIABLES
@@ -38,5 +37,4 @@ default a_clinic = False
 default a_hangOut = False
 default alec_likePoints = 10
 default alec_likePointsMax = 100
-default alec_age = ""
 default alec_description = ""

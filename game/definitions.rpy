@@ -48,10 +48,28 @@ init python:
         def start():
             store._game_menu_screen = None
             config.skipping = False # if skipping, stop it
-            config.allow_skipping = False #prevents from skipping
+            store._skipping = False #prevents from skipping
         def stop():
             store._game_menu_screen = 'emptymenu'
-            config.allow_skipping = True
+            store._skipping = True
+
+    class DreamScene():
+        def start():
+            store.current_scene = "dream"
+            renpy.show("textbox_dream", layer="dream")
+            if persistent.dismiss_pause == False or persistent.dismiss_pause == True:
+                store._dismiss_pause = False
+            if not config.developer:
+                DisableSkip.start()
+        def stop():
+            store.current_scene = None
+            renpy.hide("textbox_dream", layer="dream")
+            if persistent.dismiss_pause == True:
+                store._dismiss_pause = True
+            #delete the dream history to make it more authentic like she forgor
+            store._history_list = []
+            DisableSkip.stop()
+
 
 ##########################################################################################################
 #                                               CHARACTERS                                               #
@@ -127,6 +145,7 @@ image bg clinic:
 image bg hospital:
     im.Blur("images/bg/hospital.jpg", 2.5)
 
+image textbox_dream = "gui/textbox_dream.png"
 
 image mom = "images/characters/mom.png"
 
@@ -152,7 +171,7 @@ image menu_bg = Composite(
     (0, 0), At("gui/menu/clouds2.png", cloud2),
     (0, 0), At("gui/menu/clouds1.png", cloud1),
     (0, 700), "gui/menu/grasshill.png",
-    (0, 0), "dandelions",
+    (0, 0), "particle",
     (-2, 825), "gui/menu/grassblur.png"
     )
 

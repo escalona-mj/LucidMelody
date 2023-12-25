@@ -16,7 +16,6 @@ label start:
     #declare the characters in the journal
     $ Dhannica = CharInfo(
     char_name="[mcNamegirl]",
-    age="[dhannica_age]",
     description="[dhannica_description]",
     points="dhannica_likePoints",
     max_points="dhannica_likePointsMax",
@@ -24,7 +23,6 @@ label start:
 
     $ Nick = CharInfo(
     char_name="[mcNameboy]",
-    age="[nick_age]",
     description="[nick_description]",
     points="nick_likePoints",
     max_points="nick_likePointsMax",
@@ -32,7 +30,6 @@ label start:
 
     $ Alec = CharInfo(
     char_name="[a_name]",
-    age="[alec_age]",
     description="[alec_description]",
     points="alec_likePoints",
     max_points="alec_likePointsMax",

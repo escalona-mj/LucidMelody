@@ -252,8 +252,13 @@ screen time_intermission(txt):
 
 
 screen controls_modal():
-    on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="screens"), Play("sfx3", "audio/sfx/modal_open.ogg")
-    on "hide" action Function(renpy.show_layer_at, dialogue_noBlur, layer="screens")
+    if main_menu:
+        on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="screens"), Play("sfx3", "audio/sfx/modal_open.ogg")
+        on "hide" action Function(renpy.show_layer_at, noBlur, layer="screens")
+    else:
+        on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx3", "audio/sfx/modal_open.ogg")
+        on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
+
     $ persistent.seen_controls = True
     if main_menu:
         dismiss action Hide()

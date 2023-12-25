@@ -4,7 +4,6 @@ label chap1_dhannica:
     #dhannica route, so she takes the MC role
     $ MC = CharInfo(
     char_name="[Main]",
-    age="[dhannica_age]",
     description="[dhannica_description]",
     mainChr=True,
     pic="journal_dhannica")
@@ -15,49 +14,122 @@ label chap1_dhannica:
     $ a_name = "???"
     $ mcNameboy = "???"
 
+    $ DreamScene.start()
+    
     if not config.developer:
         $ renpy.block_rollback() #prevent from going back to mc selection screen
         
     pause 2.0
-    scene bg stage:
-        truecenter
-        zoom 1.03
-    with scenefade
-    camera:
-        easeout 1.0 yoffset 10
-        easein 1.0 yoffset -10
-        repeat
+    scene bg stage with scenefade
+    
     play ambient cheer fadein 3.0 volume 0.2
     
     "The audience roars."
-    "You find yourself in an opulent concert hall, with golden chandeliers casting a warm glow above you."
+    "You find yourself in an opulent concert hall, with golden spotlights casting a warm glow above you."
+    show bg stage:
+        truecenter
+        ease 1.0 zoom 1.4
+    show dust_particle onlayer dream behind textbox_dream
+    show dust_particle_blur onlayer dream behind textbox_dream
     "The crowd's anticipation is palpable."
+    show dream_cg_scene1:
+        offscreenright
+        ease 1.0 xalign 0.5
     "There lies a singer on stage, his face obscured by a quirky lunchbox bag, hidden from the world and remain unknown."
     "His mystery has always captivated you."
     "The atmosphere is almost too electric, with fans waving glow sticks in rhythm."
+    scene dream_cg_scene2
+    show dream_cg_scene2_light at pulse
+    with dissolve
     "Being close to the front of the stage, you shout your deepest exaggeration of support to the band that tears started to fall from your eyes."
     dhannica_i "I never thought I got to be on front stage..."
     dhannica_i "Now I get to observe him closer!"
     dhannica_i "This is all making me teary...!"
+    show dream_cg_scene2_singer:
+        xpos 1.0 xanchor 0.0
+        easein 0.25 xpos 1.0 xanchor 1.0
     d_singer "{sc}{size=+50}YOU THERE!{/size}{/sc}{fast}" with vpunch
     "The lead singer shouted, while looking at your teary soulful eyes."
+    show dream_cg_scene2_dhannica:
+        xpos 0.0 xanchor 1.0
+        easein 0.25 xpos 0.0 xanchor 0.0
     dhannica "Wh-wha? Me?"
     d_singer "Yes you! You'd been crying there for so long."
     d_singer "Seems like you need to get a hold of yourself together!"
     dhannica "H-huh?"
     "You became so ecstatic and shocked at what had occured."
-    "Hesitant, he held out his hand inviting you to accompany him for a song."
-    d_singer "Come on, sing with me on stage."
+    dhannica_i "Oh gosh... He called me out...!"
+    dhannica_i "W-wait! I'm still trying to process what just happened!"
+    scene black with eye_close
+    "You close your eyes and pinched yourself if all of this is real."
+    "*pinch*"
+    dhannica_i "Ow!" with vpunch
+    camera at dizzy
+    scene dream_cg_scene3
+    show dream_cg_scene3_light
+    with eye_open
+    dhannica_i "I'm not dreaming! I-It's real!"
+    show dream_cg_scene3_hand behind dream_cg_scene3_light:
+        xalign 0.5
+        ypos 0.0 yanchor 1.0
+        ease 1.5 ypos 0.0 yanchor 0.0
+    "Suddenly, he held out his hand in front of you."
+    dhannica_i "H-huh?"
+    d_singer "Let's get you up here."
+    dhannica "W-where?"
+    d_singer "On the stage!"
     "Hurriedly, fans cheering around you helped you get up on stage."
+    camera at reset_dizzy
+    scene dream_cg_scene4 with eye_scene
+    show dream_cg_scene4_dhannica:
+        yalign 0.25
+        xpos 0.0 xanchor 1.0
+        ease 1.5 xpos 0.0 xanchor -0.25
+    show dream_cg_scene4_light at pulse
+    show dream_cg_scene4_singer:
+        yalign 0.5
+        xpos 1.0 xanchor 0.0
+        ease 1.5 xpos 1.0 xanchor 1.0
+    d_singer "You know, you're pretty lucky."
+    d_singer "What's your name?"
+    dhannica "O-oh, it's [Main]."
+    show dream_cg_scene4_dhannica:
+        ease .25 yalign 0.5
+    d_singer "{sc}{size=+20}ALRIGHT, LET'S GIVE AN APPLAUSE TO [Main!u]!{/size}{/sc}" with vpunch
+    "The crowd goes wilder."
+    dhannica_i "Ow! That was pretty loud."
+    dhannica_i "But quite exhilirating!"
+    d_singer "I want you to accompany me for a song of your choice!"
+    dhannica "R-really?"
+    d_singer "Yeah!"
     d_singer "Whadd'ya wanna sing?"
     dhannica "Oh uhm... Maybe..."
+    scene black with eye_close
     "You whisper to him discreetly the song."
     d_singer "Ah, I see. Alright, get yourself ready, as this crowd's about to get hectic!"
+    camera:
+        zoom 1.03
+        choice:
+            ease_quad 1.0 xoffset 5 yoffset 10
+        choice:
+            ease_quad 1.0 xoffset -5 yoffset 10
+        choice:
+            ease_quad 1.0 xoffset 5 yoffset -10
+        choice:
+            ease_quad 1.0 xoffset -5 yoffset -10
+        repeat
+    scene dream_cg_scene5:
+        yalign 0.5
+    show dream_cg_scene5_both:
+        xalign 0.5
+        yalign 1.0
+    show dream_cg_scene5_light at pulse
+    with scenedissolve
     "Both of you started singing, and the crowd goes even wilder as headlights were spotted to both of you."
-    "But you don't care about that. Your eyes only focused on him as you sang, trying hard not to cry as you look at his masked face."
-    "But the harsh light gleamed against to him so strongly that you caught a glimpse of his eyes."
+    "But you don't care about that. Your eyes only focused on him as you sang, while trying hard not to cry from the excitement as you look at his masked face."
+    "The harsh light gleamed against to him so strongly that you caught a glimpse of his eyes."
     "They were green..."
-    "You were lost in the song, in his eyes, having caught a milisecond of his identity."
+    "You were lost in the song in his eyes, having caught a milisecond of his identity."
     "You wonder and think, will this last forever?"
     $ renpy.music.set_volume(0.0, delay=0.0, channel='sfx2')
     play sfx2 alarmloop loop
@@ -68,23 +140,24 @@ label chap1_dhannica:
     $ renpy.music.set_volume(1.0, delay=0.0, channel='sfx2')
     stop sfx2 fadeout 1.0
     stop ambient
-    #delete the dream history to make it more authentic like she forgor
-    $ _history_list = []
-    $ config.skipping = False
+    camera
+    hide dust_particle onlayer dream behind textbox_dream
+    hide dust_particle_blur onlayer dream behind textbox_dream
+    $ DreamScene.stop()
+    
     if not config.developer:
         $ renpy.block_rollback()
     window hide(None)
-    camera
     play sound alarm
     scene black
     pause 4.0
     $ dream.grant()
     $ dhannica_age = "18"
     $ dhannica_description = "There's not much to say anything about me."
-    $ entry1 = "Entry No. 1\n\nThe dream was something else. A concert perhaps? The person in my dreams... I saw them. It felt familiar. Emerald eyes..."
+    $ entry1 = "Entry No. 1\n\nThe dream was something else. The person in my dreams... I saw them. It felt familiar. Emerald eyes... Oh, if only it were real, I would never wake up. One can dream though, haha."
     $ journal_entries.append(entry1)
     window auto
-    menu(mode="important"):
+    menu:
         "Get up and turn off the alarm":
             camera at dizzy
             scene bg dhannica room with eye_open
@@ -100,7 +173,7 @@ label chap1_dhannica:
             dhannica_i "Huh? My phone..."
             dhannica_i "..."
             dhannica_i "It won't hurt to peek right?"
-            menu(mode="important"):
+            menu:
                 "Check your phone":
                     $ usePhone = True
                     $ beLate = True

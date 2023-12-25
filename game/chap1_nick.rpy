@@ -4,7 +4,6 @@ label chap1_nick:
     #nick route, so he takes the MC role
     $ MC = CharInfo(
     char_name="[Main]",
-    age="[nick_age]",
     description="[nick_description]",
     mainChr=True,
     pic="journal_nick")

@@ -50,8 +50,15 @@ define gui.muted_color = u'#003d51'
 define gui.hover_muted_color = u'#005b7a'
 
 ## The colors used for dialogue and menu choice text.
-define gui.text_color = "#ffffff"
+define gui.text_color = gui.preference("textbox_color", default=theme_dict['white']['textbox_color'])
 define gui.interface_text_color = u'#ffffff'
+
+define gui.namebox_outline = [(5, "#16161d", 0, 1)]
+
+define gui.textbox_style = gui.preference("textbox_bg", default=theme_dict['white']['textbox_bg'])
+define gui.dialogue_color = gui.preference("textbox_color", default=theme_dict['white']['textbox_color'])
+define gui.dialogue_outline_color = gui.preference("textbox_outline", default=theme_dict['white']['textbox_outline'])
+define gui.dialogue_outline = [(3, gui.dialogue_outline_color, 0, 1)]
 
 
 ## Fonts and Font Sizes ########################################################
@@ -60,7 +67,8 @@ define gui.game_menu_label_font = "fonts/MyPrettyCutie.ttf"
 define gui.journal_font = "fonts/123Marker.ttf"
 
 ## The font used for in-game text.
-define gui.text_font = persistent.textbox_font
+default persistent.textbox_font = "Playtime"
+define gui.text_font = gui.preference("font", default="fonts/playtime.ttf")
 
 ## The font used for character names.
 define gui.name_text_font = "fonts/MyPrettyCutie.ttf"
@@ -211,7 +219,7 @@ define gui.important_choice_button_width = 960
 define gui.important_choice_button_height = None
 define gui.important_choice_button_tile = False
 define gui.important_choice_button_borders = Borders(150, 25, 150, 25)
-define gui.important_choice_button_text_font = gui.interface_text_font
+define gui.important_choice_button_text_font = gui.text_font
 define gui.important_choice_button_text_size = (gui.text_size + 25)
 define gui.important_choice_button_text_xalign = 0.5
 define gui.important_choice_button_text_idle_color = "#ffffff" #gui.accent_color
@@ -222,14 +230,14 @@ define gui.important_choice_button_text_hover_outlines = [ (10, "#6667ab", 0, 2)
 
 define gui.choice_button_width = None
 define gui.choice_button_height = None
-define gui.choice_button_text_font = gui.interface_text_font
-define gui.choice_button_text_size = (gui.text_size + 15)
+define gui.choice_button_text_font = gui.text_font
+define gui.choice_button_text_size = (gui.text_size + 5)
 define gui.choice_button_text_xalign = 0.5
 define gui.choice_button_text_idle_color = "#fff"
 define gui.choice_button_text_hover_color = "#fff"
 define gui.choice_button_text_insensitive_color = '#8888887f'
-define gui.choice_button_text_outlines = [ (5, "#16161d", 0, 2) ]
-define gui.choice_button_text_hover_outlines = [ (5, "#6667ab", 0, 2) ]
+define gui.choice_button_text_outlines = [ (4, "#16161d", 0, 1) ]
+define gui.choice_button_text_hover_outlines = [ (4, "#6667ab", 0, 1) ]
 
 
 ## File Slot Buttons ###########################################################
@@ -439,7 +447,7 @@ init python:
     ## This increases the size of the quick buttons to make them easier to touch
     ## on tablets and phones.
     @gui.variant
-    def touch():
+    def small():
         gui.text_size = 40
         gui.name_text_size = 50
         gui.notify_text_size = 38
@@ -447,10 +455,13 @@ init python:
         gui.button_text_size = 40
         gui.label_text_size = 40
         gui.title_text_size = 90
+
+        gui.dialogue_width = 1200
         
         gui.radio_button_borders = Borders(70, 6, 6, 6)
         gui.check_button_borders = Borders(70, 6, 6, 6)
 
+        gui.important_choice_button_text_size = (gui.text_size + 25)
         gui.choice_button_text_size = (gui.text_size + 15)
         gui.choice_button_text_outlines = [ (7, "#16161d", 0, 2) ]
         gui.choice_button_text_hover_outlines = [ (7, "#6667ab", 0, 2) ]

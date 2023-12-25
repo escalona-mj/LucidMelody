@@ -45,5 +45,6 @@ label chapter_transition:
     hide chapter_num
     hide chapter_text
     with dissolve
+    $ _history_list = []
     $ DisableSkip.stop()
     return
