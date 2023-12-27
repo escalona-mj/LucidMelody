@@ -50,15 +50,11 @@ define gui.muted_color = u'#003d51'
 define gui.hover_muted_color = u'#005b7a'
 
 ## The colors used for dialogue and menu choice text.
-define gui.text_color = gui.preference("textbox_color", default=theme_dict['white']['textbox_color'])
+define gui.text_color = "#fff"
 define gui.interface_text_color = u'#ffffff'
 
 define gui.namebox_outline = [(5, "#16161d", 0, 1)]
-
-define gui.textbox_style = gui.preference("textbox_bg", default=theme_dict['white']['textbox_bg'])
-define gui.dialogue_color = gui.preference("textbox_color", default=theme_dict['white']['textbox_color'])
-define gui.dialogue_outline_color = gui.preference("textbox_outline", default=theme_dict['white']['textbox_outline'])
-define gui.dialogue_outline = [(3, gui.dialogue_outline_color, 0, 1)]
+define gui.dialogue_outline = [(3, "#16161d", 0, 1)]
 
 
 ## Fonts and Font Sizes ########################################################

@@ -45,8 +45,12 @@ init python:
     
 define config.say_menu_text_filter = comma_pause
 
-default persistent.dismiss_pause = True
 
+define config.periodic_callback = toggle_pause
+
+default persistent.dismiss_pause = True
+init python:
+    _dismiss_pause = persistent.dismiss_pause
 
 
 ## Basics ######################################################################
@@ -70,8 +74,9 @@ define config.gl2 = True
 define config.gl_resize = False
 define config.has_sync = True
 
+define config.history_current_dialogue = False
+
 define config.gestures = {"s" : "game_menu"}
-define config.dispatch_gesture = None
 
 define config.layers = [ 'master', 'choice_menu', 'transient', 'dream', 'screens', 'overlay', 'front' ]
 define config.choice_layer = "choice_menu"
@@ -160,6 +165,8 @@ define config.after_load_transition = Dissolve(0.2)
 
 define config.end_game_transition = scenefade
 
+define config.enter_replay_transition = scenedissolve
+define config.exit_replay_transition = scenefade
 
 ## A variable to set the transition used when the game starts does not exist.
 ## Instead, use a with statement after showing the initial scene.

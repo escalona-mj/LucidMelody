@@ -289,16 +289,19 @@ style achievements_text: #unlocked achievement description
     yalign 0.5
     font gui.interface_text_font
     color gui.accent_color
+    size 35
     
 style locked_label_text: #locked achievement name
     is gui_label_text
     yalign 0.5
+    font gui.game_menu_label_font
     color u'#b5b5b5'
     
 style locked_text: #locked description
     is gui_text
     yalign 0.5
     color u'#b5b5b5'
+    size 35
 
 style achievements_button:
     background Frame("gui/achievements/achievement_frame.png", gui.achievement_frame_borders, tile=gui.frame_tile)

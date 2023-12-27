@@ -51,7 +51,18 @@ screen name_input(ok_action, back_action):
 
     frame:
         modal True
-        at screen_appear
+        if not renpy.variant("touch"):
+            at screen_appear
+        else:
+            at transform:
+                subpixel True
+                on show:
+                    zoom 0.1 alpha 0.0
+                    easein_back .25 zoom 1.0 alpha 1.0
+                    parallel:
+                        ease 0.5 yoffset -100
+                on hide:
+                    ease .25 zoom 0.1 alpha 0.0
         has vbox:
             xalign 0.5
             yalign 0.5
@@ -68,6 +79,9 @@ screen name_input(ok_action, back_action):
             xalign 0.5
             yalign 0.5
             size 69
+    
+    ## Right-click and escape answer "no".
+    key "game_menu" action back_action
 
 style confirm_text:
     xalign 0.5
@@ -112,24 +126,24 @@ transform blink:
     ease 1.0 alpha 0.0
     repeat
 
-image firefly:
+image particle:
     "gui/firefly.png"
     choice:
         ease 1.0
-        "gui/fireflyellow.png"
+        "gui/particle_yellow.png"
     choice:
         ease 0.2
-        "gui/fireflyellow.png"
+        "gui/particle_yellow.png"
     choice:
         ease 0.5
-        "gui/fireflyellow.png"
+        "gui/particle_yellow.png"
     choice:
         ease 0.7
-        "gui/fireflyellow.png"
+        "gui/particle_yellow.png"
     ease 1.0
     repeat
 
-image fireflies = SnowBlossom(At("firefly", blink), count=20, xspeed=(0,-10), yspeed=(-150,-90), fast=False, horizontal=False)
+image fireflies = SnowBlossom(At("particle", blink), count=20, xspeed=(0,-10), yspeed=(-150,-90), fast=False, horizontal=False)
 
 image girlMC:
     im.MatrixColor("images/characters/dhannica/base.png", im.matrix.brightness(1))
@@ -219,27 +233,6 @@ label chooseMale:
         $ Main = "Nick"
     $ mcNameboy = Main
     return
-
-screen emptymenu:
-    tag menu
-    style_prefix "emptymenu"
-
-    use game_menu(""):
-        vbox:
-            text "Chapter [chapter]":
-                font gui.interface_text_font
-                size 90
-            text "[chapter_name]":
-                size 70
-
-style emptymenu_vbox is vbox:
-    xalign 0.5
-    yalign 0.5
-
-style emptymenu_text:
-    xalign 0.5
-    color '#fff'
-    outlines [(5, "#16161d", 3, 3)]
 
 screen time_intermission(txt):
     fixed:

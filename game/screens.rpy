@@ -114,7 +114,7 @@ screen say(who, what):
         style_prefix "say"
 
         window:
-            background Transform(gui.textbox_style, alpha=persistent.say_window_alpha)
+            background Transform(persistent.textbox_bg, alpha=persistent.say_window_alpha)
             id "window"
 
             if who is not None:
@@ -135,6 +135,7 @@ screen say(who, what):
         style_prefix "dream"
 
         if who is not None:
+
             window:
                 xalign 0.5
                 yalign 0.05
@@ -157,6 +158,9 @@ screen say(who, what):
                 textalign 0.5
                 xsize 1920
     
+style dream_text:
+    color "#fff"
+
 
 ## Make the namebox available for styling through the Character object.
 init python:
@@ -205,7 +209,6 @@ style say_dialogue:
     xsize gui.dialogue_width
     ypos gui.dialogue_ypos
 
-    color gui.dialogue_color
     outlines gui.dialogue_outline
 
     adjust_spacing True
@@ -521,6 +524,29 @@ style tooltip_text:
 ## This screen is included in the main and game menus, and provides navigation
 ## to other menus, and to start the game.
 
+screen emptymenu():
+    tag menu
+    style_prefix "emptymenu"
+
+    use game_menu(If(_in_replay, true="Replay", false="")):
+        vbox:
+            if not _in_replay:
+                text "Chapter [chapter]":
+                    font gui.interface_text_font
+                    size 90
+                text "[chapter_name]":
+                    size 70
+
+style emptymenu_vbox is vbox:
+    xalign 0.5
+    yalign 0.5
+
+style emptymenu_text:
+    xalign 0.5
+    color '#fff'
+    outlines [(5, "#16161d", 3, 3)]
+
+
 transform nav_item:
     subpixel True
     on show:
@@ -558,6 +584,7 @@ screen navigation():
             spacing 30
 
             textbutton "START" action Start()
+            textbutton "DREAM 1" action Replay("dream1")
             textbutton "SAVES" action ShowMenu('file_slots')
             textbutton "SETTINGS" action ShowMenu("preferences")
             textbutton "EXTRAS" action ShowMenu("achievements")
@@ -573,64 +600,66 @@ screen navigation():
                 style_prefix "navigation"
                 spacing 0
                 
-                if not main_menu:
+                if _in_replay:
                     imagebutton:
-                        auto "gui/navigation/history_%s.png"
-                        foreground Text(_("History"), style="navigation_btn")
-                        hover_foreground Text(_("History"), style="navigation_btn_hover")
-                        selected_foreground Text(_("History"), style="navigation_btn_selected")
-                        action ShowMenu("history")
+                        auto "gui/navigation/quit_%s.png"
+                        foreground Text(_("End Replay"), style="navigation_btn")
+                        hover_foreground Text(_("End Replay"), style="navigation_btn_hover")
+                        action EndReplay(confirm=True)
 
-                imagebutton:
-                    auto "gui/navigation/save_%s.png"
-                    foreground Text(_("Saves"), style="navigation_btn")
-                    hover_foreground Text(_("Saves"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Saves"), style="navigation_btn_selected")
-                    action ShowMenu('file_slots')
-
-                imagebutton:
-                    auto "gui/navigation/preferences_%s.png"
-                    foreground Text(_("Settings"), style="navigation_btn")
-                    hover_foreground Text(_("Settings"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Settings"), style="navigation_btn_selected")
-                    action ShowMenu("preferences")
-
-                if main_menu:
-                    imagebutton:
-                        auto "gui/navigation/extras_%s.png"
-                        foreground Text(_("Extras"), style="navigation_btn")
-                        hover_foreground Text(_("Extras"), style="navigation_btn_hover")
-                        selected_foreground Text(_("Extras"), style="navigation_btn_selected")
-                        action ShowMenu("achievements")
+                else:
+                    if not main_menu:
+                        imagebutton:
+                            auto "gui/navigation/history_%s.png"
+                            foreground Text(_("History"), style="navigation_btn")
+                            hover_foreground Text(_("History"), style="navigation_btn_hover")
+                            selected_foreground Text(_("History"), style="navigation_btn_selected")
+                            action ShowMenu("history")
 
                     imagebutton:
-                        auto "gui/navigation/about_%s.png"
-                        foreground Text(_("About"), style="navigation_btn")
-                        hover_foreground Text(_("About"), style="navigation_btn_hover")
-                        selected_foreground Text(_("About"), style="navigation_btn_selected")
-                        action ShowMenu("about")
+                        auto "gui/navigation/save_%s.png"
+                        foreground Text(_("Saves"), style="navigation_btn")
+                        hover_foreground Text(_("Saves"), style="navigation_btn_hover")
+                        selected_foreground Text(_("Saves"), style="navigation_btn_selected")
+                        action ShowMenu('file_slots')
 
-                if not main_menu:
                     imagebutton:
-                        auto "gui/navigation/mainmenu_%s.png"
-                        foreground Text(_("Title"), style="navigation_btn")
-                        hover_foreground Text(_("Title"), style="navigation_btn_hover")
-                        selected_foreground Text(_("Title"), style="navigation_btn_selected")
-                        action MainMenu()
+                        auto "gui/navigation/preferences_%s.png"
+                        foreground Text(_("Settings"), style="navigation_btn")
+                        hover_foreground Text(_("Settings"), style="navigation_btn_hover")
+                        selected_foreground Text(_("Settings"), style="navigation_btn_selected")
+                        action ShowMenu("preferences")
 
-                imagebutton:
-                    auto "gui/navigation/quit_%s.png"
-                    foreground Text(_("Quit"), style="navigation_btn")
-                    hover_foreground Text(_("Quit"), style="navigation_btn_hover")
-                    selected_foreground Text(_("Quit"), style="navigation_btn_selected")
-                    action Quit(confirm=True)
+                    if main_menu:
+                        imagebutton:
+                            auto "gui/navigation/extras_%s.png"
+                            foreground Text(_("Extras"), style="navigation_btn")
+                            hover_foreground Text(_("Extras"), style="navigation_btn_hover")
+                            selected_foreground Text(_("Extras"), style="navigation_btn_selected")
+                            action ShowMenu("achievements")
 
-                # if _in_replay:
-                #     imagebutton:
-                #         auto "gui/navigation/gallery_%s.png"
-                #         foreground Text(_("End Replay"), style="navigation_btn")
-                #         hover_foreground Text(_("End Replay"), style="navigation_btn_hover")
-                #         action EndReplay(confirm=True)
+                        imagebutton:
+                            auto "gui/navigation/about_%s.png"
+                            foreground Text(_("About"), style="navigation_btn")
+                            hover_foreground Text(_("About"), style="navigation_btn_hover")
+                            selected_foreground Text(_("About"), style="navigation_btn_selected")
+                            action ShowMenu("about")
+
+                    if not main_menu:
+                        imagebutton:
+                            auto "gui/navigation/mainmenu_%s.png"
+                            foreground Text(_("Title"), style="navigation_btn")
+                            hover_foreground Text(_("Title"), style="navigation_btn_hover")
+                            selected_foreground Text(_("Title"), style="navigation_btn_selected")
+                            action MainMenu()
+
+                    imagebutton:
+                        auto "gui/navigation/quit_%s.png"
+                        foreground Text(_("Quit"), style="navigation_btn")
+                        hover_foreground Text(_("Quit"), style="navigation_btn_hover")
+                        selected_foreground Text(_("Quit"), style="navigation_btn_selected")
+                        action Quit(confirm=True)
+
 
     #if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
 
@@ -1213,7 +1242,7 @@ style about_role_label_text:
     text_align 0.5
     xalign 0.5
 
-style about_person_text:
+style about_person_text is gui_text:
     font gui.interface_text_font
     size gui.interface_text_size
     text_align 0.5
@@ -1308,7 +1337,7 @@ screen pref_general():
             style_prefix "radio"
             label _("Rollback Side")
             textbutton _("Disable") action Preference("rollback side", "disable"):
-                tooltip "Disable rollback entirely."
+                tooltip "Disables rollback via screen when clicking either of the sides."
             textbutton _("Left") action Preference("rollback side", "left"):
                 tooltip "Tapping the left side of the screen will rollback to a previous dialogue."
             textbutton _("Right") action Preference("rollback side", "right"):
@@ -1318,9 +1347,9 @@ screen pref_general():
             style_prefix "check"
             label "Animations"
             textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle")):
-                tooltip "Disables the animations between screens."
+                tooltip "Disables the animations between screens and scenes."
             textbutton "Dismiss Pause" action ToggleField(persistent, "dismiss_pause"), Function(toggle_pause):
-                tooltip "Enable to dismiss juicy animations. {i}(May not work properly.){/i}"
+                tooltip "Allows you to dismiss pauses and scene animations."
             textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
                 tooltip "Adds a slight delay per comma."
         
@@ -1389,28 +1418,18 @@ image textboxbg = Crop((200, 600, 710, 160), "bg dhannica room")
 image textbox_black_crop = "gui/textbox_dark_preview.png"
 image textbox_white_crop = "gui/textbox_preview.png"
 
-python early:
-    theme_dict = {
-        "black" : {
-            "textbox_bg" : "gui/textbox_dark.png",
-            "textbox_color" : "#ffffff",
-            "textbox_outline" : "#16161d",
-            },
-
-        "white" : {
-            "textbox_bg" : "gui/textbox.png",
-            "textbox_color" : "#16161d",
-            "textbox_outline" : "#e5e5e5",
-            }
-    }
-
 init python:
     def dynamicTextbox(newStyle):
-        return SetField(persistent,"textbox_style",newStyle), gui.SetPreference("textbox_bg", theme_dict[newStyle]['textbox_bg']), gui.SetPreference("textbox_color", theme_dict[newStyle]['textbox_color']), gui.SetPreference("textbox_outline", theme_dict[newStyle]['textbox_outline'])
+        return SetField(persistent,"textbox_style",newStyle), SetField(persistent,"textbox_bg",textbox_dict[newStyle])
 
+    textbox_dict = {
+        "black" : "gui/textbox_dark.png",
+        "white" : "gui/textbox.png",
+    }
 
 default persistent.say_window_alpha = 0.9
 default persistent.textbox_style = "white"
+default persistent.textbox_bg = "gui/textbox.png"
 
 screen pref_text():
     hbox:
@@ -1430,7 +1449,7 @@ screen pref_text():
                     else:
                         background Transform("textbox_white_crop", alpha=persistent.say_window_alpha) xoffset 5 yoffset 5
                     padding(25,25,25,25)
-                    add Text("A really really long sample text just to force the text to make a new line.", slow_cps=_preferences.text_cps, color=gui.dialogue_color, font=gui.text_font, outlines=gui.dialogue_outline)
+                    add Text("A really long sample text just to force the text to make a new line.", slow_cps=_preferences.text_cps, font=gui.text_font, outlines=gui.dialogue_outline, size=33, adjust_spacing=True)
                     add "ctc" xoffset 95
 
             vbox:
@@ -1454,9 +1473,9 @@ screen pref_text():
                 style_prefix "radio"
                 label "Textbox Style"
                 textbutton "Dark" action [dynamicTextbox(newStyle="black"),SelectedIf(persistent.textbox_style == "black")]:
-                    tooltip "Set the textbox to dark and the text to white."    
+                    tooltip "Set the textbox to dark."    
                 textbutton "Light" action [dynamicTextbox(newStyle="white"),SelectedIf(persistent.textbox_style == "white")]:
-                    tooltip "Set the textbox to white and the text to dark."
+                    tooltip "Set the textbox to white."
             vbox:
                 style_prefix "radio"
                 label "Textbox Font"
@@ -1466,7 +1485,6 @@ screen pref_text():
                     tooltip "Set the typeface to {font=fonts/Atkinson-Hyperlegible-Regular-102.ttf}Hyperlegible{/font}."
                 textbutton "{font=fonts/123Marker.ttf}123Marker" action [gui.SetPreference("font", "fonts/123Marker.ttf"), SetVariable("persistent.typeface", "123Marker")]:
                     tooltip "Set the typeface to {font=fonts/123Marker.ttf}123Marker{/font}."
-                # 123Marker.ttf
 
 style header_image_button:
     activate_sound "audio/sfx/click.ogg"

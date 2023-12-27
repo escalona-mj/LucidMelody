@@ -57,19 +57,32 @@ init python:
         def start():
             store.current_scene = "dream"
             renpy.show("textbox_dream", layer="dream")
+
+            if _in_replay:
+                store._game_menu_screen = 'emptymenu'
+
+            #if dismiss_pause is enabled in the user preference, force disable it
             if persistent.dismiss_pause == False or persistent.dismiss_pause == True:
                 store._dismiss_pause = False
+
+            #disable rollback and skip. only allow devs to rollback and skip
             if not config.developer:
+                config.rollback_enabled = False
                 DisableSkip.start()
+
         def stop():
             store.current_scene = None
             renpy.hide("textbox_dream", layer="dream")
+
+            #after dream scene, renable the dismiss_pause. if the dismiss_pause is False right before the dream starts, respect the user preference to make it still False
             if persistent.dismiss_pause == True:
                 store._dismiss_pause = True
+            
+            config.rollback_enabled = True
+            
             #delete the dream history to make it more authentic like she forgor
             store._history_list = []
             DisableSkip.stop()
-
 
 ##########################################################################################################
 #                                               CHARACTERS                                               #
