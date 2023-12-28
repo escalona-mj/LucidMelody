@@ -3,7 +3,8 @@ screen extras_game_menu(title):
 
     style_prefix "extras_game_menu"
 
-    use bg
+    if main_menu:
+        use bg
 
     add "gui/overlay/confirm.png":
         alpha 0.65
@@ -31,7 +32,17 @@ screen extras_game_menu(title):
         else:
             key "game_menu" action ShowMenu("main_menu")
 
-    use extras_navigation
+    imagebutton:
+        auto "gui/navigation/return_%s.png"
+        activate_sound "audio/sfx/click.ogg"
+        hover_sound "audio/sfx/hover.ogg"
+        focus_mask True
+        xalign 0.0
+        yalign 0.0
+        if not renpy.get_screen("extras_emptymenu"):
+            action ShowMenu("extras_emptymenu")
+        else:
+            action Return()
 
     label title style "game_menu_label"
 
@@ -59,20 +70,15 @@ screen extras_emptymenu():
     use extras_game_menu("Extras"):
         vbox:
             textbutton "Achievements" action ShowMenu("achievements")
-            textbutton "CG GALLERY" action NullAction()
-            textbutton "REPLAY GALLERY" action NullAction()
-            textbutton "DREAM 1" action If(renpy.seen_label("dream1"), true=Show("confirm", message="Are you sure you want to replay Dream 1?", yes_action=[Replay("dream1"), Hide()], no_action=Hide()), false=Show("dialog", message="You have not seen this part yet.", ok_btn="OK", ok_action=Hide()))
-
-screen extras_navigation():
-    window:    
-        imagebutton:
-            auto "gui/navigation/return_%s.png"
-            activate_sound "audio/sfx/click.ogg"
-            hover_sound "audio/sfx/hover.ogg"
-            focus_mask True
-            xalign 0.0
-            yalign 0.0
-            if not renpy.get_screen("extras_emptymenu"):
-                action ShowMenu("extras_emptymenu")
-            else:
-                action Return()
+            textbutton "CG GALLERY" action ShowMenu("cg_gallery")
+            # textbutton "REPLAY GALLERY" action NullAction()
+            textbutton "DREAM 1" action If(persistent.seen_dream1,
+                                            true=Show("confirm",
+                                                    message="Are you sure you want to replay Dream 1?",
+                                                    yes_action=[Replay("dream1"), Hide()],
+                                                    no_action=Hide()),
+                                            false=Show("dialog",
+                                                    message="You have not seen this part yet.",
+                                                    ok_btn="OK",
+                                                    ok_action=Hide())
+                                            )

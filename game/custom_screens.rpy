@@ -51,7 +51,7 @@ screen name_input(ok_action, back_action):
 
     frame:
         modal True
-        if not renpy.variant("touch"):
+        if not renpy.variant("small"):
             at screen_appear
         else:
             at transform:

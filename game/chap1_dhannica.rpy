@@ -35,13 +35,15 @@ label chap1_dhannica:
         show dust_particle onlayer dream behind textbox_dream
         show dust_particle_blur onlayer dream behind textbox_dream
         "The crowd's anticipation is palpable."
-        show dream_cg_scene1:
+        show dream1_cg_scene1_singer:
             offscreenright
             ease 1.0 xalign 0.5
+        show dream1_cg_part1
+        hide dream1_cg_part1
         "There lies a singer on stage, his face obscured by a quirky lunchbox bag, hidden from the world."
         "His mystery has always captivated you."
-        scene dream_cg_scene2:
-            zoom 2.2 yoffset 125
+        scene dream1_cg_scene2:
+            zoom 2.2
             block:
                 xoffset 0
                 ease 5.0 xoffset -100
@@ -51,22 +53,26 @@ label chap1_dhannica:
         "The atmosphere is charged with an electric buzz, with fans waving their light sticks in rhythm."
         "The light sticks wave, dip, and swirl, an orchestrated chaos of color, creating patterns and waves that ebb and flow with the melody."
         "In some moments, they form a unified field of color, a single, massive wave of light that rolls across the audience, following the performance of the band."
-        show dream_cg_scene2:
+        show dream1_cg_part2
+        hide dream1_cg_part2
+        show dream1_cg_scene2:
             ease 1.0 zoom 1.0 xoffset 0
         with None
-        show dream_cg_scene2_light at pulse with dissolve
+        show dream1_cg_scene2_light at pulse with dissolve
         "Being close to the front of the stage, you shout your deepest exaggeration of support to the band that tears started to fall from your eyes."
         dhannica_i "I never thought I got to be on front stage..."
         dhannica_i "Now I get to observe him closer!"
         dhannica_i "This is all making me teary...!"
-        show dream_cg_scene2_singer:
+        show dream1_cg_scene2_singer:
             xpos 1.0 xanchor 0.0
             easein 0.25 xpos 1.0 xanchor 1.0
         d_singer "{sc}{size=+50}YOU THERE!{/size}{/sc}{fast}" with vpunch
         "The singer shouted, while looking at your teary soulful eyes."
-        show dream_cg_scene2_dhannica:
+        show dream1_cg_scene2_dhannica:
             xpos 0.0 xanchor 1.0
             easein 0.25 xpos 0.0 xanchor 0.0
+        show dream1_cg_part2_2
+        hide dream1_cg_part2_2
         dhannica "Wh-wha? Me?"
         d_singer "Yes you! You've been crying for quite a while there."
         d_singer "Seems like you need to get a hold of yourself together!"
@@ -79,14 +85,16 @@ label chap1_dhannica:
         "*pinch*"
         dhannica_i "Ow!" with vpunch
         camera at dizzy
-        scene dream_cg_scene3
-        show dream_cg_scene3_light
+        scene dream1_cg_scene3
+        show dream1_cg_scene3_light
         with eye_open
         dhannica_i "I'm not dreaming! I-It's real!"
-        show dream_cg_scene3_hand behind dream_cg_scene3_light:
+        show dream1_cg_scene3_hand behind dream1_cg_scene3_light:
             xalign 0.5
             ypos 0.0 yanchor 1.0
             ease 1.5 ypos 0.0 yanchor 0.0
+        show dream1_cg_part3
+        hide dream1_cg_part3
         "Suddenly, he held out his hand in front of you."
         dhannica_i "H-huh?"
         d_singer "Let's get you up here."
@@ -94,21 +102,23 @@ label chap1_dhannica:
         d_singer "On the stage!"
         "Hurriedly, fans cheering around you helped you get up on stage."
         camera at reset_dizzy
-        scene dream_cg_scene4 with eye_scene
-        show dream_cg_scene4_dhannica:
-            yalign 0.25
+        scene dream1_cg_scene4 with eye_scene
+        show dream1_cg_scene4_dhannica:
+            yalign 1.0
             xpos 0.0 xanchor 1.0
             ease 1.5 xpos 0.0 xanchor -0.25
-        show dream_cg_scene4_light at pulse
-        show dream_cg_scene4_singer:
-            yalign 0.5
+        show dream1_cg_scene4_light at pulse
+        show dream1_cg_scene4_singer:
             xpos 1.0 xanchor 0.0
             ease 1.5 xpos 1.0 xanchor 1.0
+        show dream1_cg_part4
+        hide dream1_cg_part4
         d_singer "You know, you're pretty lucky."
         d_singer "What's your name?"
         dhannica "O-oh, it's [Main]."
-        show dream_cg_scene4_dhannica:
-            ease .25 yalign 0.5
+        show dream1_cg_scene4_dhannica:
+            easein .1 yoffset 20
+            easeout .1 yoffset 0
         d_singer "{sc}{size=+20}ALRIGHT, LET'S GIVE AN APPLAUSE TO [Main!u]!{/size}{/sc}" with vpunch
         "The crowd goes wilder."
         dhannica_i "Ow! That was pretty loud."
@@ -132,13 +142,15 @@ label chap1_dhannica:
             choice:
                 ease_quad 1.0 xoffset -5 yoffset -10
             repeat
-        scene dream_cg_scene5:
+        scene dream1_cg_scene5:
             yalign 0.5
-        show dream_cg_scene5_both:
+        show dream1_cg_scene5_both:
             xalign 0.5
             yalign 1.0
-        show dream_cg_scene5_light at pulse
+        show dream1_cg_scene5_light at pulse
         with scenedissolve
+        show dream1_cg_part5
+        hide dream1_cg_part5
         "Both of you started singing, and the crowd goes even wilder as headlights were spotted to both of you."
         "But you don't care about that. Your eyes only focused on him as you sang, while trying hard not to cry from the excitement as you look at his masked face."
         "The harsh light gleamed against to him so strongly that you caught a glimpse of his eyes."
