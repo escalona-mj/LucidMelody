@@ -62,8 +62,9 @@ label start:
     hide intro_text with dissolve
 
     if current_route == "dhannica":
-        jump chap1_dhannica
+        call chap1_dhannica from _call_chap1_dhannica
+        call chap2_dhannica from _call_chap2_dhannica
     elif current_route == "nick":
-        jump chap1_nick
+        call chap1_nick
 
     return

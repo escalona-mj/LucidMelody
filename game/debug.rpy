@@ -29,6 +29,10 @@ init python:
 style test_text:
     outlines [(3, "#16161d", 0, 1)]
 
+init python:
+    def make_it_unseen():
+        renpy.mark_label_unseen("dream1")
+
 screen dev_screen():
     default devtools = False
     zorder 1000
@@ -47,6 +51,17 @@ screen dev_screen():
         text "Is Touch Variant?: [touch_output]"
         $ android_output = renpy.variant("android")
         text "Is Android Variant?: [android_output]"
+        $ dev_mode = config.developer
+        text "Is developer?: [dev_mode]"
+        $ ingameMenu = _game_menu_screen
+        text "Which game menu are we in: [ingameMenu]"
+        $ what_replay = _in_replay
+        text "We're in replay [what_replay]"
+        $ underscore_skip = _skipping
+        text "_skipping = [underscore_skip]"
+        $ seen_label = renpy.seen_label("dream1")
+        text "Dream1 has been seen? [seen_label]"
+        # textbutton "make it unseen" action make_it_unseen()
         text "Alec points = {0}".format(alec_likePoints)
         text "Nick points = {0}".format(nick_likePoints)
 
@@ -127,6 +142,8 @@ screen dev_screen():
             activate_sound "audio/sfx/click.ogg"
             action ToggleLocalVariable("devtools", True, False)
 
+style test_text:
+    size 25
 
 # init python:
 #     build.classify("**debug.rpy", None)

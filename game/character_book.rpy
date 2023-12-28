@@ -127,6 +127,8 @@ transform book_appear_touch:
         zoom 0.5 alpha 0.0
         easein .25 zoom 1.0 alpha 1.0 yoffset 0
 
+transform bookmark_side:
+    rotate -5 zoom 0.35 yoffset -50 xoffset 50
 
 transform page_flip:
     xzoom 0
@@ -144,7 +146,6 @@ screen journal():
     for char in all_chars:
         if current_page == char.name:
             $ name = "Name: " + char.name
-            $ age = "Age: " + char.age
             $ description = "Description:\n" + char.description
             $ mainChr = char.mainChr
             $ points = char.points
@@ -182,18 +183,24 @@ screen journal():
                     if isDhannica:
                         imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
                             foreground Text("", style="bookmark_btn")
+                            idle_foreground At("side dhannica", bookmark_side)
+                            hover_foreground At("side dhannica", bookmark_side)
                             selected_foreground Text("{0}".format(Main), style="bookmark_btn")
                             action [SetVariable("current_page", MC.name)]
                             focus_mask True
                         if meetNick:
                             imagebutton auto "gui/journal/nick_bookmark_%s.png":
                                 foreground Text("", style="bookmark_btn")
+                                idle_foreground At("side nick", bookmark_side)
+                                hover_foreground At("side nick", bookmark_side)
                                 selected_foreground Text("{0}".format(mcNameboy), style="bookmark_btn")
                                 action [SetVariable("current_page", Nick.name)]
                                 focus_mask True
                         if meetAlec:
                             imagebutton auto "gui/journal/alec_bookmark_%s.png":
                                 foreground Text("", style="bookmark_btn")
+                                idle_foreground At("side alec", bookmark_side)
+                                hover_foreground At("side alec", bookmark_side)
                                 selected_foreground Text("{0}".format(a_name), style="bookmark_btn")
                                 action [SetVariable("current_page", Alec.name)]
                                 focus_mask True
@@ -252,7 +259,7 @@ screen journal():
                         scrollbars "vertical"
                         vbox:
                             if not current_page == "Journal":
-                                add pic xalign 0.5 zoom 0.75 yalign 0.5 rotate 2
+                                add pic xalign 0.5 zoom 0.70 yalign 0.5 rotate 2
                                 if LoveMeter == True:
                                     vbox:
                                         xalign 0.5

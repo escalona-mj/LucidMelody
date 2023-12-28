@@ -1,6 +1,7 @@
 label chap2_dhannica:
     window auto hide
     call chapter_transition
+    
     if beLate:
         prof "Oh? So you've met this student before?"
         dhannica "Y-yes."
@@ -17,6 +18,7 @@ label chap2_dhannica:
         nick "There's the infirmary."
         nick "Let's get you there."
         "As you both walked, the hallways were bustling with students and you noticed them stealing a glance at both of you, probably wondering about the unusual pair."
+
     else:
         dhannica_i "Sheesh, talk about being late..."
         dhannica_i "Glad I woke up in time."
@@ -118,6 +120,7 @@ label chap2_dhannica:
         else:
             girlMom "[Main], you really need to be more careful. Why the rush this morning?"
         "You explained the situation, leaving out the part about Nick. Somehow, you weren't ready to share that detail yet."
+
     else:
         alec "Eesh, that's painful."
         alec "I remember it happening to me to the point I felt like I was dying."
@@ -129,6 +132,7 @@ label chap2_dhannica:
         dhannica "Well I try my best, hahaha."
         nurse "D'aww, you guys are cute."
         nurse "You both make a great couple!"
+
         menu:
             dhannica_i "Uh..."
             "\"Oh no, we're just friends.\"":
@@ -136,21 +140,26 @@ label chap2_dhannica:
                 nurse "Is that so? Well, I bet you're really good friends then?"
                 alec "Very much so, hahaha. Am I right?"
                 dhannica "Yeah, I don't even know this guy, hahaha."
+
             "Laugh it off":
                 $ Alec.add(10)
                 dhannica "Ahaha..."
+
         hide alec at trans3
         dhannica_i "But we do seem to get along quite well."
         nurse "Well, I suggest you get this treated at a hospital so they can patch up your dislocated toe. I can't do anything since I'm only a nurse; that's beyond my skills."
         nurse "I treat students with injuries but yours seems to have gotten worse."
+
         menu:
             nurse "Did you do anything to cause it to swell up so badly?"
             "Yes":
                 dhannica "Well, I walked here."
                 nurse "You should've taken your time, or asked your mother to take you."
+
             "No":
                 dhannica "No, I just walked here."
                 nurse "Well, that may still strain and worsen the condition. It's probably why it gotten so swollen."
+
         nurse "{bt=3} *sighs* {/bt}"
         nurse "Well it would probably take you a few days of rest before you can come back to school, so I'll make you an excuse letter."
         dhannica_i "Great, just when I thought this would be a normal week."
@@ -172,11 +181,11 @@ label chap2_dhannica:
         $ alec_description = "{0}\n\nHe's quite very upfront with everything, but I don't mind. But for a moment, someone actually looks after me despite everything. And Alec is no greater example of that.".format(alec_description)
         dhannica "Yeah... you too."
 
-    $ update_journal("Journal updated.")
-    $ dhannica_description = "{0}\n\nFirst day of school went horribly. Not only I was sent to a hospital due to negligence of my 'initally thought a small scratch that wouldn't be that much of a problem' turned out to be a big problem.".format(dhannica_description)
 
     scene bg hospital with long_dissolve
     play ambient hospital volume 0.5 fadein 1.0
+    $ update_journal("Journal updated.")
+    $ dhannica_description = "{0}\n\nFirst day of school went horribly. Not only I was sent to a hospital due to negligence of my 'initally thought a small scratch that wouldn't be that much of a problem' turned out to be a big problem.".format(dhannica_description)
     "After quite some time, your mother picked you up from school and took you to a nearby hospital."
     girlMom "Didn't I tell you to just stay at home?"
     dhannica "Yes, but it was the first day I didn't want to mis-{nw}"
@@ -245,8 +254,8 @@ label chap2_dhannica:
                 $ Nick.add(4)
             "\"I shouldn't read too much into it. He was probably just being polite.\"":
                 $ Nick.remove(2)
-
         dhannica_i "Ah nevermind about that. Who knows, only time will tell on what truly is he."
+
     else:
         "The first couple of days at home were a mix of boredom and restlessness."
         "You couldn't help but think about school and how everyone was getting along without you."
@@ -259,7 +268,8 @@ label chap2_dhannica:
         dhannica_i "Oh crap! Already?"
         dhannica_i "But, this would be fine, right?"
         dhannica_i "I get to study my missed discussions with someone, but I can just grab the modules online and study alone..."
-        menu(mode="important"):
+
+        menu:
             dhannica_i "What should I reply?"
             "\"That'd be great, actually.\"":
                 $ a_hangOut = True
@@ -308,6 +318,7 @@ label chap2_dhannica:
                 girlMom "So, is this a new boyfriend?~"
                 dhannica "Ew Mom. We're just friends."
                 girlMom "Alright, if you say so."
+
             "\"I appreciate it, but I think I need some time alone.\"":
                 $ Alec.remove(2)
                 phone_dhannica "I appreciate it, but I think I need some time alone."
@@ -344,16 +355,19 @@ label chap2_dhannica:
                 "That's when you noticed Nick approaching. His timing was almost uncanny."
             else:
                 "That's when you noticed someone familiar approaching. His timing was almost uncanny."
+
             show nick at trans3
             nick "Hey, you're back. How's the foot?"
             "Caught off guard by his sudden appearance and the concern in his voice, you hesitated for a moment."
             dhannica "It's getting there, thanks. Just trying to, you know, manage."
+
             if not beLate:
                 dhannica "Uhh..."
                 $ meetNick = True
                 $ mcNameboy = "Nick"
                 $ update_journal("Character added.")
                 nick "Nick."
+
             nick "Looks like you could use a hand. Mind if I walk with you to your next class?"
             "You were surprised by his offer. Despite your initial intent to manage on your own, you found yourself nodding."
             dhannica "Sure, thanks, Nick."
@@ -363,6 +377,7 @@ label chap2_dhannica:
                 "Nick's presence, once a source of annoyance, now offered a different kind of comfort."
 
         "\"I'd appreciate that, thanks.\"":
+            $ Alec.add(3)
             dhannica "I'd appreciate that, thanks."
             "Walking with Alec through the halls, you felt a sense of comfort. His support was reassuring."
             alec "Just give me a shout if you need anything, okay?"
@@ -372,7 +387,6 @@ label chap2_dhannica:
             else:
                 dhannica "Thanks, Alec."
                 "He chuckled for a moment."
-            $ Alec.add(3)
             alec "Well, if you need a recap of what you've missed or just someone to hang with during lunch, I'm here."
             "His offer made you smile, a genuine sense of gratitude welling up inside you."
             dhannica "I might take you up on that. Thanks again, Alec."
@@ -380,7 +394,6 @@ label chap2_dhannica:
             "As he left, you felt a newfound appreciation for his friendship. It was nice that you had someone like Alec at school."
 
     stop ambient fadeout 1.0
-    jump classroom2
 
 label classroom2:
     scene bg classroom with scenefadehold

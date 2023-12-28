@@ -16,10 +16,11 @@ label chap1_dhannica:
 
     if not config.developer:
         $ renpy.block_rollback() #prevent from going back to mc selection screen
+    
+    pause 2.0
         
     label dream1:
-        $ DreamScene.start()    
-        pause 2.0
+        $ DreamScene.start("dream1")    
         scene bg stage with scenefade
         
         play ambient cheer fadein 3.0 volume 0.2
@@ -160,11 +161,10 @@ label chap1_dhannica:
         play sound alarm
         scene black
         pause 4.0
-        $ DreamScene.stop()
-        $ renpy.end_replay()
+        label .end_dream:
+            $ DreamScene.stop("dream1")
 
     $ dream.grant()
-    $ dhannica_age = "18"
     $ dhannica_description = "There's not much to say anything about me."
     $ entry1 = "Entry No. 1\n\nThe dream was something else. The person in my dreams... I saw them. It felt familiar. Emerald eyes... Oh, if only it were real, I would never wake up. One can dream though, haha."
     $ journal_entries.append(entry1)
@@ -272,6 +272,7 @@ label chap1_dhannica:
         $ update_journal("Journal updated.")
         $ dhannica_description = "{0} Well, a bit tardy I suppose.".format(dhannica_description)
         "You rushed outside."
+
     elif eatBreakfast:
         "You accidentally bumped your toe on the baluster."
         dhannica "Arrrrgh...this sucks, what the hell."
@@ -310,21 +311,26 @@ label chap1_dhannica:
         "You started to look like a zombie from an apocalypse movie, just limping as fast to get there in time."
         "As the bus took its momentary halt at the bus stop, tons of people were also waiting to get on."
         "Which meant more time for you to be able to '{i}limp{/i}' your way to the bus stop."
+
         scene bg busstop with scenefade
         play ambient2 busengine fadein 1.0
+
         dhannica_i "Almost there...!"
         "You're quite confident that you would get there in time, despite the fact that you look like an absolute ninny."
         "But you started to notice the bus was reaching its capacity, and people were getting fewer by the second."
         dhannica_i "Wait, please!"
         "You had to do something..."
+
         menu:
             dhannica_i "Should I just run for it?"
             "Yes":
                 "You mustered up the courage to suck up the pain and just run for it, and that's exactly what you did."
                 "You didn't care about your appearance, even if you felt people were staring at you, wondering if you were okay or if they should help you."
+
                 play sound bus_open fadeout 0.5
                 stop ambient2 fadeout 10.0
                 show bg busstop_no_bus with dissolve
+                
                 "However, as you were about to reach the door, it immediately closed, which could only mean one thing: it was already full and the bus had already left."
                 dhannica_i "No..."
                 "A sudden pang of pain rushed through you."
@@ -364,6 +370,7 @@ label chap1_dhannica:
                         ease 3.0 alpha 1.0
                 "You decided not to pay him any mind and sat uncomfortably, trying to remain calm and not draw attention to yourself."
                 "Suddenly, a cold sensation touched your skin."
+
                 menu:
                     "Accept it":
                         $ Nick.add(5)
@@ -513,6 +520,7 @@ label chap1_dhannica:
                 show nick at trans3
                 nick "Here."
                 nick "Put this on your foot. The cold will help your swelling."
+
                 menu:
                     "Take the flask":
                         $ Nick.add(5)
@@ -525,6 +533,7 @@ label chap1_dhannica:
                         "In fact, he appears as though he doesn't want to interact with anyone."
                         "You gently applied the cold flask to the side of your foot and instantly began to experience relief. Your pinky toe had swelled and grown warm, but this remedy appeared to be reducing the discomfort."
                         "Leaning down as you tended your injury, you couldn't help but notice his shoes."
+
                     "Refuse":
                         $ n_refuseTake = True
                         dhannica "You wouldn't want me to do that."
@@ -582,7 +591,6 @@ label chap1_dhannica:
             hide nick at trans3
             "He soon left at a fastened pace, leaving you all alone in the bus stop."
             dhannica_i "Well that was...interesting."
-            jump school
 
         if n_takeFlask:
             show nick at trans3
@@ -604,7 +612,6 @@ label chap1_dhannica:
             "He disembarked at the next bus stop, and you never saw him again."
             "Silence came after, for the rest of the ride."
             play ambient birds fadein 2.0
-            jump school
 
         if n_refuseTake:
             $ Nick.add(10)
@@ -628,14 +635,12 @@ label chap1_dhannica:
             "He disembarked at the next bus stop, and you never saw him again."
             "Silence came after, for the rest of the ride."
             play ambient birds fadein 2.0
-            jump school
 
     else:
         "The air around you was chilly, and the birds were all up and singing."
         "Not sure what the time was, you checked your phone. You just needed to make sure you had time before the class started."
         dhannica_i "Guess I should hurry up."
         dhannica_i "As if this stupid toe would make it easier for me."
-        jump school
     
 label school:
     camera:
@@ -802,4 +807,5 @@ label classroom:
             ease 1.0 offscreenleft
         "As you exited, a guy rushed towards the door, abruptly halting in front of you before swerving to enter."
         nick "Sorry, I'm late!"
-    jump chap2_dhannica
+
+    return

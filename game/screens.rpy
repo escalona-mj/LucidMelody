@@ -526,16 +526,32 @@ style tooltip_text:
 
 screen emptymenu():
     tag menu
-    style_prefix "emptymenu"
 
-    use game_menu(If(_in_replay, true="Replay", false="")):
-        vbox:
-            if not _in_replay:
+    use game_menu(""):
+        if not _in_replay:
+            style_prefix "emptymenu"
+            vbox:
                 text "Chapter [chapter]":
                     font gui.interface_text_font
                     size 90
                 text "[chapter_name]":
                     size 70
+
+        else:
+            style_prefix "dreaming"
+            hbox:
+                xalign 0.5
+                yalign 0.5
+                text "Currently dreaming"
+                hbox:
+                    yalign 0.5
+                    text "." at delayed_blink(0.0, 1.0)
+                    text "." at delayed_blink(0.2, 1.0)
+                    text "." at delayed_blink(0.4, 1.0)
+
+style dreaming_text:
+    size 75
+    font gui.interface_text_font
 
 style emptymenu_vbox is vbox:
     xalign 0.5
@@ -584,10 +600,9 @@ screen navigation():
             spacing 30
 
             textbutton "START" action Start()
-            textbutton "DREAM 1" action Replay("dream1")
             textbutton "SAVES" action ShowMenu('file_slots')
             textbutton "SETTINGS" action ShowMenu("preferences")
-            textbutton "EXTRAS" action ShowMenu("achievements")
+            textbutton "EXTRAS" action ShowMenu("extras_emptymenu")
             textbutton "ABOUT" action ShowMenu("about")
             textbutton "EXIT" action Quit(confirm=True)
 
@@ -602,9 +617,15 @@ screen navigation():
                 
                 if _in_replay:
                     imagebutton:
-                        auto "gui/navigation/quit_%s.png"
-                        foreground Text(_("End Replay"), style="navigation_btn")
-                        hover_foreground Text(_("End Replay"), style="navigation_btn_hover")
+                        auto "gui/navigation/confirm_btn_%s.png"
+                        foreground Text(_("Settings"), style="confirm_btn")
+                        hover_foreground Text(_("Settings"), style="confirm_btn_hover")
+                        action ShowMenu("preferences")
+
+                    imagebutton:
+                        auto "gui/navigation/confirm_btn_%s.png"
+                        foreground Text(_("End Replay"), style="confirm_btn")
+                        hover_foreground Text(_("End Replay"), style="confirm_btn_hover")
                         action EndReplay(confirm=True)
 
                 else:
@@ -631,13 +652,6 @@ screen navigation():
                         action ShowMenu("preferences")
 
                     if main_menu:
-                        imagebutton:
-                            auto "gui/navigation/extras_%s.png"
-                            foreground Text(_("Extras"), style="navigation_btn")
-                            hover_foreground Text(_("Extras"), style="navigation_btn_hover")
-                            selected_foreground Text(_("Extras"), style="navigation_btn_selected")
-                            action ShowMenu("achievements")
-
                         imagebutton:
                             auto "gui/navigation/about_%s.png"
                             foreground Text(_("About"), style="navigation_btn")
@@ -716,7 +730,7 @@ style navigation_button_text:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#main-menu
 
-image particle = SnowBlossom("gui/menu/particle.png", count=10, xspeed=(100,250), yspeed=(-150,-90), fast=True, horizontal=False)
+image menu_particle = SnowBlossom("gui/menu/particle.png", count=10, xspeed=(100,250), yspeed=(-150,-90), fast=True, horizontal=False)
 
 init python:
     def dynamicMCMenu():
@@ -771,7 +785,7 @@ screen bg():
                 easein .75 alpha 1.0 yoffset 0
 
 
-    add "particle":
+    add "menu_particle":
         at transform:
                 on show:
                     alpha 0.0
@@ -791,9 +805,7 @@ screen bg():
 
     if renpy.get_screen("main_menu"):
         add "gui/menu/logo.png":
-            xalign 0.5
-            yalign 0.5
-            zoom 0.75
+            xalign 0.5 yalign 0.5 zoom 0.75
             at transform:
                 subpixel True
                 on show:
@@ -939,11 +951,10 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     add "gui/overlay/confirm.png":
         alpha 0.65
+
     add "gui/menu/logo_white.png":
-            xalign 0.5
-            yalign 0.5
-            zoom 0.75
-            alpha 0.05
+        xalign 0.5 yalign 0.5 zoom 0.75 alpha 0.05
+
     if current_route == "alec":
         add "overlay_alec"
     elif current_route == "nick":
@@ -1331,7 +1342,8 @@ screen pref_general():
                 tooltip "Skips the dialogue regardless if seen or unseen."
             textbutton _("After Choices") action Preference("after choices", "toggle"):
                 tooltip "Keeps skipping, even on choices."
-            textbutton "Toggle developer mode" action ToggleVariable("config.developer", True, False)
+            textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
+                tooltip "Adds a slight delay per comma."
 
         vbox:
             style_prefix "radio"
@@ -1350,8 +1362,6 @@ screen pref_general():
                 tooltip "Disables the animations between screens and scenes."
             textbutton "Dismiss Pause" action ToggleField(persistent, "dismiss_pause"), Function(toggle_pause):
                 tooltip "Allows you to dismiss pauses and scene animations."
-            textbutton _("Comma Pausing") action ToggleField(persistent, "comma_pause"):
-                tooltip "Adds a slight delay per comma."
         
         if renpy.variant("pc"):
             vbox:

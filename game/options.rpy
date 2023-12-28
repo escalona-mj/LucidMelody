@@ -165,7 +165,7 @@ define config.after_load_transition = Dissolve(0.2)
 
 define config.end_game_transition = scenefade
 
-define config.enter_replay_transition = scenedissolve
+define config.enter_replay_transition = scenefadehold
 define config.exit_replay_transition = scenefade
 
 ## A variable to set the transition used when the game starts does not exist.

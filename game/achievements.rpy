@@ -244,7 +244,7 @@ style achievement_toast_text:
 screen achievements():
     tag menu
 
-    use game_menu(__("Achievements: ") + "{earned}/{total}".format(earned=Achievement.num_earned(), total=Achievement.num_total()), scroll="viewport"):
+    use extras_game_menu(__("Achievements: ") + "{earned}/{total}".format(earned=Achievement.num_earned(), total=Achievement.num_total())):
 
         style_prefix "achievements"
         vbox:

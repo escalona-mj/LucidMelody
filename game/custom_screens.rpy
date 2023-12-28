@@ -127,7 +127,7 @@ transform blink:
     repeat
 
 image particle:
-    "gui/firefly.png"
+    "gui/menu/particle.png"
     choice:
         ease 1.0
         "gui/particle_yellow.png"
@@ -333,6 +333,12 @@ screen controls_modal():
                 text "If you're still overwhelmed with the controls, you can\nview them again on the main menu.":
                     size 30
                     text_align 0.5
+
+    if main_menu:
+        key "game_menu" action Hide()
+    else:
+        key "game_menu" action Return()
+
             # null height 25
 
             # hbox:
