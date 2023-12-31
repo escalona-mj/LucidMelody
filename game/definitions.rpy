@@ -75,6 +75,7 @@ init python:
                 store._skipping = False
 
             if _in_replay:
+                store.Main = "Dhannica"
                 store._game_menu_screen = 'emptymenu'
 
         def stop(label):

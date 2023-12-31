@@ -1,4 +1,4 @@
-screen extras_game_menu(title):
+screen extras_game_menu(title, withMargin=True):
     tag menu
 
     style_prefix "extras_game_menu"
@@ -17,6 +17,10 @@ screen extras_game_menu(title):
     add "gui/overlay/game_menu.png"
     
     frame:
+        if withMargin == True:
+            bottom_margin 0.01
+        else:
+            pass
         viewport:
             scrollbars "vertical"
             mousewheel True
@@ -27,8 +31,8 @@ screen extras_game_menu(title):
                 transclude
 
     if main_menu:
-        if not renpy.get_screen("extras_emptymenu"):
-            key "game_menu" action ShowMenu("extras_emptymenu")
+        if not renpy.get_screen("extras"):
+            key "game_menu" action ShowMenu("extras")
         else:
             key "game_menu" action ShowMenu("main_menu")
 
@@ -39,8 +43,8 @@ screen extras_game_menu(title):
         focus_mask True
         xalign 0.0
         yalign 0.0
-        if not renpy.get_screen("extras_emptymenu"):
-            action ShowMenu("extras_emptymenu")
+        if not renpy.get_screen("extras"):
+            action ShowMenu("extras")
         else:
             action Return()
 
@@ -52,8 +56,6 @@ style extras_game_menu_frame:
     xalign 0.5
     yalign 0.5
     top_margin 0.15
-    bottom_margin 0.01
-    # background Frame("gui/test_frame.png", gui.frame_borders, tile=gui.frame_tile)
 
 style extras_game_menu_side:
     spacing 0
@@ -62,23 +64,127 @@ style extras_game_menu_viewport:
     xfill True
 
 style extras_game_menu_vscrollbar:
+    base_bar None
+    thumb Frame(At("gui/scrollbar/vertical_[prefix_]thumb.png", slight_transparent), gui.vscrollbar_borders, tile=gui.scrollbar_tile)
     unscrollable gui.unscrollable
 
-screen extras_emptymenu():
+transform slight_transparent:
+    alpha 0.25
+
+screen extras():
     tag menu
 
     use extras_game_menu("Extras"):
+        style_prefix "extras"
+
         vbox:
-            textbutton "Achievements" action ShowMenu("achievements")
-            textbutton "CG GALLERY" action ShowMenu("cg_gallery")
-            # textbutton "REPLAY GALLERY" action NullAction()
-            textbutton "DREAM 1" action If(persistent.seen_dream1,
-                                            true=Show("confirm",
-                                                    message="Are you sure you want to replay Dream 1?",
-                                                    yes_action=[Replay("dream1"), Hide()],
-                                                    no_action=Hide()),
-                                            false=Show("dialog",
-                                                    message="You have not seen this part yet.",
-                                                    ok_btn="OK",
-                                                    ok_action=Hide())
-                                            )
+            xalign 0.5
+
+            button:
+                action ShowMenu("achievements")
+                foreground "gui/extras/extras_achieve_[prefix_]foreground.png"
+
+                frame:
+                    style_prefix "extras_btn_content"
+                    yalign 0.5
+                    vbox:
+                        spacing 5
+                        label "Achievements"
+                        text "View your achievements here."
+
+            button:
+                action ShowMenu("gallery")
+                foreground "gui/extras/extras_gallery_[prefix_]foreground.png"
+
+                frame:
+                    style_prefix "extras_btn_content"
+                    yalign 0.5
+                    vbox:
+                        spacing 5
+                        label "Gallery"
+                        text "See those memorable moments again."
+
+            button:
+                action ShowMenu("licenses")
+                foreground "gui/extras/extras_license_[prefix_]foreground.png"
+
+                frame:
+                    style_prefix "extras_btn_content"
+                    yalign 0.5
+                    vbox:
+                        spacing 5
+                        label "Licenses"
+                        text "See which works are being used in the game."
+            
+            if mainMenu_ach.has():
+                button:
+                    action If(persistent.seen_dream1, true=Show("confirm", message="Are you sure you want to replay Dream 1?", yes_action=[Replay("dream1"), Hide()], no_action=Hide()), false=Show("dialog", message="You have not seen this part yet.", ok_btn="OK", ok_action=Hide()))
+                    foreground "lucid_button"
+
+                    frame:
+                        style_prefix "extras_btn_content"
+                        yalign 0.5
+                        vbox:
+                            style_prefix "extras_lucid"
+                            label "{gtext}{font=fonts/Lmromancaps10Oblique-BWV4G.otf}{size=70}Lucid Somnambulism{/font}{/gtext}"
+                            # text "Revisit and see the world unfold as if you're both the participant and observer."
+            else:
+                button:
+                    action None
+                    foreground "gui/extras/extras_locked_foreground.png"
+
+                    frame:
+                        style_prefix "extras_btn_content"
+                        yalign 0.5
+                        vbox:
+                            spacing 5
+                            style_prefix "extras_locked"
+                            label "???"
+                            text "???"
+
+screen licenses():
+    tag menu
+    use extras_game_menu("Licenses"):
+        vbox:
+            text "Under construction."
+
+
+image lucid_button:
+    glitch("gui/extras/extras_lucid_foreground.png", chroma=False, offset=10, minbandheight=50, randomkey=None)
+    pause 0.05
+    glitch("gui/extras/extras_lucid_hover_foreground.png", chroma=False, offset=10, minbandheight=50, randomkey=None)
+    pause 0.05
+    repeat
+
+style extras_button:
+    background None
+    xsize 1200
+    ysize 300
+    
+    padding(325, 50, 0, 50)
+
+    
+style extras_btn_content_frame is empty
+
+style extras_btn_content_label_text:
+    font gui.game_menu_label_font
+    size (gui.name_text_size + 15)
+    outlines [(7, "#16161d", 0, 2)]
+    hover_outlines [(7, "#6667ab", 0, 2)]
+
+style extras_btn_content_text is gui_text:
+    hover_color "#abace0"
+
+style extras_locked_label_text is extras_btn_content_label_text:
+    color u'#b5b5b5'
+    outlines [(0, "#00000000", 0, 0)]
+    
+style extras_locked_text is extras_btn_content_text:
+    color u'#b5b5b5'
+
+style extras_lucid_label_text:
+    font "fonts/Lmromancaps10Oblique-BWV4G.otf"
+    size (gui.name_text_size + 25)
+
+style extras_lucid_text is gui_text:
+    font "fonts/Labrada-Regular.ttf"

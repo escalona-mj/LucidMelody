@@ -93,7 +93,7 @@ screen dev_screen():
                     yalign 0.5
                     label "Other stuff"
                     style_prefix "check"
-                    textbutton "Open extras" action ShowMenu("extras_emptymenu")
+                    textbutton "Open extras" action ShowMenu("extras")
                     textbutton "Open menu" action ShowMenu("emptymenu")
                     textbutton "Force rollback" action Rollback()
                     textbutton "Toggle developer mode" action ToggleVariable("config.developer", True, False)

@@ -92,6 +92,12 @@ screen file_slots():
                         xsize 1250
                         ysize 200
 
+                        if main_menu:
+                            if FileLoadable(slot):
+                                action SetScreenVariable("slot_selected", slot)
+                        else:
+                            action SetScreenVariable("slot_selected", slot)
+
                         frame:
                             background None 
                             add "gui/button/slot_shadow.png"
@@ -107,15 +113,6 @@ screen file_slots():
                                 if not main_menu:
                                     if slot_selected == slot:
                                         add "gui/button/slot_overlay.png"
-
-                        if main_menu:
-                            if FileLoadable(slot):
-                                action SetScreenVariable("slot_selected", slot)
-                            elif not FileLoadable(slot):
-                                pass
-                        else:
-                            if ((FileLoadable(slot)) or (not FileLoadable(slot))):
-                                action SetScreenVariable("slot_selected", slot)
 
                         frame:
                             background None
@@ -156,11 +153,11 @@ screen file_slots():
                             elif cur_route == 'nick':
                                 add 'save_nick_indicator' xpos 1085 ypos -25
                             
-                            if slot_selected == slot:
-                                if FileLoadable(slot):
-                                    imagebutton auto "gui/button/delete_save_%s.png" action FileDelete(slot) xpos -25 ypos -25:
-                                        activate_sound "audio/sfx/click.ogg"
-                                        hover_sound "audio/sfx/hover.ogg"
+                        if slot_selected == slot:
+                            if FileLoadable(slot):
+                                imagebutton auto "gui/button/delete_save_%s.png" action FileDelete(slot) xpos -15 ypos -15:
+                                    activate_sound "audio/sfx/click.ogg"
+                                    hover_sound "audio/sfx/hover.ogg"
                             
 
             ## Buttons to access other pages.

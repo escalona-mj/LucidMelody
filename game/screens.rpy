@@ -20,6 +20,7 @@ style input:
 style hyperlink_text:
     # properties gui.text_properties("hyperlink", accent=True)
     properties gui.text_properties("hyperlink", accent=True)
+    color "#abace0"
     font gui.interface_text_font
     # hover_underline True
     underline True
@@ -602,7 +603,7 @@ screen navigation():
             textbutton "START" action Start()
             textbutton "SAVES" action ShowMenu('file_slots')
             textbutton "SETTINGS" action ShowMenu("preferences")
-            textbutton "EXTRAS" action ShowMenu("extras_emptymenu")
+            textbutton "EXTRAS" action ShowMenu("extras")
             textbutton "ABOUT" action ShowMenu("about")
             textbutton "EXIT" action Quit(confirm=True)
 
