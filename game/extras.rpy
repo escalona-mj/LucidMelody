@@ -63,9 +63,7 @@ style extras_game_menu_side:
 style extras_game_menu_viewport:
     xfill True
 
-style extras_game_menu_vscrollbar:
-    base_bar None
-    thumb Frame(At("gui/scrollbar/vertical_[prefix_]thumb.png", slight_transparent), gui.vscrollbar_borders, tile=gui.scrollbar_tile)
+style extras_game_menu_vscrollbar is vscrollbar:
     unscrollable gui.unscrollable
 
 transform slight_transparent:
@@ -103,22 +101,11 @@ screen extras():
                         spacing 5
                         label "Gallery"
                         text "See those memorable moments again."
-
-            button:
-                action ShowMenu("licenses")
-                foreground "gui/extras/extras_license_[prefix_]foreground.png"
-
-                frame:
-                    style_prefix "extras_btn_content"
-                    yalign 0.5
-                    vbox:
-                        spacing 5
-                        label "Licenses"
-                        text "See which works are being used in the game."
             
             if mainMenu_ach.has():
                 button:
-                    action If(persistent.seen_dream1, true=Show("confirm", message="Are you sure you want to replay Dream 1?", yes_action=[Replay("dream1"), Hide()], no_action=Hide()), false=Show("dialog", message="You have not seen this part yet.", ok_btn="OK", ok_action=Hide()))
+                    action Start("enter_lucid")
+                    #action If(persistent.seen_dream1, true=Show("confirm", message="Are you sure you want to replay Dream 1?", yes_action=[Replay("dream1"), Hide()], no_action=Hide()), false=Show("dialog", message="You have not seen this part yet.", ok_btn="OK", ok_action=Hide()))
                     foreground "lucid_button"
 
                     frame:
@@ -127,7 +114,6 @@ screen extras():
                         vbox:
                             style_prefix "extras_lucid"
                             label "{gtext}{font=fonts/Lmromancaps10Oblique-BWV4G.otf}{size=70}Lucid Somnambulism{/font}{/gtext}"
-                            # text "Revisit and see the world unfold as if you're both the participant and observer."
             else:
                 button:
                     action None
@@ -141,13 +127,6 @@ screen extras():
                             style_prefix "extras_locked"
                             label "???"
                             text "???"
-
-screen licenses():
-    tag menu
-    use extras_game_menu("Licenses"):
-        vbox:
-            text "Under construction."
-
 
 image lucid_button:
     glitch("gui/extras/extras_lucid_foreground.png", chroma=False, offset=10, minbandheight=50, randomkey=None)

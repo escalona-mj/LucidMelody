@@ -198,7 +198,7 @@ screen file_slots():
                     foreground Text(_("Cloud"), style="header_btn")
                     hover_foreground Text(_("Cloud"), style="header_btn_hover")
                     selected_foreground Text(_("Cloud"), style="header_btn_selected")
-                    action Show("cloud_modal", message="What do you want to do with saves?", first_btn="Upload", first_action=[UploadSync(), Hide()], second_btn="Download", second_action=[DownloadSync(), Hide()])
+                    action ShowTransient("cloud_modal", message="What do you want to do with saves?", first_btn="Upload", first_action=[UploadSync(), Hide()], second_btn="Download", second_action=[DownloadSync(), Hide()])
                     tooltip "Access your saves via cloud."
                 
 screen cloud_modal(message, first_btn, second_btn, first_action, second_action):

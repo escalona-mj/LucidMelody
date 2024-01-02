@@ -71,8 +71,10 @@ style scrollbar:
 
 style vscrollbar:
     xsize gui.scrollbar_size
-    base_bar Frame("gui/scrollbar/vertical_[prefix_]bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
-    thumb Frame("gui/scrollbar/vertical_[prefix_]thumb.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
+    # base_bar Frame("gui/scrollbar/vertical_[prefix_]bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
+    # thumb Frame("gui/scrollbar/vertical_[prefix_]thumb.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
+    base_bar None
+    thumb Frame(At("gui/scrollbar/vertical_[prefix_]thumb.png", slight_transparent), gui.vscrollbar_borders, tile=gui.scrollbar_tile)
     thumb_offset 4
 
 style slider:
@@ -141,6 +143,7 @@ screen say(who, what):
                 xalign 0.5
                 yalign 0.05
                 text who:
+                    at textdissolve
                     size gui.name_text_size
                     font gui.name_text_font
 
@@ -152,6 +155,7 @@ screen say(who, what):
             padding(25, 0, 25, 0)
 
             text what id "what":
+                at textdissolve
                 yalign 0.5
                 xalign 0.5
                 color "#fff"
@@ -162,6 +166,9 @@ screen say(who, what):
 style dream_text:
     color "#fff"
 
+transform textdissolve:
+    alpha 0.0
+    ease 0.25 alpha 1.0
 
 ## Make the namebox available for styling through the Character object.
 init python:
@@ -633,46 +640,46 @@ screen navigation():
                     if not main_menu:
                         imagebutton:
                             auto "gui/navigation/history_%s.png"
-                            foreground Text(_("History"), style="navigation_btn")
-                            hover_foreground Text(_("History"), style="navigation_btn_hover")
-                            selected_foreground Text(_("History"), style="navigation_btn_selected")
+                            foreground Text(_("History"), style="nav_btn")
+                            hover_foreground Text(_("History"), style="nav_btn_hover")
+                            selected_foreground Text(_("History"), style="nav_btn_selected")
                             action ShowMenu("history")
 
                     imagebutton:
                         auto "gui/navigation/save_%s.png"
-                        foreground Text(_("Saves"), style="navigation_btn")
-                        hover_foreground Text(_("Saves"), style="navigation_btn_hover")
-                        selected_foreground Text(_("Saves"), style="navigation_btn_selected")
+                        foreground Text(_("Saves"), style="nav_btn")
+                        hover_foreground Text(_("Saves"), style="nav_btn_hover")
+                        selected_foreground Text(_("Saves"), style="nav_btn_selected")
                         action ShowMenu('file_slots')
 
                     imagebutton:
                         auto "gui/navigation/preferences_%s.png"
-                        foreground Text(_("Settings"), style="navigation_btn")
-                        hover_foreground Text(_("Settings"), style="navigation_btn_hover")
-                        selected_foreground Text(_("Settings"), style="navigation_btn_selected")
+                        foreground Text(_("Settings"), style="nav_btn")
+                        hover_foreground Text(_("Settings"), style="nav_btn_hover")
+                        selected_foreground Text(_("Settings"), style="nav_btn_selected")
                         action ShowMenu("preferences")
 
                     if main_menu:
                         imagebutton:
                             auto "gui/navigation/about_%s.png"
-                            foreground Text(_("About"), style="navigation_btn")
-                            hover_foreground Text(_("About"), style="navigation_btn_hover")
-                            selected_foreground Text(_("About"), style="navigation_btn_selected")
+                            foreground Text(_("About"), style="nav_btn")
+                            hover_foreground Text(_("About"), style="nav_btn_hover")
+                            selected_foreground Text(_("About"), style="nav_btn_selected")
                             action ShowMenu("about")
 
                     if not main_menu:
                         imagebutton:
                             auto "gui/navigation/mainmenu_%s.png"
-                            foreground Text(_("Title"), style="navigation_btn")
-                            hover_foreground Text(_("Title"), style="navigation_btn_hover")
-                            selected_foreground Text(_("Title"), style="navigation_btn_selected")
+                            foreground Text(_("Title"), style="nav_btn")
+                            hover_foreground Text(_("Title"), style="nav_btn_hover")
+                            selected_foreground Text(_("Title"), style="nav_btn_selected")
                             action MainMenu()
 
                     imagebutton:
                         auto "gui/navigation/quit_%s.png"
-                        foreground Text(_("Quit"), style="navigation_btn")
-                        hover_foreground Text(_("Quit"), style="navigation_btn_hover")
-                        selected_foreground Text(_("Quit"), style="navigation_btn_selected")
+                        foreground Text(_("Quit"), style="nav_btn")
+                        hover_foreground Text(_("Quit"), style="nav_btn_hover")
+                        selected_foreground Text(_("Quit"), style="nav_btn_selected")
                         action Quit(confirm=True)
 
 
@@ -680,10 +687,6 @@ screen navigation():
 
         ## Help isn't necessary or relevant to mobile devices.
         #textbutton _("Help") action ShowMenu("help")
-
-style navigation_image_button:
-    activate_sound "audio/sfx/click.ogg"
-    hover_sound "audio/sfx/hover.ogg"
 
 style navigation_button is gui_button
 style navigation_button_text:
@@ -695,22 +698,23 @@ style navigation_button_text:
     outlines [(5, "#16161d", 2, 2)]
     hover_outlines [(5, "#6667ab", 2, 2)]
 
+style navigation_image_button is button
 
-style navigation_btn_hover:
+style nav_btn_hover:
     color u"#fff"
     yalign 0.5
     xpos 95
     font gui.interface_text_font
     size gui.interface_text_size
 
-style navigation_btn_selected:
+style nav_btn_selected:
     color u"#fff"
     yalign 0.5
     xpos 95
     font gui.interface_text_font
     size gui.interface_text_size
 
-style navigation_btn:
+style nav_btn:
     yalign 0.5
     color u"#fff"
     xpos 95
@@ -1233,6 +1237,8 @@ screen about():
         
         null height 25
 
+        
+
 
 style empty_frame:
     background None
@@ -1497,16 +1503,14 @@ screen pref_text():
                 textbutton "{font=fonts/123Marker.ttf}123Marker" action [gui.SetPreference("font", "fonts/123Marker.ttf"), SetVariable("persistent.typeface", "123Marker")]:
                     tooltip "Set the typeface to {font=fonts/123Marker.ttf}123Marker{/font}."
 
-style header_image_button:
-    activate_sound "audio/sfx/click.ogg"
-    hover_sound "audio/sfx/hover.ogg"
+style header_image_button is button
 
-style header_btn_hover is navigation_btn_hover
+style header_btn_hover is nav_btn_hover
 
-style header_btn_selected is navigation_btn_selected
+style header_btn_selected is nav_btn_selected
 
 style header_btn:
-    is navigation_btn
+    is nav_btn
     color gui.accent_color
 
 style pref_label is gui_label

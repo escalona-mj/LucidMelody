@@ -68,3 +68,62 @@ image dream1_cg_part5 = Composite(
     (0, 0), "dream1_cg_scene5",
     (650, 96), "dream1_cg_scene5_both",
     (0, 0), At("dream1_cg_scene5_light", pulse))
+
+image dhannica_gojo_bg = "images/cg/cg_extras/dhannica_gojo_bg.png"
+
+image dhannica_gojo_blink:
+    "images/cg/cg_extras/dhannica_gojo_eye_open.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "images/cg/cg_extras/dhannica_gojo_eye_close.png"
+    .10
+    repeat
+
+image dhannica_gojo_light = "images/cg/cg_extras/dhannica_gojo_light.png"
+
+transform pulse_bright:
+    alpha 1.0
+    choice:
+        ease 2.0 alpha 0.5
+    choice:
+        ease 4.0 alpha 0.5
+    choice:
+        ease 1.0 alpha 0.8
+    choice:
+        ease 10 alpha 0.2
+    ease 7 alpha 1.0
+    repeat
+
+image dirt_overlay:
+    "images/cg/cg_extras/dirt_overlay.png"
+    alpha 0.75
+image nah = "images/cg/cg_extras/nah.png"
+
+image cg_dhannica_gojo = Composite(
+    (1920, 1080),
+    (0, 0), "dhannica_gojo_bg",
+    (0, 0), "dhannica_gojo",
+    (0, 0), At("dhannica_gojo_light", pulse_bright),
+    (0, 0), At("dirt_overlay", pulse_bright))
+
+image cg_dhannica_gojo_nah = Composite(
+    (1920, 1080),
+    (0, 0), "cg_dhannica_gojo",
+    (1100, 150), "nah")
+
+layeredimage dhannica_gojo:
+    group base: #body
+        attribute base default:
+            "images/cg/cg_extras/dhannica_gojo_base.png"
+    group eyes:
+        attribute blink default:
+            "dhannica_gojo_blink"
+        attribute eyeclose:
+            "images/cg/cg_extras/dhannica_gojo_eye_close.png"
+    group accesories:
+        attribute glasses default:
+            "images/cg/cg_extras/dhannica_gojo_glasses.png"

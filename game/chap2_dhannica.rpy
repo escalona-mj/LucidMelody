@@ -7,7 +7,7 @@ label chap2_dhannica:
         dhannica "Y-yes."
         prof "I see."
         prof "Take her to the infirmary."
-        scene bg school hallway with scenefadehold
+        scene bg school hallway with blur_fadehold
         "You both walk in the long hallways of the school, searching for the infirmary."
         "You tried to maintain your posture, but your limping slowed you down."
         nick "Hey, slow down. You're going to hurt yourself more."
@@ -396,7 +396,7 @@ label chap2_dhannica:
     stop ambient fadeout 1.0
 
 label classroom2:
-    scene bg classroom with scenefadehold
+    scene bg classroom with blur_fadehold
     play ambient classroom fadein 1.0 volume 0.2
     "Settling into your seat, with the remnants of pain in your foot, your thoughts drifted back to the dream you had before the start of school."
     if a_hangOut:

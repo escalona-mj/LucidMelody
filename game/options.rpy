@@ -49,8 +49,6 @@ define config.say_menu_text_filter = comma_pause
 define config.periodic_callback = toggle_pause
 
 default persistent.dismiss_pause = True
-init python:
-    _dismiss_pause = persistent.dismiss_pause
 
 
 ## Basics ######################################################################
@@ -149,7 +147,7 @@ define config.end_splash_transition = dissolve
 
 # define config.enter_yesno_transition = Dissolve(0.2)
 # define config.exit_yesno_transition = Dissolve(0.2)
-define config.game_main_transition = scenefade
+define config.game_main_transition = blur_fade
 
 ## Between screens of the game menu.
 
@@ -163,10 +161,10 @@ define config.after_load_transition = Dissolve(0.2)
 
 ## Used when entering the main menu after the game has ended.
 
-define config.end_game_transition = scenefade
+define config.end_game_transition = blur_fade
 
-define config.enter_replay_transition = scenefadehold
-define config.exit_replay_transition = scenefade
+define config.enter_replay_transition = blur_fadehold
+define config.exit_replay_transition = blur_fade
 
 ## A variable to set the transition used when the game starts does not exist.
 ## Instead, use a with statement after showing the initial scene.

@@ -37,7 +37,7 @@ label start:
 
     $ DisableSkip.start()
     scene black
-    with scenefade
+    with blur_fade
 
     if persistent.first_gameplay == False:
         show intro_text "Before you start, the game would like to clarify some things." with dissolve

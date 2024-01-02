@@ -21,7 +21,7 @@ label chap1_dhannica:
         
     label dream1:
         $ DreamScene.start("dream1")    
-        scene bg stage with scenefade
+        scene bg stage with blur_fade
         
         play ambient cheer fadein 3.0 volume 0.2
         
@@ -32,8 +32,8 @@ label chap1_dhannica:
         show bg stage:
             truecenter
             ease 1.0 zoom 1.4
-        show dust_particle onlayer dream behind textbox_dream
-        show dust_particle_blur onlayer dream behind textbox_dream
+        show dust_particle onlayer dream behind black_bars
+        show dust_particle_blur onlayer dream behind black_bars
         "The crowd's anticipation is palpable."
         show dream1_cg_scene1_singer:
             offscreenright
@@ -114,6 +114,52 @@ label chap1_dhannica:
         show dream1_cg_part4
         hide dream1_cg_part4
         d_singer "You know, you're pretty lucky."
+        if _in_replay:
+            dhannica "You must have misunderstood me."
+            show dirt_overlay onlayer dream behind black_bars:
+                alpha 0.0
+                linear 5.0 alpha 1.0
+                parallel:
+                    pulse_bright
+            camera:
+                zoom 1.5 xalign 0.5
+            show dhannica_gojo_bg
+            show dhannica_gojo eyeclose:
+                subpixel True xalign 0.5 blur 50 yalign -0.5 zoom 2
+            show dhannica_gojo_light at pulse_bright
+            with dissolve
+            d_singer "Would you like to sing with me?"
+            show cg_dhannica_gojo
+            hide cg_dhannica_gojo
+            show dhannica_gojo -eyeclose:
+                easein 0.5 xalign 0.5 yalign 1.0 zoom 1.0 blur 0 
+            camera:
+                easein 0.5 zoom 1.1 truecenter
+                parallel:
+                    choice:
+                        ease 1.0 xoffset 5 yoffset 10
+                    choice:
+                        ease 1.0 xoffset -5 yoffset 10
+                    choice:
+                        ease 1.0 xoffset 5 yoffset -10
+                    choice:
+                        ease 1.0 xoffset -5 yoffset -10
+                    repeat
+            dhannica "Me?"
+            show dhannica_gojo eyeclose:
+                xalign 0.5 yalign 1.0 zoom 1.0 blur 0 
+                easein .1 yoffset 20
+                easeout .1 yoffset 0
+            dhannica "Heh."
+            show cg_dhannica_gojo_nah
+            hide cg_dhannica_gojo_nah
+            with None
+            show dhannica_gojo -eyeclose with None
+            show nah onlayer dream:
+                xpos 1100 ypos 150 alpha 0.0
+                ease 1.0 alpha 1.0
+            dhannica "No thanks."
+            camera
         d_singer "What's your name?"
         dhannica "O-oh, it's [Main]."
         show dream1_cg_scene4_dhannica:
@@ -148,7 +194,7 @@ label chap1_dhannica:
             xalign 0.5
             yalign 1.0
         show dream1_cg_scene5_light at pulse
-        with scenedissolve
+        with blur_dissolve
         show dream1_cg_part5
         hide dream1_cg_part5
         "Both of you started singing, and the crowd goes even wilder as headlights were spotted to both of you."
@@ -167,8 +213,8 @@ label chap1_dhannica:
         stop sfx2 fadeout 1.0
         stop ambient
         camera
-        hide dust_particle onlayer dream behind textbox_dream
-        hide dust_particle_blur onlayer dream behind textbox_dream
+        hide dust_particle onlayer dream behind black_bars
+        hide dust_particle_blur onlayer dream behind black_bars
         window hide(None)
         play sound alarm
         scene black
@@ -257,9 +303,9 @@ label chap1_dhannica:
         else:
             "You jumped out of bed, changed into your uniform, rushed out the door and head downstairs."
 
-    scene black with scenedissolve
+    scene black with blur_dissolve
     play sound thump
-    scene bg living room with scenedissolve
+    scene bg living room with blur_dissolve
     dhannica "Ow!" with vpunch
 
     if beLate or usePhone:
@@ -308,9 +354,9 @@ label chap1_dhannica:
         dhannica_i "Though my foot still hurts..."
         "You ate breakfast with your mother and went outside."
     
-    scene black with scenedissolve
+    scene black with blur_dissolve
     play sound doorclose
-    scene bg highway with scenedissolve
+    scene bg highway with blur_dissolve
     play ambient birds fadein 1.0
 
     if beLate:
@@ -324,7 +370,7 @@ label chap1_dhannica:
         "As the bus took its momentary halt at the bus stop, tons of people were also waiting to get on."
         "Which meant more time for you to be able to '{i}limp{/i}' your way to the bus stop."
 
-        scene bg busstop with scenefade
+        scene bg busstop with blur_fade
         play ambient2 busengine fadein 1.0
 
         dhannica_i "Almost there...!"
@@ -509,7 +555,7 @@ label chap1_dhannica:
                 "It appeared to be full, but you needed to check if you could squeeze in."
                 stop ambient fadeout 1.0
                 stop ambient2 fadeout 1.0
-                scene bg bus with scenefade
+                scene bg bus with blur_fade
                 "Upon entering, you scanned the area for seats, only to meet disatisfaction as all were taken."
                 dhannica_i "No seats. Great, more fun."
                 dhannica_i "Guess I'll be standing then."
@@ -657,7 +703,7 @@ label chap1_dhannica:
 label school:
     camera:
         ease 1.0 truecenter zoom 1.0
-    scene bg school with scenefadehold
+    scene bg school with blur_fadehold
     $ welcome.grant()
     if beLate:
         $ update_journal("Character updated.")
@@ -742,7 +788,7 @@ label school:
     jump classroom
 
 label classroom:
-    scene bg classroom2 with scenefadehold
+    scene bg classroom2 with blur_fadehold
     play ambient2 classroom volume 0.5 fadein 1.0
     if beLate:
         "You hustle to class, pulling yourself towards the door with just a minute to spare before the teacher arrives."
@@ -811,7 +857,7 @@ label classroom:
         dhannica "Thanks."
         alec "No problem."
         stop ambient2 fadeout 1.0
-        scene bg school hallway with scenefadehold
+        scene bg school hallway with blur_fadehold
         show nick:
             offscreenright
             ease 1.0 xalign 0.5

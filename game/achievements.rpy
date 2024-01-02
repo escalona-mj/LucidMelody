@@ -279,7 +279,7 @@ style achievements_vbox is vbox
 
 style achievements_label_text: #unlocked achievement name
     yalign 0.5
-    outlines [(5, "#6667ab", 0, 2)]
+    outlines [(5, "#6667ab", 0, 0)]
     font gui.game_menu_label_font
     color '#fff'
     size (gui.interface_text_size + 5)

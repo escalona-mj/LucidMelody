@@ -67,7 +67,7 @@ init python:
 
             #declare that we are now in a dream
             store.current_scene = "dream"
-            renpy.show("textbox_dream", layer="dream")
+            renpy.show("black_bars", layer="dream")
 
 
             if not config.developer:
@@ -75,7 +75,8 @@ init python:
                 store._skipping = False
 
             if _in_replay:
-                store.Main = "Dhannica"
+                store.mcNamegirl = "Dhannica"
+                store.Main = mcNamegirl
                 store._game_menu_screen = 'emptymenu'
 
         def stop(label):
@@ -85,7 +86,7 @@ init python:
 
             #leave the dream
             store.current_scene = None
-            renpy.hide("textbox_dream", layer="dream")
+            renpy.hide("black_bars", layer="dream")
 
             config.rollback_enabled = True
             store._skipping = True
@@ -170,7 +171,7 @@ image bg clinic:
 image bg hospital:
     im.Blur("images/bg/hospital.jpg", 2.5)
 
-image textbox_dream = "gui/textbox_dream.png"
+image black_bars = "gui/black_bars.png"
 
 image mom = "images/characters/mom.png"
 
@@ -196,7 +197,7 @@ image menu_bg = Composite(
     (0, 0), At("gui/menu/clouds2.png", cloud2),
     (0, 0), At("gui/menu/clouds1.png", cloud1),
     (0, 700), "gui/menu/grasshill.png",
-    (0, 0), "particle",
+    (0, 0), "menu_particle",
     (-2, 825), "gui/menu/grassblur.png"
     )
 
@@ -298,67 +299,67 @@ transform reset_dizzy:
 
 
 #APPARENTLY, YOU CAN USE ATL TRANSFORMATIONS AS TRANSITIONS
-transform scenefade(new_widget, old_widget):
+transform blur_fade(new_widget, old_widget):
     delay 1.5
     contains:
         pause 0.5
         new_widget
         subpixel True
         truecenter
-        zoom 1.03 alpha 0.0 blur 10
-        easein 1.0 alpha 1.0 zoom 1.0 blur 0
+        alpha 0.0 blur 30
+        easein 1.0 alpha 1.0 blur 0
     contains:
         old_widget
         subpixel True
         truecenter
-        zoom 1.0 alpha 1.0 blur 0
-        easein 0.5 zoom 1.03 alpha 0.0 blur 10
+        alpha 1.0 blur 0
+        easein 0.5 alpha 0.0 blur 30
         pause 1.0
 
-transform scenefadehold(new_widget, old_widget):
+transform blur_fadehold(new_widget, old_widget):
     delay 2.5
     contains:
         pause 1.5
         new_widget
         subpixel True
         truecenter
-        zoom 1.03 alpha 0.0 blur 10
-        easein 1.0 alpha 1.0 zoom 1.0 blur 0
+        alpha 0.0 blur 30
+        easein 1.0 alpha 1.0 blur 0
     contains:
         old_widget
         subpixel True
         truecenter
-        zoom 1.0 alpha 1.0 blur 0
-        easein 0.5 zoom 1.03 alpha 0.0 blur 10
+        alpha 1.0 blur 0
+        easein 0.5 alpha 0.0 blur 30
         pause 1.5
 
-transform scenedissolve(new_widget, old_widget):
+transform blur_dissolve(new_widget, old_widget):
     delay 0.6
     contains:
         new_widget
         subpixel True
         truecenter
-        zoom 1.03 alpha 0.0 blur 10
-        easein 0.5 alpha 1.0 zoom 1.0 blur 0
+        alpha 0.0 blur 30
+        easein 0.5 alpha 1.0 blur 0
     contains:
         old_widget
         subpixel True
         truecenter
-        zoom 1.0 alpha 1.0 blur 0
-        easein 0.5 alpha 0.0 zoom 1.03 blur 10
+        alpha 1.0 blur 0
+        easein 0.5 alpha 0.0 blur 30
 
 
 ###########################################################################################################
 #                                               TRANSITIONS                                               #
 ###########################################################################################################
-# define config.say_attribute_transition = Dissolve(.25, alpha=True)
-# define config.say_attribute_transition_layer = "master"
 
 init -10 python:
     def eyewarp(x):
         return x**1.33
-    # $ fastdiv = {"master" : wipeleft}
-    
+
+init +1:
+    $ dissolve = {"master" : dissolve}
+
 define long_dissolve = MultipleTransition([
     False, Dissolve(1.5),
     Solid("#000"), Pause(1.5),
@@ -382,10 +383,11 @@ define eye_scene = MultipleTransition([
 define audio.titlescreen = "audio/bgm/titlescreen.mp3"
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
 define audio.meet = "<loop 04.024>audio/bgm/meet.ogg"
+define audio.into_a_dream = "<loop 0>audio/bgm/into_a_dream.ogg"
 
 #SFX
-define audio.alarm = "audio/sfx/alarm.mp3"
-define audio.alarmloop = "<from 0.160 to 1.113>audio/sfx/alarm.mp3"
+define audio.alarm = "audio/sfx/alarm.ogg"
+define audio.alarmloop = "<from 0.880 to 2.855>audio/sfx/alarm.ogg"
 define audio.doorclose = "audio/sfx/doorclose.mp3"
 define audio.phone_notif = "audio/sfx/phone_notif.ogg"
 define audio.stomachgrowl = "audio/sfx/stomachgrowl.ogg"
