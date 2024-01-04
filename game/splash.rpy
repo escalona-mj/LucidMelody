@@ -12,6 +12,7 @@ image splash_text = ParameterizedText(
     size=gui.interface_text_size
 )
 
+
 label splashscreen:
     if not renpy.variant("tv"):
         if renpy.variant("pc"):
@@ -19,15 +20,6 @@ label splashscreen:
         $ config.rollback_enabled = False
         $ renpy.music.play(config.main_menu_music)
         scene splash_white with None
-        # show renpy_logo at truecenter:
-        #     yalign 0.45
-        # show splash_text "Made with Ren'Py.":
-        #     yalign 0.6
-        # with dissolve
-        # pause 3.0
-        # hide renpy_logo
-        # hide splash_text
-        # with dissolve
         if renpy.variant("small"):
             show logo_studio:
                 truecenter
@@ -43,7 +35,7 @@ label splashscreen:
         pause 3.0
         hide logo_studio
         show sky_color
-        show splash_text "Some text here that will be changed."
+        show splash_text "The melody is very lucid."
         with dissolve
         pause 2.0
         $ config.rollback_enabled = True

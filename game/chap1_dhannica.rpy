@@ -1,22 +1,8 @@
 label chap1_dhannica:
     call chapter_transition
-
-    #dhannica route, so she takes the MC role
-    $ MC = CharInfo(
-    char_name="[Main]",
-    description="[dhannica_description]",
-    mainChr=True,
-    pic="journal_dhannica")
-
-    $ all_chars = [MC, Dhannica, Nick, Alec]
-    $ current_page = "[Main]" #set the default screen when opening the character book for the first time
-
     $ a_name = "???"
-    $ mcNameboy = "???"
+    $ n_name = "???"
 
-    if not config.developer:
-        $ renpy.block_rollback() #prevent from going back to mc selection screen
-    
     pause 2.0
         
     label dream1:
@@ -26,7 +12,6 @@ label chap1_dhannica:
         play ambient cheer fadein 3.0 volume 0.2
         
         "The audience roars."
-        "A palpable blend of excitement and anticipation vibrates through the crowd."
         "You find yourself in an opulent concert hall, with golden spotlights casting a warm glow above you."
         "Thousands of fans, a mosaic of diverse faces and emotions, are gathered, their eyes alight with the fervor of shared passion."
         show bg stage:
@@ -34,7 +19,7 @@ label chap1_dhannica:
             ease 1.0 zoom 1.4
         show dust_particle onlayer dream behind black_bars
         show dust_particle_blur onlayer dream behind black_bars
-        "The crowd's anticipation is palpable."
+        "A palpable blend of excitement and anticipation vibrates through the crowd."
         show dream1_cg_scene1_singer:
             offscreenright
             ease 1.0 xalign 0.5
@@ -49,7 +34,7 @@ label chap1_dhannica:
                 ease 5.0 xoffset -100
                 ease 5.0 xoffset 0
                 repeat
-        with dissolve
+        with blur_dissolve
         "The atmosphere is charged with an electric buzz, with fans waving their light sticks in rhythm."
         "The light sticks wave, dip, and swirl, an orchestrated chaos of color, creating patterns and waves that ebb and flow with the melody."
         "In some moments, they form a unified field of color, a single, massive wave of light that rolls across the audience, following the performance of the band."
@@ -78,17 +63,27 @@ label chap1_dhannica:
         d_singer "Seems like you need to get a hold of yourself together!"
         dhannica "H-huh?"
         "You became so ecstatic and shocked at what had occured."
-        dhannica_i "Oh gosh... He called me out...!"
-        dhannica_i "W-wait! I'm still trying to process what just happened!"
-        scene black with eye_close
-        "You close your eyes and pinched yourself if all of this is real."
-        "*pinch*"
-        dhannica_i "Ow!" with vpunch
-        camera at dizzy
-        scene dream1_cg_scene3
-        show dream1_cg_scene3_light
-        with eye_open
-        dhannica_i "I'm not dreaming! I-It's real!"
+        if not _in_replay:
+            dhannica_i "Oh gosh... He called me out...!"
+            dhannica_i "W-wait! I'm still trying to process what just happened!"
+            scene black with eye_close
+            "You close your eyes and pinched yourself if all of this is real."
+            "*pinch*"
+            dhannica_i "Ow!" with vpunch
+            camera at dizzy
+            scene dream1_cg_scene3
+            show dream1_cg_scene3_light
+            with eye_open
+            dhannica_i "I'm not dreaming! I-It's real!"
+        else:
+            scene black with eye_close
+            "You embarassingly close your eyes."
+            dhannica_i "I hope he goes away... this is so embarassing."
+            camera at dizzy
+            scene dream1_cg_scene3
+            show dream1_cg_scene3_light
+            with eye_open
+            dhannica_i "Please go away..."
         show dream1_cg_scene3_hand behind dream1_cg_scene3_light:
             xalign 0.5
             ypos 0.0 yanchor 1.0
@@ -100,66 +95,31 @@ label chap1_dhannica:
         d_singer "Let's get you up here."
         dhannica "W-where?"
         d_singer "On the stage!"
+        if _in_replay:
+            dhannica "W-wait, I don't think you-{nw}"
         "Hurriedly, fans cheering around you helped you get up on stage."
         camera at reset_dizzy
         scene dream1_cg_scene4 with eye_scene
-        show dream1_cg_scene4_dhannica:
-            yalign 1.0
-            xpos 0.0 xanchor 1.0
-            ease 1.5 xpos 0.0 xanchor -0.25
+        if not _in_replay:
+            show dream1_cg_scene4_dhannica:
+                yalign 1.0
+                xpos 0.0 xanchor 1.0
+                ease 1.5 xpos 0.0 xanchor -0.25
         show dream1_cg_scene4_light at pulse
         show dream1_cg_scene4_singer:
             xpos 1.0 xanchor 0.0
             ease 1.5 xpos 1.0 xanchor 1.0
         show dream1_cg_part4
         hide dream1_cg_part4
-        d_singer "You know, you're pretty lucky."
+
+        if not _in_replay:
+            d_singer "You know, you're pretty lucky."
+        else:
+            d_singer "Hey, come on! Don't be shy!"
+
         if _in_replay:
-            dhannica "You must have misunderstood me."
-            show dirt_overlay onlayer dream behind black_bars:
-                alpha 0.0
-                linear 5.0 alpha 1.0
-                parallel:
-                    pulse_bright
-            camera:
-                zoom 1.5 xalign 0.5
-            show dhannica_gojo_bg
-            show dhannica_gojo eyeclose:
-                subpixel True xalign 0.5 blur 50 yalign -0.5 zoom 2
-            show dhannica_gojo_light at pulse_bright
-            with dissolve
-            d_singer "Would you like to sing with me?"
-            show cg_dhannica_gojo
-            hide cg_dhannica_gojo
-            show dhannica_gojo -eyeclose:
-                easein 0.5 xalign 0.5 yalign 1.0 zoom 1.0 blur 0 
-            camera:
-                easein 0.5 zoom 1.1 truecenter
-                parallel:
-                    choice:
-                        ease 1.0 xoffset 5 yoffset 10
-                    choice:
-                        ease 1.0 xoffset -5 yoffset 10
-                    choice:
-                        ease 1.0 xoffset 5 yoffset -10
-                    choice:
-                        ease 1.0 xoffset -5 yoffset -10
-                    repeat
-            dhannica "Me?"
-            show dhannica_gojo eyeclose:
-                xalign 0.5 yalign 1.0 zoom 1.0 blur 0 
-                easein .1 yoffset 20
-                easeout .1 yoffset 0
-            dhannica "Heh."
-            show cg_dhannica_gojo_nah
-            hide cg_dhannica_gojo_nah
-            with None
-            show dhannica_gojo -eyeclose with None
-            show nah onlayer dream:
-                xpos 1100 ypos 150 alpha 0.0
-                ease 1.0 alpha 1.0
-            dhannica "No thanks."
-            camera
+            jump alt_lucid_dream1
+            
         d_singer "What's your name?"
         dhannica "O-oh, it's [Main]."
         show dream1_cg_scene4_dhannica:
@@ -625,7 +585,7 @@ label chap1_dhannica:
             camera:
                 ease 1.0 truecenter zoom 1.0
             show nick:
-                ease_back 1.0 yalign 1.0
+                trans3
             nick "There, that should do it."
             show nick at trans3
             nick "..."
@@ -635,6 +595,7 @@ label chap1_dhannica:
                 ease_back 1.0 offscreenright
             dhannica "Wait! Your flask!..."
             "You're clueless at what just happened."
+            dhannica_i "I didn't even get to ask his name."
             dhannica_i "Guess I'll return this..."
 
         if n_refuseIcedTea:
@@ -646,9 +607,11 @@ label chap1_dhannica:
                 ease 1.0 truecenter zoom 1.0
             "It was sort of giving a public display of affection, garnering curious glances from onlookers."
             nick "J-just put that there. Give the bottle back to me when you get a chance."
-            hide nick at trans3
+            show nick:
+                ease_back 1.0 offscreenright
             "He soon left at a fastened pace, leaving you all alone in the bus stop."
-            dhannica_i "Well that was...interesting."
+            dhannica_i "I didn't even get to ask his name."
+            dhannica_i "Guess I'll return this..."
 
         if n_takeFlask:
             show nick at trans3
@@ -824,7 +787,7 @@ label classroom:
     dhannica_i "When is he gonna stop blabbering?"
     if beLate:
         "The door opens, and a newcomer rushes in, catching his breath."
-        unknown_guy "Sorry, I'm late!"
+        unknown "Sorry, I'm late!"
         prof "Ah, first day and he's already late."
     "Suddenly, Alec raises his hand, catching the professor's attention."
     prof "Yes, Mr. Boyband with the grunge style. What's up?"

@@ -104,8 +104,7 @@ screen extras():
             
             if mainMenu_ach.has():
                 button:
-                    action Start("enter_lucid")
-                    #action If(persistent.seen_dream1, true=Show("confirm", message="Are you sure you want to replay Dream 1?", yes_action=[Replay("dream1"), Hide()], no_action=Hide()), false=Show("dialog", message="You have not seen this part yet.", ok_btn="OK", ok_action=Hide()))
+                    action If(persistent.seen_dream1, true=Start("enter_lucid"), false=Show(screen="dialog", message="We were unable to access the protocol.\nPlease try again later.", ok_btn="OK", ok_action=Hide()))
                     foreground "lucid_button"
 
                     frame:

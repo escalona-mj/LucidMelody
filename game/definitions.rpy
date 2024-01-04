@@ -75,8 +75,8 @@ init python:
                 store._skipping = False
 
             if _in_replay:
-                store.mcNamegirl = "Dhannica"
-                store.Main = mcNamegirl
+                store.Main = persistent.playername
+                store.mcNamegirl = Main
                 store._game_menu_screen = 'emptymenu'
 
         def stop(label):
@@ -105,15 +105,14 @@ define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_positi
 
 #thought MC
 define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}(', what_suffix='){/i}', color='#ff9b9b', image="dhannica", callback=dhannica_i_beep, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
-define nick_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}(', what_suffix='){/i}', color='#4076ff', callback=nick_i_beep, namebox_background=Frame("gui/namebox/nick_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 #characters
 default mcNamegirl = ""
 define dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b', image="dhannica", callback=dhannica_beep, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 define phone_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="dhannica", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
-default mcNameboy = ""
-define nick = DynamicCharacter('mcNameboy', kind=speak, color='#4076ff', image='nick', callback=nick_beep, namebox_background=Frame("gui/namebox/nick_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+default n_name = ""
+define nick = DynamicCharacter('n_name', kind=speak, color='#4076ff', image='nick', callback=nick_beep, namebox_background=Frame("gui/namebox/nick_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 default a_name = "Alec"
 define alec = DynamicCharacter('a_name', kind=speak, color='#21a733', image="alec", callback=alec_beep, namebox_background=Frame("gui/namebox/alec_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
@@ -123,53 +122,54 @@ define phone_alec = DynamicCharacter('a_name', kind=alec, image="alec", what_fon
 define girlMom = Character('Mom', kind=speak)
 define d_singer = Character('Singer',kind=speak)
 define prof = Character('Prof', kind=speak)
-define unknown_guy = Character('???', kind=speak)
+define unknown = Character('???', kind=speak)
 define nurse = Character('Nurse', kind=speak)
 define doctor = Character('Doctor', kind=speak)
 define everyone = Character('Everyone', kind=speak)
 
+define block = Character(None, advance=False)
 
 ######################################################################################################
 #                                               IMAGES                                               #
 ######################################################################################################
 image bg highway:
-    im.Blur("images/bg/highway.jpg", 2.5)
+    im.Blur("images/bg/highway.jpg", 1.5)
 
 image bg dhannica room:
-    im.Blur("images/bg/dhannica_room.png", 2.5)
+    im.Blur("images/bg/dhannica_room.png", 1.5)
 
 image bg stage:
-    im.Blur("images/bg/stage.png", 2.5)
+    im.Blur("images/bg/stage.png", 1.5)
 
 image bg living room:
-    im.Blur("images/bg/livingroom.png", 2.5)
+    im.Blur("images/bg/livingroom.png", 1.5)
 
 image bg school:
-    im.Blur("images/bg/school.jpg", 2.5)
+    im.Blur("images/bg/school.jpg", 1.5)
 
 image bg busstop:
-    im.Blur("images/bg/busstop.png", 2.5)
+    im.Blur("images/bg/busstop.png", 1.5)
 
 image bg busstop_no_bus:
-    im.Blur("images/bg/busstop_no_bus.png", 2.5)
+    im.Blur("images/bg/busstop_no_bus.png", 1.5)
 
 image bg bus:
-    im.Blur("images/bg/bus.png", 2.5)
+    im.Blur("images/bg/bus.png", 1.5)
 
 image bg school hallway:
-    im.Blur("images/bg/schoolhallway.jpg", 2.5)
+    im.Blur("images/bg/schoolhallway.jpg", 1.5)
 
 image bg classroom:
-    im.Blur("images/bg/classroom.png", 2.5)
+    im.Blur("images/bg/classroom.png", 1.5)
 
 image bg classroom2:
-    im.Blur("images/bg/classroom2.png", 2.5)
+    im.Blur("images/bg/classroom2.png", 1.5)
     
 image bg clinic:
-    im.Blur("images/bg/clinic.jpg", 2.5)
+    im.Blur("images/bg/clinic.jpg", 1.5)
 
 image bg hospital:
-    im.Blur("images/bg/hospital.jpg", 2.5)
+    im.Blur("images/bg/hospital.jpg", 1.5)
 
 image black_bars = "gui/black_bars.png"
 

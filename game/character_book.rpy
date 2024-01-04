@@ -168,60 +168,46 @@ screen journal():
         xalign 0.5
         yalign 0.5
         hbox:
-            spacing 10
             
             #BOOKMARK SECTION
             frame:
                 xsize 0
                 ysize 0
-                yoffset 40
-                xoffset 55
+                yoffset 75
+                xoffset 59
                 style_prefix "bookmark"
                 vbox:
                     xalign 1.0
                     spacing 25
-                    if isDhannica:
-                        imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
-                            foreground Text("", style="bookmark_btn")
-                            idle_foreground At("side dhannica", bookmark_side)
-                            hover_foreground At("side dhannica", bookmark_side)
-                            selected_foreground Text("{0}".format(Main), style="bookmark_btn")
-                            action [SetVariable("current_page", MC.name)]
-                            focus_mask True
-                        if meetNick:
-                            imagebutton auto "gui/journal/nick_bookmark_%s.png":
-                                foreground Text("", style="bookmark_btn")
-                                idle_foreground At("side nick", bookmark_side)
-                                hover_foreground At("side nick", bookmark_side)
-                                selected_foreground Text("{0}".format(mcNameboy), style="bookmark_btn")
-                                action [SetVariable("current_page", Nick.name)]
-                                focus_mask True
-                        if meetAlec:
-                            imagebutton auto "gui/journal/alec_bookmark_%s.png":
-                                foreground Text("", style="bookmark_btn")
-                                idle_foreground At("side alec", bookmark_side)
-                                hover_foreground At("side alec", bookmark_side)
-                                selected_foreground Text("{0}".format(a_name), style="bookmark_btn")
-                                action [SetVariable("current_page", Alec.name)]
-                                focus_mask True
-                    
-                    elif isNick:
+                    imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
+                        foreground Text("", style="bookmark_btn")
+                        idle_foreground At("side dhannica", bookmark_side)
+                        hover_foreground At("side dhannica", bookmark_side)
+                        selected_foreground Text("{0}".format(Main), style="bookmark_btn")
+                        action [SetScreenVariable("current_page", MC.name)]
+                        focus_mask True
+                    if meetNick:
                         imagebutton auto "gui/journal/nick_bookmark_%s.png":
                             foreground Text("", style="bookmark_btn")
-                            selected_foreground Text("{0}".format(Main), style="bookmark_btn")
-                            action [SetVariable("current_page", MC.name)]
+                            idle_foreground At("side nick", bookmark_side)
+                            hover_foreground At("side nick", bookmark_side)
+                            selected_foreground Text("{0}".format(n_name), style="bookmark_btn")
+                            action [SetScreenVariable("current_page", Nick.name)]
                             focus_mask True
-                        if meetDhannica:
-                            imagebutton auto "gui/journal/dhannica_bookmark_%s.png":
-                                foreground Text("", style="bookmark_btn")
-                                selected_foreground Text("{0}".format(mcNamegirl), style="bookmark_btn")
-                                action [SetVariable("current_page", Dhannica.name)]
-                                focus_mask True
+                    if meetAlec:
+                        imagebutton auto "gui/journal/alec_bookmark_%s.png":
+                            foreground Text("", style="bookmark_btn")
+                            idle_foreground At("side alec", bookmark_side)
+                            hover_foreground At("side alec", bookmark_side)
+                            selected_foreground Text("{0}".format(a_name), style="bookmark_btn")
+                            action [SetScreenVariable("current_page", Alec.name)]
+                            focus_mask True
+                    
             #FIRST PAGE
             frame:
                 at page_flip
                 background None
-                padding(80,30,30,90)
+                padding(90,70,60,90)
                 vbox:
                     style_prefix "page"
                     viewport:
@@ -248,7 +234,7 @@ screen journal():
             frame:
                 at page_flip
                 background None
-                padding(30,30,90,60)
+                padding(90,70,90,90)
                 vbox:
                     style_prefix "page"
                     viewport:
@@ -284,13 +270,13 @@ screen journal():
                 xsize 0
                 ysize 0
                 yoffset 700
-                xoffset -55
+                xoffset -59
                 style_prefix "dream_bookmark"
                 hbox:
                     imagebutton auto "gui/journal/bookmark_%s.png":
                         foreground Text("", style="dream_bookmark_btn")
                         selected_foreground Text("Journal", style="dream_bookmark_btn")
-                        action [SetVariable("current_page", "Journal")]
+                        action [SetScreenVariable("current_page", "Journal"), SelectedIf(current_page == "Journal")]
                         focus_mask True
 
     if current_page == "Journal":

@@ -1,6 +1,6 @@
 init python:
-    # if config.developer:
-    #     config.always_shown_screens = ["dev_screen"]
+    if config.developer:
+        config.always_shown_screens = ["dev_screen"]
 
     def delete_all_saves():
         for i in renpy.list_saved_games(fast=True):
@@ -59,7 +59,7 @@ screen dev_screen():
         text "We're in replay [what_replay]"
         $ underscore_skip = _skipping
         text "_skipping = [underscore_skip]"
-        $ seen_label = renpy.seen_label("dream1")
+        $ seen_label = persistent.seen_dream1
         text "Dream1 has been seen? [seen_label]"
         # textbutton "make it unseen" action make_it_unseen()
         text "Alec points = {0}".format(alec_likePoints)

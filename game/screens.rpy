@@ -536,30 +536,32 @@ screen emptymenu():
     tag menu
 
     use game_menu(""):
-        if not _in_replay:
-            style_prefix "emptymenu"
-            vbox:
-                text "Chapter [chapter]":
-                    font gui.interface_text_font
-                    size 90
-                text "[chapter_name]":
-                    size 70
-
+        if not current_route == "lucid":
+            if not _in_replay:
+                style_prefix "emptymenu"
+                vbox:
+                    text "Chapter [chapter]":
+                        font gui.interface_text_font
+                        size 90
+                    text "[chapter_name]":
+                        size 70
+            else:
+                style_prefix "title_lucid"
+                hbox:
+                    xalign 0.5
+                    yalign 0.5
+                    label "Currently dreaming"
+                    hbox:
+                        yalign 0.5
+                        label "." at delayed_blink(0.0, 1.0)
+                        label "." at delayed_blink(0.2, 1.0)
+                        label "." at delayed_blink(0.4, 1.0)
         else:
-            style_prefix "dreaming"
+            style_prefix "title_lucid"
             hbox:
                 xalign 0.5
                 yalign 0.5
-                text "Currently dreaming"
-                hbox:
-                    yalign 0.5
-                    text "." at delayed_blink(0.0, 1.0)
-                    text "." at delayed_blink(0.2, 1.0)
-                    text "." at delayed_blink(0.4, 1.0)
-
-style dreaming_text:
-    size 75
-    font gui.interface_text_font
+                label "Current status: Awaken"
 
 style emptymenu_vbox is vbox:
     xalign 0.5
@@ -607,7 +609,7 @@ screen navigation():
             yalign 0.95
             spacing 30
 
-            textbutton "START" action Start()
+            textbutton "START" action Show('name_input', _layer="front", ok_action=(Hide(screen='name_input',_layer="front"), Function(SavePlayerName)), back_action=Hide(screen='name_input',_layer="front"))
             textbutton "SAVES" action ShowMenu('file_slots')
             textbutton "SETTINGS" action ShowMenu("preferences")
             textbutton "EXTRAS" action ShowMenu("extras")
@@ -632,9 +634,9 @@ screen navigation():
 
                     imagebutton:
                         auto "gui/navigation/confirm_btn_%s.png"
-                        foreground Text(_("End Replay"), style="confirm_btn")
-                        hover_foreground Text(_("End Replay"), style="confirm_btn_hover")
-                        action EndReplay(confirm=True)
+                        foreground Text(_("End Dream"), style="confirm_btn")
+                        hover_foreground Text(_("End Dream"), style="confirm_btn_hover")
+                        action ShowTransient("confirm", message="Are you sure you want to end this dream?", yes_action=EndReplay(confirm=False), no_action=Hide())
 
                 else:
                     if not main_menu:
@@ -741,7 +743,7 @@ init python:
     def dynamicMCMenu():
         last_save = renpy.slot_json(renpy.newest_slot())
 
-        if last_save is None or 'common' in last_save:
+        if last_save is None or 'common' or 'lucid' in last_save:
             return "gui/menu/menu_NONE.png"
         elif last_save['route'] == 'dhannica':
             return "gui/menu/menu_dhannica.png"
@@ -960,14 +962,14 @@ screen game_menu(title, scroll=None, yinitial=0.0):
     add "gui/menu/logo_white.png":
         xalign 0.5 yalign 0.5 zoom 0.75 alpha 0.05
 
-    if current_route == "alec":
+    if main_menu or current_route == "lucid":
+        add "gui/overlay/game_menu.png"
+    elif current_route == "alec":
         add "overlay_alec"
     elif current_route == "nick":
         add "overlay_nick"
-    elif current_route == "dhannica":
-        add "overlay_dhannica"
     elif current_route == "common":
-        add "gui/overlay/game_menu.png"
+        add "overlay_dhannica"
 
     frame:
         style "game_menu_outer_frame"

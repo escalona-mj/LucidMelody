@@ -1,13 +1,40 @@
 default current_route = 'common'
 default persistent.first_gameplay = False
 default persistent.seen_controls = False
-default journal = False
-default notify_journal = True
+default persistent.seen_lucid = False
 default current_scene = None
-# default notify_dhannica = False
-# default notify_alec = False
-# default notify_nick = False
+
+default Main = ''
+default persistent.playername = ''
+
+#CHARACTER JOURNAL
+define MC = CharInfo(
+    char_name="[Main]",
+    description="[dhannica_description]",
+    mainChr=True,
+    pic="journal_dhannica")
+
+define Nick = CharInfo(
+    char_name="[n_name]",
+    description="[nick_description]",
+    points="nick_likePoints",
+    max_points="nick_likePointsMax",
+    pic="journal_nick")
+
+define Alec = CharInfo(
+    char_name="[a_name]",
+    description="[alec_description]",
+    points="alec_likePoints",
+    max_points="alec_likePointsMax",
+    pic="journal_alec")
+
+default all_chars = [MC, Nick, Alec]
+
+default journal = False
 default journal_entries = []
+default current_page = "Journal" #set the default screen when opening the character book for the first time
+
+default notify_journal = True
 default first_page = 1
 default second_page = 2
 

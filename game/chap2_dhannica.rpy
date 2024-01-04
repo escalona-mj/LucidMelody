@@ -86,7 +86,7 @@ label chap2_dhannica:
         nick "Just one of those days, I guess. Overslept, missed the alarm."
         "You wanted to probe further but decided against it. You both sat in silence for a moment, before you realized you haven't properly introduced yourself."
         dhannica "I'm [Main], by the way."
-        $ mcNameboy = 'Nick'
+        $ n_name = 'Nick'
         $ update_journal("Character updated.")
         nick "Nick. Nice to officially meet you, [Main]."
         hide nick at trans3
@@ -227,7 +227,7 @@ label chap2_dhannica:
     pause 2.5
     window auto
     "There was a moment of brief silence."
-    "You forgot about the doctor being present in the room and noticed him in your peripherals listening to both of you bickering about chores."
+    "You forgot about the doctor being present in the room and noticed him listening to both of you bickering about chores."
     dhannica "S-sorry, where are my manners."
     girlMom "Doctor, if you may."
     play ambient hospital volume 0.2 fadein 1.0
@@ -364,7 +364,7 @@ label chap2_dhannica:
             if not beLate:
                 dhannica "Uhh..."
                 $ meetNick = True
-                $ mcNameboy = "Nick"
+                $ n_name = "Nick"
                 $ update_journal("Character added.")
                 nick "Nick."
 
@@ -406,4 +406,4 @@ label classroom2:
     "It felt surreal, almost a premonition of the complexities you were now facing in your waking life."
     "Alec, sitting next to you, leaned in with a whisper, breaking your reverie."
     alec "You sure you're okay? You seem a bit... distant."
-    
+    block "END"

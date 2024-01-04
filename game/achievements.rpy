@@ -156,15 +156,7 @@ define mainMenu_ach = Achievement(
 define independent = Achievement(
     name=_("Independent"),
     id="independent",
-    description=_("Get through the game without dating either of the love interests during Dhannica's route."),
-    unlocked_image="gui/achievements/icons/end.png",
-    locked_image="locked_achievement",
-)
-
-define girlArc = Achievement(
-    name=_("Dhannica's Tribute"),
-    id="girlArc",
-    description=_("Finish the game during her route."),
+    description=_("Get through the game without dating either of the love interests."),
     unlocked_image="gui/achievements/icons/end.png",
     locked_image="locked_achievement",
 )
@@ -172,15 +164,15 @@ define girlArc = Achievement(
 define boyArc = Achievement(
     name=_("Nick's Tribute"),
     id="boyArc",
-    description=_("Finish the game during his route."),
+    description=_("Achieve Nick's ending."),
     unlocked_image="gui/achievements/icons/end.png",
     locked_image="locked_achievement",
 )
 
 define nickArc = Achievement(
-    name=_("Alec's Intervention"),
+    name=_("Alec's Tribute"),
     id="alecArc",
-    description=_("Finish the game by choosing Alec over Nick during Dhannica's route."),
+    description=_("Achieve Alec's ending."),
     unlocked_image="gui/achievements/icons/end.png",
     locked_image="locked_achievement",
 )

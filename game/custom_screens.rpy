@@ -38,16 +38,23 @@ screen dialog(message, ok_btn, ok_action):
 # CUSTOM NAME INPUT SCREEN #
 ############################
 
-default Main = ''
-
 #custom name input
 screen name_input(ok_action, back_action):
     on "show" action Function(renpy.show_layer_at, dialogue_withBlur, layer="screens"), Play("sfx3", "audio/sfx/modal_open.ogg")
-    on "hide" action Function(renpy.show_layer_at, dialogue_noBlur, layer="screens")
+    on "hide" action Function(renpy.show_layer_at, noBlur, layer="screens")
     dismiss action back_action
     zorder 200
     style_prefix "confirm"
     key "K_RETURN" action [ok_action]
+
+    add "gui/overlay/confirm.png":
+        at transform:
+            on show:
+                alpha 0.0
+                easein .25 alpha 0.5
+            on hide:
+                alpha 0.5
+                easein .25 alpha 0.0
 
     frame:
         modal True
@@ -86,7 +93,7 @@ screen name_input(ok_action, back_action):
 style confirm_text:
     xalign 0.5
     yalign 0.5
-    color u'#000'
+    color gui.accent_color
     text_align 0.5
     font gui.interface_text_font
 
@@ -95,7 +102,11 @@ style confirm_input:
 
 init python:
     def SavePlayerName():
+        if not Main:
+            store.Main = "Dhannica"
         persistent.playername = Main
+        store.mcNamegirl = Main
+        renpy.jump_out_of_context('start')
 
 ####################
 # CHOOSE MC SCREEN #
@@ -218,7 +229,7 @@ label chooseFemale:
     pause 0.1
     $ current_route = 'dhannica'
     $ isDhannica = True
-    $ mcNameboy = 'Nick'
+    $ n_name = 'Nick'
     if not Main:
         $ Main = "Dhannica"
     $ mcNamegirl = Main
@@ -231,7 +242,7 @@ label chooseMale:
     $ mcNamegirl = 'Dhannica'
     if not Main:
         $ Main = "Nick"
-    $ mcNameboy = Main
+    $ n_name = Main
     return
 
 screen time_intermission(txt):

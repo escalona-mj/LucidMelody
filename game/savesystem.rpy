@@ -85,7 +85,11 @@ screen file_slots():
 
                 for i in range(3):
 
-                    $ slot = i 
+                    $ slot = i
+                    $ cur_route = FileJson(slot, key='route')
+
+                    $ cur_chap = FileJson(slot, key='chapter')
+                    $ cur_chap_name = FileJson(slot, key='ch_name')
 
                     button:
                         xfill True
@@ -122,10 +126,12 @@ screen file_slots():
                                 box_wrap_spacing 1250
                                 vbox:
                                     yoffset 80
-                                    $ cur_chap = FileJson(slot, key='chapter')
-                                    $ cur_chap_name = FileJson(slot, key='ch_name')
-                                    text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nChapter [cur_chap]: [cur_chap_name]"), empty=_("")):
-                                        style "slot_time_text"
+                                    if not cur_route == "lucid":
+                                        text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nChapter [cur_chap]: [cur_chap_name]"), empty=_("")):
+                                            style "slot_time_text"
+                                    else:
+                                        text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nLucid Somnambulism"), empty=_("")):
+                                            style "slot_time_text"
                                     text FileSaveName(slot):
                                         style "slot_name_text"
                                 hbox:
@@ -143,15 +149,12 @@ screen file_slots():
                                                 textbutton "LOAD" action FileLoad(slot)
                                             textbutton "SAVE" action FileSave(slot)
 
-                            $ cur_route = FileJson(slot, key='route')
                             if cur_route == 'common':
-                                pass
-                            elif cur_route == 'dhannica':
-                                add 'save_dhannica_indicator' xpos 1085 ypos -25
+                                add 'side dhannica' zoom 0.35 rotate 5 xpos 1085 ypos -25
                             elif cur_route == 'alec':
-                                add 'save_alec_indicator' xpos 1085 ypos -25
+                                add 'side alec' zoom 0.35 rotate 5 xpos 1085 ypos -25
                             elif cur_route == 'nick':
-                                add 'save_nick_indicator' xpos 1085 ypos -25
+                                add 'side nick' zoom 0.35 rotate 5 xpos 1085 ypos -25
                             
                         if slot_selected == slot:
                             if FileLoadable(slot):
