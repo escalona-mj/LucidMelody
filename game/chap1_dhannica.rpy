@@ -231,7 +231,7 @@ label chap1_dhannica:
 
         "Snooze for another 5 minutes":
             $ beLate = True
-            dhannica_i "Nooo, I need to remember..."
+            dhannica_i eyeclose "Nooo, I need to remember..."
             dhannica_i "I don't wanna wake up..."
             "You try to remember the dream the best you could."
             "Attempting to replay the entire thing isn't working, it's only making it worse."
@@ -247,8 +247,8 @@ label chap1_dhannica:
             camera at dizzy
             scene bg dhannica room with eye_open
             window auto
-            dhannica_i "Urk..."
-            dhannica_i "Alright, alright! I'm awake!"
+            dhannica_i eyeclose "Urk..."
+            dhannica_i -eyeclose "Alright, alright! I'm awake!"
             "Feeling somewhat disoriented, you extended your hand to grab your phone and checked the time."
             stop sound fadeout 0.2
 

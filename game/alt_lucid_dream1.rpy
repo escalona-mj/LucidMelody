@@ -60,7 +60,7 @@ label alt_lucid_dream1:
     hide dust_particle_blur onlayer dream behind black_bars
     scene bg dhannica room
     with None
-    $ current_scene = None
+    $ DreamScene.stop("dream1")
     if not config.developer:
         $ renpy.block_rollback()
     dhannica ".....!{fast}" with vpunch
@@ -77,7 +77,7 @@ label alt_lucid_dream1:
     "You found eggs, thawed out hotdogs and some leftover food last night."
     dhannica_i "Oh yeah, I didn't get to eat last night..."
     dhannica_i "Eh, might as well reheat it."
-    "The sound of sizzling of your cooking echoes throughout the room."
+    "The sound of sizzling of your cooking echoes throughout the house."
     unknown "Hello?"
     "You turn around and see someone in peeking in the kitchen doorway."
     show mom at trans3

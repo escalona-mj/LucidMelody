@@ -130,8 +130,18 @@ screen file_slots():
                                         text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nChapter [cur_chap]: [cur_chap_name]"), empty=_("")):
                                             style "slot_time_text"
                                     else:
-                                        text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M\nLucid Somnambulism"), empty=_("")):
-                                            style "slot_time_text"
+                                        vbox:
+                                            spacing -10
+                                            text FileTime(slot, format=_("{#file_time}%A | %m/%d/%y | %H:%M"), empty=_("")):
+                                                style "slot_time_text"
+                                            hbox:
+                                                text "Dreaming":
+                                                    font "fonts/Lmromancaps10Oblique-BWV4G.otf"
+                                                    size gui.interface_text_size
+                                                    outlines [ (1, "#000", 1, 1) ]
+                                                text "." at delayed_blink(0.0, 1.0) style "slot_time_text"
+                                                text "." at delayed_blink(0.2, 1.0) style "slot_time_text"
+                                                text "." at delayed_blink(0.4, 1.0) style "slot_time_text"
                                     text FileSaveName(slot):
                                         style "slot_name_text"
                                 hbox:

@@ -20,6 +20,30 @@ image lucid_menu_bg = Composite(
     (-2, 825), "gui/menu/grassblur.png"
     )
 
+init python:
+    lucid_info_dict = {
+        'dialog_1': {
+            'title': "Welcome to Lucid Somnambulism",
+            'info': "Lucid Somnambulism is a state of dreamlike, surreal atmosphere where you have control over [persistent.playername]'s dream.",
+            "centered": True
+        },
+        'dialog_2': {
+            'title': "Introduction",
+            'info': "After choosing none of the love interests in the game, [persistent.playername] underwent through an emotional outburst, triggering her trauma of loneliness.\n\nThis state is her mind's way of coping and resolving the trauma. [persistent.playername] must traverse through her subconscious, revisiting key moments of her life.\n\nIn the lucid somnambulistic state, she needs to navigate without encountering Alec or Nick, exploring alternate interactions and experiences that leads to a new branch of story.",
+            "centered": False
+        },
+        'dialog_3': {
+            'title': "Objective",
+            'info': "You must traverse through these altered memories to find a path that reconciles her independence with her need for connection. This journey is about understanding that loneliness doesn't mean isolation and that independence can coexist with interdependence.\n\nSometimes we are happy to be by ourselves, and sometimes we wish for the company of others.",
+            "centered": False
+        },
+        'dialog_4': {
+            'title': "Note",
+            'info': "There are times where you are made to choose a choice. You can also choose to leave the dream as is, and the lucid somnambulism state will end as if nothing happened. You can replay the dreams as many times as you want.\n\n\n{i}{size=-10}(You will notice that you are in the state of lucid somnambulism when the game becomes desaturated.){/i}",
+            "centered": True
+        },
+    }
+
 label enter_lucid:
     $ _skipping = False
     $ _game_menu_screen = None
@@ -33,18 +57,17 @@ label enter_lucid:
         label lucid_intro:
             stop music fadeout 1.0
             camera:
-                parallel:
-                    desaturate
-                parallel:
-                    noBlur
+                desaturate
             show black_bars onlayer dream
             scene bg hospital
             play ambient hospital volume 0.5 fadein 1.0
             with blur_fade
             $ current_scene = "dream"
-            "The sterile scent of antiseptic hung heavy in the air as the doctor clicked his pen, preparing to discuss the case of a patient with the mother at their the side."
+            "The sterile scent of antiseptic hung heavy in the air as the doctor clicked his pen."
+            "On the other side of the room, a caretaker beside the patient precautiously examines the doctor's actions."
             "They sat in a small consultation room within the hospital, the only sounds being the faint hum of fluorescent lights and the distant murmur of the busy ward outside."
-            doctor "I understand this has been a very distressing time for you and your family. I wanted to discuss [persistent.playername]'s condition and what might have led to her current state."
+            doctor "I understand this has been a very distressing time for you."
+            doctor "I wanted to discuss [persistent.playername]'s condition and what might have led to her current state."
             girlMom "Please, Doctor, tell me what's happening to my daughter."
             "Taking a deep breath, the doctor opened the medical file before him."
             doctor "We've conducted several tests, including neurological examinations and imaging scans."
@@ -62,27 +85,29 @@ label enter_lucid:
             girlMom "{i}Oh, [persistent.playername]...{/i}"
             scene black
             hide black_bars onlayer dream
+            hide grout onlayer front
             stop ambient fadeout 1.0
             with blur_fade
     
-    camera at withBlur
     play music into_a_dream
     show lucid_menu_bg:
-        matrixcolor SaturationMatrix(0.0)
+        parallel:
+            blur 5
+        parallel:
+            bw
     show expression "gui/lucid/confirm_overlay.png" as overlay:
         alpha 0.75
-    # show expression "gui/lucid/grout.png" as grout at pulse onlayer front:
-    #     alpha 0.5
+    show expression "gui/lucid/grout.png" as grout at pulse onlayer front:
+        alpha 0.5
     with blur_dissolve
 
     if persistent.seen_lucid == False:
         $ persistent.seen_lucid = True
         $ renpy.save_persistent()
         label lucid_tutorial:
-            call screen dialog_lucid("Welcome to Lucid Somnambulism", "Lucid Somnambulism is a state of dreamlike, surreal atmosphere where you have control over [persistent.playername]'s dream.", centered_text=True)
-            call screen dialog_lucid("Introduction", "After choosing none of the love interests in the game, [persistent.playername] underwent through an emotional outburst, triggering her trauma.\n\nThis state is her mind's way of coping and trying to resolve the trauma that led her to a coma. [persistent.playername] must traverse through her subconscious, revisiting key moments of her life, particularly focusing on her first day of school.\n\nThis day was pivotal as she met two significant characters, Alec and Nick. However, in the lucid somnambulistic state, [persistent.playername] needs to navigate without encountering them, exploring alternate interactions and experiences that leads to a new branch of story.")
-            call screen dialog_lucid("Objective", "[persistent.playername] must traverse through these altered memories to find a path that reconciles her independence with her need for connection.\n\nThis journey is about understanding that self-assertion doesn't necessarily mean isolation and that independence can coexist with interdependence.")
-            call screen dialog_lucid("Note", "You can also choose to leave the dream as is and the lucid somnambulism state will end as if nothing will happen. You can replay the dreams as much as you want.", centered_text=True)
+            python:
+                for key, value in lucid_info_dict.items():
+                    renpy.call_screen("dialog_lucid", title=value['title'], message=value['info'], centered_text=value['centered'])
             
     #main thing
     call screen lucid
@@ -96,6 +121,8 @@ label enter_lucid:
     with blur_dissolve
     $ renpy.pause(0.5, hard=True)
 
+
+################## CONFIRM SCREEN ##################
 screen lucid_modal(message, first_btn, second_btn, first_action, second_action):
     style_prefix "dialog_lucid"
     modal True
@@ -167,6 +194,19 @@ transform dream_thumb:
     desaturate
     blur 10
 
+transform move_around:
+    parallel:
+        choice:
+            ease_quad 1.0 xoffset 5 yoffset 10
+        choice:
+            ease_quad 2.5 xoffset -5 yoffset 10
+        choice:
+            ease_quad 3.0 xoffset 5 yoffset -10
+        choice:
+            ease_quad 2.0 xoffset -5 yoffset -10
+        repeat
+    
+
 transform hover_dream_thumb:
     parallel:
         dream_thumb
@@ -175,6 +215,9 @@ transform hover_dream_thumb:
 
 transform desaturate:
     matrixcolor SaturationMatrix(0.25)
+
+transform bw:
+    matrixcolor SaturationMatrix(0.0)
 
 ################## DREAM SCREEN ##################
 screen lucid():
@@ -197,9 +240,10 @@ screen lucid():
                 button:
                     xsize 470
                     ysize 720
-                    background AlphaMask(At("dream1_cg_part5", dream_thumb), "gui/lucid/slot_mask.png")
-                    hover_background AlphaMask(At("dream1_cg_part5", hover_dream_thumb), "gui/lucid/slot_mask.png")
-                    action ShowTransient("dream_enter", which_dream="dream1", transition=Dissolve(0.2))
+                    background AlphaMask(At("bg stage", dream_thumb), "gui/lucid/slot_mask.png")
+                    hover_background AlphaMask(At("bg stage", hover_dream_thumb), "gui/lucid/slot_mask.png")
+                    action [ShowTransient("dream_enter", which_dream="dream1", transition=Dissolve(0.2))]
+                    at move_around
                     # action ShowTransient("lucid_modal", message="Are you sure you want to commence this dream?", first_btn="Yes", first_action=[Hide(), Replay("dream1")], second_btn="No", second_action=Hide())
                 
                 button:
@@ -207,12 +251,14 @@ screen lucid():
                     ysize 720
                     background AlphaMask("gui/lucid/slot_locked.png", "gui/lucid/slot_mask.png")
                     action None
+                    at move_around
 
                 button:
                     xsize 470
                     ysize 720
                     background AlphaMask("gui/lucid/slot_locked.png", "gui/lucid/slot_mask.png")
                     action None
+                    at move_around
 
     # HEADER
     hbox:
@@ -243,7 +289,7 @@ init python:
     dream_dict = {
         'dream1': {
             'title': "Enigmatic Concert",
-            'desc': "The audience roars. A spotlight illuminated the center stage, revealing a figure. The artist, obscured in a paperbag, began to weave a sonic tapestry that transcended the ordinary.",
+            'desc': "The audience roars. A spotlight illuminated the center stage, revealing a figure, obscured in a paperbag. It began to weave a sonic tapestry that uplifted the audience.",
             'thumb': "bg stage",
             'label': "dream1"
         }
@@ -252,6 +298,7 @@ init python:
 screen dream_enter(which_dream):
     modal True
     frame:
+        align(0.5, 0.5)
         xfill True
         yfill True
         background Composite(
@@ -261,7 +308,7 @@ screen dream_enter(which_dream):
         )
 
         textbutton "<" style_prefix "title_lucid":
-            action [With(Dissolve(0.2)),Hide()]
+            action [Hide(transition=Dissolve(0.2))]
             pos(75, 15)
 
         frame:
@@ -271,7 +318,7 @@ screen dream_enter(which_dream):
             vbox:
                 spacing 10
                 label dream_dict[which_dream]['title'] style_prefix "title_lucid"
-                
+                    
                 hbox:
                     xfill True
                     box_wrap_spacing 1920
@@ -280,13 +327,14 @@ screen dream_enter(which_dream):
                         xsize 0.5
                         slow_cps 100
                         line_spacing 10
+                        outlines [ (1, "#000", 1, 1) ]
 
                     textbutton "Start" style_prefix "title_lucid":
                         xalign 1.0
                         yalign 1.0
                         action Replay(dream_dict[which_dream]['label'])
 
-    key "game_menu" action [With(Dissolve(0.2)),Hide()]
+    key "game_menu" action [Hide(transition=Dissolve(0.2))]
 
 
 style lucid_frame is empty

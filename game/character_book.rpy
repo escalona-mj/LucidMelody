@@ -135,6 +135,7 @@ transform page_flip:
     easein_back .5 xzoom 1
 
 screen journal():
+    tag menu
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/journal_open.ogg")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master"), Play("sfx2", "audio/sfx/journal_close.ogg")
 
@@ -207,34 +208,7 @@ screen journal():
             frame:
                 at page_flip
                 background None
-                padding(90,70,60,90)
-                vbox:
-                    style_prefix "page"
-                    viewport:
-                        xsize 600
-                        ysize 800
-                        draggable True
-                        mousewheel True
-                        scrollbars "vertical"
-                        vbox:
-                            if not current_page == "Journal":
-                                text name
-                                null height 10
-                                text description
-                            else:
-                                if len(journal_entries) > 0:
-                                    text "{0}".format(journal_entries[first_page - 1])
-
-                    if current_page == "Journal":
-                        if len(journal_entries) > 0:
-                            text "[first_page]" color "#000":
-                                xalign 0.5
-
-            #SECOND PAGE
-            frame:
-                at page_flip
-                background None
-                padding(90,70,90,90)
+                padding(90,50,60,90)
                 vbox:
                     style_prefix "page"
                     viewport:
@@ -256,6 +230,34 @@ screen journal():
                                         bar style "love_bar_bar":
                                             value points
                                             range max_points
+                                null height 10
+                                text name:
+                                    xalign 0.5
+                            else:
+                                if len(journal_entries) > 0:
+                                    text "{0}".format(journal_entries[first_page - 1])
+
+                    if current_page == "Journal":
+                        if len(journal_entries) > 0:
+                            text "[first_page]" color "#000":
+                                xalign 0.5
+
+            #SECOND PAGE
+            frame:
+                at page_flip
+                background None
+                padding(90,50,90,90)
+                vbox:
+                    style_prefix "page"
+                    viewport:
+                        xsize 600
+                        ysize 800
+                        draggable True
+                        mousewheel True
+                        scrollbars "vertical"
+                        vbox:
+                            if not current_page == "Journal":
+                                text description
                             else:
                                 if first_page < len(journal_entries):
                                     text "{0}".format(journal_entries[second_page - 1])
