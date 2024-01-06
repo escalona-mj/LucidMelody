@@ -76,7 +76,6 @@ init python:
 
             if _in_replay:
                 store.Main = persistent.playername
-                store.mcNamegirl = Main
                 store._game_menu_screen = 'emptymenu'
 
         def stop(label):
@@ -103,20 +102,17 @@ init python:
 define narrator = Character(ctc="ctc", ctc_position='fixed')
 define speak = Character(what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed", callback=narrator_beep)
 
-#thought MC
-define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}(', what_suffix='){/i}', color='#ff9b9b', image="dhannica", callback=dhannica_i_beep, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
-
 #characters
-default mcNamegirl = ""
-define dhannica = DynamicCharacter('mcNamegirl', kind=speak, color='#ff9b9b', image="dhannica", callback=dhannica_beep, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
-define phone_dhannica = DynamicCharacter('mcNamegirl', kind=dhannica, image="dhannica", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define dhannica = Character('[Main]', kind=speak, color='#ff9b9b', image="dhannica", callback=dhannica_beep, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define dhannica_i = Character('[Main]', ctc="ctc", ctc_position="fixed", what_prefix='{i}(', what_suffix='){/i}', color='#ff9b9b', image="dhannica", callback=dhannica_i_beep, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define phone_dhannica = Character('[Main]', kind=dhannica, image="dhannica", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31, namebox_background=Frame("gui/namebox/dhannica_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 default n_name = ""
-define nick = DynamicCharacter('n_name', kind=speak, color='#4076ff', image='nick', callback=nick_beep, namebox_background=Frame("gui/namebox/nick_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define nick = Character('[n_name]', kind=speak, color='#4076ff', image='nick', callback=nick_beep, namebox_background=Frame("gui/namebox/nick_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 default a_name = "Alec"
-define alec = DynamicCharacter('a_name', kind=speak, color='#21a733', image="alec", callback=alec_beep, namebox_background=Frame("gui/namebox/alec_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
-define phone_alec = DynamicCharacter('a_name', kind=alec, image="alec", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31, namebox_background=Frame("gui/namebox/alec_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define alec = Character('[a_name]', kind=speak, color='#21a733', image="alec", callback=alec_beep, namebox_background=Frame("gui/namebox/alec_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
+define phone_alec = Character('[a_name]', kind=alec, image="alec", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31, namebox_background=Frame("gui/namebox/alec_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 #side characters
 define girlMom = Character('Mom', kind=speak)

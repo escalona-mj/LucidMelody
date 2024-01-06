@@ -1,6 +1,7 @@
 default current_route = 'common'
 default persistent.first_gameplay = False
 default persistent.seen_controls = False
+default persistent.seen_journal = False
 default persistent.seen_lucid = False
 default current_scene = None
 

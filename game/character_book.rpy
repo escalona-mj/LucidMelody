@@ -43,6 +43,10 @@ init python:
         renpy.notify(message)
         renpy.play("audio/sfx/journal.ogg", channel="notif2")
         store.notify_journal = True
+        
+        if persistent.seen_journal == False:
+            renpy.call_in_new_context("journal_tutorial")
+            persistent.seen_journal = True
 
     def add_entry(entry):
         store.journal_entries.append(entry)
@@ -134,15 +138,114 @@ transform page_flip:
     xzoom 0
     easein_back .5 xzoom 1
 
+
+init python:
+    journal_info_dict = {
+        'dialog_1': {
+            'title': "Welcome to Journal!",
+            'info': "Welcome to your {u}personalized journal!{/u} This journal will keep track of what's happening on your current playthrough. Use this to gain advantage of the game!\n\n{i}(Note: The contents of the journals are stored locally, which means info from other saves won't be carried.){/i}",
+            'action': Return(),
+            'pic': None
+        },
+        'dialog_2': {
+            'title': "Introduction",
+            'info': "Your journal is a reflection of your in-game experiences. Every significant event, character interaction, or pivotal decision is documented here. The journal dynamically updates based on your choices.",
+            'action': Return(),
+            'pic': "gui/journal/journal_tutorial_1.png"
+        },
+        'dialog_3': {
+            'title': "Characters",
+            'info': "As you progress, characters you meet will be added automatically to the journal and view on how it will affect the story. You can also tracks their like points.",
+            'action': Return(),
+            'pic': "gui/journal/journal_tutorial_2.png"
+        },
+        'dialog_4': {
+            'title': "Dream Journal?",
+            'info': "[persistent.playername] tends to dream a lot, so she records her dreams in the journal. Explore these entries to gain insights into her thoughts and emotions.",
+            'action': Return(),
+            'pic': "gui/journal/journal_tutorial_3.png"
+        },
+        'dialog_5': {
+            'title': "Accessing your Journal",
+            'info': "Don't forget to regularly check your journal. You will be notified when the journal updates. You can access it on the quick menu throughout the game anytime.",
+            'action': [ShowMenu("journal"), Return()],
+            'pic': "gui/journal/journal_tutorial_4.png"
+        },
+    }
+
+label journal_tutorial:
+    python:
+        for key, value in journal_info_dict.items():
+            renpy.call_screen("tutorial_dialog", title=value['title'], message=value['info'], ok_action=value['action'], pic=value['pic'])
+    if _menu:
+        call screen journal
+    return
+
+screen tutorial_dialog(title, message, ok_action, pic=None):
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx3", "audio/sfx/modal_open.ogg")
+    on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
+    modal True
+
+    zorder 200
+
+    style_prefix "confirm"
+
+    add "gui/overlay/confirm.png":
+        at transform:
+            on show:
+                alpha 0.0
+                easein .25 alpha 0.5
+            on hide:
+                alpha 0.5
+                easein .25 alpha 0.0
+
+    key "K_RETURN" action ok_action
+
+    frame at screen_appear:
+        xsize 1200
+        has vbox:
+            xalign .5
+            yalign .5
+            spacing 30
+
+        text title style_prefix "controls_title"
+
+        if pic:
+            add pic xalign 0.5
+
+        text message
+
+        hbox:
+            xalign 0.5
+            spacing 100
+
+            imagebutton:
+                auto "gui/navigation/confirm_btn_%s.png"
+                foreground Text("OK", style="confirm_btn")
+                hover_foreground Text("OK", style="confirm_btn_hover")
+                selected_foreground Text("OK", style="confirm_btn_selected")
+                action ok_action
+
+
 screen journal():
     tag menu
-    on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/journal_open.ogg")
+    on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx2", "audio/sfx/journal_open.ogg"), SetVariable("notify_journal", False)
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master"), Play("sfx2", "audio/sfx/journal_close.ogg")
-
-    dismiss action Return()
 
     add "gui/overlay/confirm.png":
         alpha 0.65
+
+    imagebutton auto _("gui/quickmenu/back_%s.png"):
+        action Return()
+        offset(50, 25)
+
+
+    imagebutton:
+        auto "gui/navigation/controls_%s.png"
+        xalign 1.0
+        offset(-50, 25)
+        action Call("journal_tutorial")
+        focus_mask True
 
     for char in all_chars:
         if current_page == char.name:
@@ -208,12 +311,12 @@ screen journal():
             frame:
                 at page_flip
                 background None
-                padding(90,50,60,90)
+                padding(90,40,60,90)
                 vbox:
                     style_prefix "page"
                     viewport:
                         xsize 600
-                        ysize 800
+                        ysize 900
                         draggable True
                         mousewheel True
                         scrollbars "vertical"
@@ -237,21 +340,16 @@ screen journal():
                                 if len(journal_entries) > 0:
                                     text "{0}".format(journal_entries[first_page - 1])
 
-                    if current_page == "Journal":
-                        if len(journal_entries) > 0:
-                            text "[first_page]" color "#000":
-                                xalign 0.5
-
             #SECOND PAGE
             frame:
                 at page_flip
                 background None
-                padding(90,50,90,90)
+                padding(90,40,90,90)
                 vbox:
                     style_prefix "page"
                     viewport:
                         xsize 600
-                        ysize 800
+                        ysize 900
                         draggable True
                         mousewheel True
                         scrollbars "vertical"
@@ -262,16 +360,11 @@ screen journal():
                                 if first_page < len(journal_entries):
                                     text "{0}".format(journal_entries[second_page - 1])
 
-                    if current_page == "Journal":
-                        if first_page < len(journal_entries):
-                            text "[second_page]" color "#000":
-                                xalign 0.5
-                                
             #JOURNAL BOOKMARK
             frame:
                 xsize 0
                 ysize 0
-                yoffset 700
+                yoffset 750
                 xoffset -59
                 style_prefix "dream_bookmark"
                 hbox:
@@ -285,14 +378,26 @@ screen journal():
         if (first_page >= 3) and (len(journal_entries) >= 3):
             imagebutton action Function(back_page) style_prefix "page":
                 idle "gui/journal/prev_page.png"
-                xalign 0.05
+                xalign 0.1
                 yalign 0.5
             
         if second_page < len(journal_entries):
             imagebutton action Function(next_page) style_prefix "page":
                 idle "gui/journal/next_page.png"
-                xalign 0.95
+                xalign 0.9
                 yalign 0.5
+    
+    if current_page == "Journal":
+        if len(journal_entries) > 0:
+            text "[first_page]" style "page_text":
+                color "#fff"
+                xalign 0.35
+                yalign 0.95
+        if first_page < len(journal_entries):
+            text "[second_page]" style "page_text":
+                color "#fff"
+                xalign 0.65
+                yalign 0.95
 
 style page_text:
     color "#000"

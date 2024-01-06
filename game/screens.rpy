@@ -436,7 +436,7 @@ screen quick_menu():
                 xalign 1.0
                 if journal:
                     imagebutton auto _("gui/quickmenu/journal_%s.png"):
-                        action [ShowMenu('journal'), SetVariable("notify_journal", False)]
+                        action ShowMenu('journal')
                         foreground If(notify_journal, true=Image("gui/notif_dot.png", xoffset=45), false=None)
                         tooltip "Journal"
                         activate_sound None
@@ -473,7 +473,7 @@ screen quick_menu():
                         tooltip "Settings"
                     if journal:
                         imagebutton auto _("gui/quickmenu/journal_%s.png"):
-                            action [ShowMenu('journal'), SetVariable("notify_journal", False)]
+                            action ShowMenu('journal')
                             foreground If(notify_journal, true=Image("gui/notif_dot.png", xoffset=45), false=None)
                             tooltip "Journal"
                             activate_sound None

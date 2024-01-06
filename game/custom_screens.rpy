@@ -105,12 +105,7 @@ init python:
         if not Main:
             store.Main = "Dhannica"
         persistent.playername = Main
-        store.mcNamegirl = Main
         renpy.jump_out_of_context('start')
-
-####################
-# CHOOSE MC SCREEN #
-####################
 
 transform pulse:
     alpha 0
@@ -156,94 +151,6 @@ image particle:
 
 image fireflies = SnowBlossom(At("particle", blink), count=20, xspeed=(0,-10), yspeed=(-150,-90), fast=False, horizontal=False)
 
-image girlMC:
-    im.MatrixColor("images/characters/dhannica/base.png", im.matrix.brightness(1))
-
-image boyMC:
-    im.MatrixColor("images/characters/nick/base.png", im.matrix.brightness(1))
-
-screen chooseMC():
-    add "black"
-    add "gui/chooseMC.png" at pulse
-    add "fireflies"
-    if persistent.first_gameplay == False:
-        text "Please choose your gender.":
-            color u"#fff"
-            xalign 0.5
-            yalign 0.25
-            at transform:
-                alpha 1.0
-                5.0
-                ease 1.0 alpha 0.0
-    fixed:
-        at transform:
-            zoom 1.0 xalign 0.5 yalign 1.0
-            on hide:
-                easein .25 zoom 0.95 alpha 0.0
-        spacing 10
-        imagebutton:
-            xalign 0.0
-            yalign 1.0
-            idle "girlMC"
-            action (Show(screen='name_input',_layer="front", ok_action=(Hide(screen='name_input',_layer="front"),Call("chooseFemale")), back_action=Hide(screen='name_input',_layer="front")))
-            tooltip "I'm a girl."
-            focus_mask True
-            activate_sound "audio/sfx/click.ogg"
-            hover_sound "audio/sfx/hover.ogg"
-            at showButtons(-0.5, 0.0)
-        imagebutton:
-            xalign 1.0
-            yalign 1.0
-            idle "boyMC"
-            action (Show(screen='name_input',_layer="front", ok_action=(Hide(screen='name_input',_layer="front"),Call("chooseMale")), back_action=Hide(screen='name_input',_layer="front")))
-            tooltip "I'm a boy."
-            focus_mask True
-            activate_sound "audio/sfx/click.ogg"
-            hover_sound "audio/sfx/hover.ogg"
-            at showButtons(1.5, 1.0)
-
-    $ tooltip = GetTooltip(screen="chooseMC")
-
-    if tooltip:
-        frame:
-            background None
-            xalign 0.5
-            yalign 0.35
-            text tooltip:
-                color u'#fff'
-                size 50
-
-transform showButtons(x1, x2):
-    xalign x1 zoom 1.0
-    easein_back 1.0 xalign x2
-    on hover:
-        easein .25 zoom 1.05
-    on idle:
-        easein .25 zoom 1.0
-
-#setting the correct variables before starting the route
-default isDhannica = False
-default isNick = False
-
-label chooseFemale:
-    pause 0.1
-    $ current_route = 'dhannica'
-    $ isDhannica = True
-    $ n_name = 'Nick'
-    if not Main:
-        $ Main = "Dhannica"
-    $ mcNamegirl = Main
-    return
-
-label chooseMale:
-    pause 0.1
-    $ current_route = 'nick'
-    $ isNick = True
-    $ mcNamegirl = 'Dhannica'
-    if not Main:
-        $ Main = "Nick"
-    $ n_name = Main
-    return
 
 screen time_intermission(txt):
     fixed:
