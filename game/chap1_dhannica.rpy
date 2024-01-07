@@ -194,15 +194,19 @@ label chap1_dhannica:
         "Get up and turn off the alarm":
             camera at dizzy
             scene bg dhannica room with eye_open
-            dhannica_i "Ugh... That was such a dream."
-            dhannica_i "Why did I set this alarm so early?"
+            dhannica_i no_glasses sad browsad "Ugh... That was such a dream."
+            dhannica_i eyeclose "Why did I set this alarm so early?"
             play sound stomachgrowl
             window hide(None)
             pause 1.25
             window auto
-            dhannica_i "Oh shoot, I forgot! I never really had dinner last night."
+            dhannica_i -eyeclose -browsad "Oh shoot, I forgot! I never really had dinner last night."
             camera at reset_dizzy
             play sound phone_notif
+            show dhannica_phone:
+                xalign 0.5 yoffset 250 xoffset 150
+                ypos 1.0 yanchor 0.0
+                ease 1.0 ypos 1.0 yanchor 1.0
             dhannica_i "Huh? My phone..."
             dhannica_i "..."
             dhannica_i "It won't hurt to peek right?"
@@ -210,28 +214,42 @@ label chap1_dhannica:
                 "Check your phone":
                     $ usePhone = True
                     $ beLate = True
-                    "You extended your hand to grab your phone."
-                    dhannica_i "Eh, it's still early."
-                    dhannica_i "I'll go watch something first to pass the time."
-                    scene bg dhannica room with long_dissolve
-                    dhannica_i "Wow, this short video is really funny~"
+                    show dhannica_phone lockscreen with dissolve
+                    "You decided to fiddle around with your phone."
+                    show dhannica_phone stream_app with dissolve
+                    dhannica_i -sad eyehappy "Eh, it's still early."
+                    dhannica_i "I'll go watch something to pass the time."
+                    scene bg dhannica room
+                    show dhannica_phone vid_cat2:
+                        xalign 0.5 yoffset 250 xoffset 150
+                        ypos 1.0 yanchor 1.0
+                    with long_dissolve
+                    dhannica_i no_glasses "Wow, this short video is really funny~"
+                    show dhannica_phone vid_cat with dissolve
                     pause 1.5
-                    dhannica_i "Lol, cute kitty."
+                    dhannica_i eyehappy "Lol, cute kitty."
                     pause 1.5
+                    show dhannica_phone vid_cat2 with dissolve
                     dhannica_i "Yeah, that's how you do it!"
                     pause 1.5
                     "It didn't take long for you to finally remember something."
+                    dhannica_i browangy eyelook sad "Wait, what time is it now?"
+                    show dhannica_phone lockscreen_time with dissolve
+                    pause 0.2
 
                 "Go eat breakfast":
                     $ eatBreakfast = True
                     dhannica_i "Nah, I think I've had enough with social media."
                     $ journal = True
+                    show dhannica_phone:
+                        ypos 1.0 yanchor 1.0
+                        ease 0.5 ypos 1.0 yanchor 0.0
                     $ update_journal("Journal unlocked.")
                     "Since it was still early, you made your bed before leaving your bedroom. Once you were done, you changed into your uniform and head downstairs."
 
         "Snooze for another 5 minutes":
             $ beLate = True
-            dhannica_i eyeclose "Nooo, I need to remember..."
+            dhannica_i no_glasses eyeclose sad tear browsad "Nooo, I need to remember..."
             dhannica_i "I don't wanna wake up..."
             "You try to remember the dream the best you could."
             "Attempting to replay the entire thing isn't working, it's only making it worse."
@@ -247,14 +265,22 @@ label chap1_dhannica:
             camera at dizzy
             scene bg dhannica room with eye_open
             window auto
-            dhannica_i eyeclose "Urk..."
-            dhannica_i -eyeclose "Alright, alright! I'm awake!"
+            dhannica_i no_glasses eyeclose sad tear browsad "Urk..."
+            show dhannica_phone:
+                xalign 0.5 yoffset 250 xoffset 150
+                ypos 1.0 yanchor 0.0
+                ease 1.0 ypos 1.0 yanchor 1.0
+            dhannica_i -eyeclose -tear -browsad "Alright, alright! I'm awake!"
+            show dhannica_phone lockscreen_time with dissolve
             "Feeling somewhat disoriented, you extended your hand to grab your phone and checked the time."
             stop sound fadeout 0.2
 
     if beLate:
         camera at reset_dizzy
-        dhannica "{sc}IT'S 7:55?!{/sc}" with vpunch
+        dhannica sad -eyelook -browangy"{sc}IT'S 7:55?!{/sc}" with vpunch
+        show dhannica_phone:
+            ypos 1.0 yanchor 1.0
+            ease 0.25 ypos 1.0 yanchor 0.0
         dhannica "{sc}SHOOT!{/sc}"
         $ journal = True
         $ update_journal("Journal unlocked.")
@@ -266,52 +292,52 @@ label chap1_dhannica:
     scene black with blur_dissolve
     play sound thump
     scene bg living room with blur_dissolve
-    dhannica "Ow!" with vpunch
+    dhannica sad eyehappy browsad "Ow!" with vpunch
 
     if beLate or usePhone:
         "Out of the rush, you accidentally bumped your toe on the baluster."
-        dhannica "Arrrrgh....!"
+        dhannica browsad eyeclose tear "Arrrrgh....!"
         "You hold your poor pinky toe, checking if you've lost your toenail to the stair rail."
-        dhannica_i "Thank God it's still intact."
-        dhannica_i "It looks swollen though, and it hurts like hell..."
+        dhannica_i -eyeclose -browsad "Thank God it's still intact."
+        dhannica_i eyeclose browsad "It looks swollen though, and it hurts like hell..."
         "A mental reminder went off in your mind that you realized you're late."
         "You rushed down the stairs limping on your other foot for support and immediately chugged the glass of milk overlooking the toast and eggs your mother had prepared for you."
         girlMom "Honey, aren't you going to eat your breakfast?"
-        dhannica "I'm late mom, I have to go!"
+        dhannica -tear -eyeclose "I'm late mom, I have to go!"
         "As soon as you're off, your mother stepped towards you and noticed your groggy appearance."
         show mom at trans3
         girlMom "Why are you limping? What's wrong with your foot?"
-        dhannica "I stubbed my toe but it's fine, it'll go away in a few minutes."
+        dhannica eyehappy sweat browsad -sad "I stubbed my toe but it's fine, it'll go away in a few minutes."
         girlMom "I don't think you should go to school today, that might get worse if you force yourself to school."
         dhannica "Too late mom."
         hide mom at trans3
         girlMom "At least bring an ice pack!"
-        dhannica "I'm going, bye~"
+        dhannica -eyehappy -sweat "I'm going, bye~"
         $ update_journal("Journal updated.")
         $ dhannica_description = "{0} Well, a bit tardy I suppose.".format(dhannica_description)
         "You rushed outside."
 
     elif eatBreakfast:
         "You accidentally bumped your toe on the baluster."
-        dhannica "Arrrrgh...this sucks, what the hell."
-        dhannica_i "Why did it have to be on the first day of school?"
+        dhannica tear "Arrrrgh...this sucks, what the hell."
+        dhannica_i -eyehappy "Why did it have to be on the first day of school?"
         dhannica_i "This smells like bad luck to me."
-        dhannica "This day just started in a bad note. Let's hope it doesn't get worse for the rest of the day."
+        dhannica_i -tear "This day just started in a bad note. Let's hope it doesn't get worse for the rest of the day."
         "You came down the stairs limping on your one leg, while checking your phone for the notification that had rung a few moments ago."
         "Suddenly, your mother swiftly came through the scene and noticed your groggy appearance."
         show mom at trans3
         girlMom "What happened hon?!"
-        dhannica "I'm fine mom, I just stubbed my toe on the way down the stairs. I'm fine."
+        dhannica eyehappy sweat browsad -sad "I'm fine mom, I just stubbed my toe on the way down the stairs. I'm fine."
         girlMom "You don't seem fine. I don't think you'd have a pretty good day at school limping like that."
         dhannica "It doesn't hurt that much."
-        dhannica_i "It hurts a lot~"
-        dhannica "I just stubbed my toe, it's not like I dislocated it. It's gonna be fine after a few minutes."
+        dhannica_i eyelook "It hurts a lot~"
+        dhannica -eyelook -sweat "I just stubbed my toe, it's not like I dislocated it. It's gonna be fine after a few minutes."
         girlMom "You sure? I can send your teacher a note."
-        dhannica "I'd rather go limping to school than be the weird kid who misses the first day, and ends up having no friends for the rest of the school year."
-        girlMom "Well, if you say so. Just make sure not to overexert yourself. We don't wanna spend money to the doctors now, do we?"
+        dhannica sad -browsad "I'd rather go limping to school than be the weird kid who misses the first day, and ends up having no friends for the rest of the school year."
+        girlMom "Well, if you say so. Just don't push yourself too hard. We don't wanna spend money to the doctors now, do we?"
         hide mom at trans3
-        dhannica "Yes mom, I won't~"
-        dhannica_i "Though my foot still hurts..."
+        dhannica eyehappy -sad"Yes mom, I won't~"
+        dhannica_i eyeclose sweat browsad sad "Though my foot still hurts..."
         "You ate breakfast with your mother and went outside."
     
     scene black with blur_dissolve
@@ -322,9 +348,9 @@ label chap1_dhannica:
     if beLate:
         "Running frantically on a Monday morning with nothing to eat and an injured toe can surely do something to you."
         "You felt weak and drained, when you've barely even started the day."
-        dhannica_i "Hopefully the milk is enough to heal my toe..."
+        dhannica_i eyeclose browsad sad "Hopefully the milk is enough to heal my toe..."
         "You saw the bus drive right pass you while you're barely catching up because of your current situation."
-        dhannica_i "Oh crap!"
+        dhannica_i -eyeclose -browsad"Oh crap!"
         "You tried to keep up with the bus as much as you could."
         "You started to look like a zombie from an apocalypse movie, just limping as fast to get there in time."
         "As the bus took its momentary halt at the bus stop, tons of people were also waiting to get on."
@@ -333,7 +359,7 @@ label chap1_dhannica:
         scene bg busstop with blur_fade
         play ambient2 busengine fadein 1.0
 
-        dhannica_i "Almost there...!"
+        dhannica_i sweat browsad sad"Almost there...!"
         "You're quite confident that you would get there in time, despite the fact that you look like an absolute ninny."
         "But you started to notice the bus was reaching its capacity, and people were getting fewer by the second."
         dhannica_i "Wait, please!"
@@ -350,10 +376,10 @@ label chap1_dhannica:
                 show bg busstop_no_bus with dissolve
                 
                 "However, as you were about to reach the door, it immediately closed, which could only mean one thing: it was already full and the bus had already left."
-                dhannica_i "No..."
+                dhannica_i -sweat "No..."
                 "A sudden pang of pain rushed through you."
-                dhannica_i "Aaargh!" with vpunch
-                dhannica_i "I forgot about my injury."
+                dhannica_i eyehappy "Aaargh!" with vpunch
+                dhannica_i -eyehappy "I forgot about my injury."
                 dhannica_i "Wait, it's been 10 minutes since this happened. Why hasn't it gone away?"
                 "The pain wasn't getting any better. Your decision to overwork yourself and recklessly run had only made it worse."
                 "You couldn't even move your foot without feeling like it was being twisted 180 degrees."
@@ -363,19 +389,19 @@ label chap1_dhannica:
                     truecenter
                     ease 1.0 zoom 1.5 xalign 0.3 yalign 0.6
                 dhannica_i "...the next 15 minutes, huh? That's better than walking 30 minutes to school."
-                dhannica_i  "But, good heavens, it still hurt."
+                dhannica_i eyeclose sweat "But, good heavens, it still hurt."
                 camera:
                     ease 2.0 xalign 0.5
                 show nick:
                     offscreenleft
                     ease 2.5 xalign 0.5 ypos 1.03
                 "As you kept your gaze fixed on the bus schedule, you noticed a presence beside you."
-                show nick at trans3
+                show nick eyelook at trans3
                 "If you hadn't looked up, you might not have even noticed him."
                 camera:
                     ease 1.0 yalign 0.55
                 "His head appeared to be facing the street, as if he paid no attention to his surroundings, but you caught a glimpse of his eyes directed at your feet."
-                "It's as if he was trying to discreetly assess what was wrong with you."
+                "It's as if he was trying to assess what was wrong with you discreetly."
                 camera:
                     ease 1.0 yalign 0.6
                 show flask:
@@ -387,6 +413,7 @@ label chap1_dhannica:
                     parallel:
                         ease 3.0 alpha 1.0
                 "You decided not to pay him any mind and sat uncomfortably, trying to remain calm and not draw attention to yourself."
+                show nick -eyelook
                 "Suddenly, a cold sensation touched your skin."
 
                 menu:
@@ -403,57 +430,64 @@ label chap1_dhannica:
                 camera:
                     ease 1.0 zoom 1.5 truecenter
                 hide flask with Dissolve(0.2)
-                dhannica "Umm... what's this?"
+                dhannica -eyeclose -sweat -browsad "Umm... what's this?"
                 nick "Put this on your foot."
-                dhannica "Excuse me?"
+                dhannica browangy"Excuse me?"
 
                 if n_takeIcedTea:
                     nick "You sprained yourself, right?"
-                    dhannica "I uh, stubbed my toe."
+                    dhannica -browangy "I uh, stubbed my toe."
+                    show nick eyeclose smile:
+                        easein .1 yoffset 20
+                        easeout .1 yoffset 0
                     "He let out a small chuckle, but it sounded more like he was mocking."
-                    dhannica_i "Was he laughing at my situation?"
-                    dhannica_i "I swear, this guy..."
-                    dhannica "What's so funny?"
-                    nick "Nothing. Here."
+                    show nick -eyeclose
+                    dhannica_i browangy"Was he laughing at my situation?"
+                    dhannica_i eyeclose "I swear, this guy..."
+                    dhannica -eyeclose"What's so funny?"
+                    nick -smile "Nothing. Here."
                     show nick:
                         ease_back 1.0 yalign 7.0 
                     "He applies the cold side of his flask to the affected area."
-                    dhannica "H-hey, isn't this a bit too much?"
-                    nick "Just take it, or it'll get worse."
+                    dhannica sweat -browangy "H-hey, isn't this a bit too much?"
+                    nick eyeclose "Just take it, or it'll get worse."
                     dhannica "But it'll get dirty!"
                     
                 elif n_refuseIcedTea:
                     nick "Something for your foot."
                     dhannica_i "What's he talking about? The heck is this guy's problem?"
-                    nick "It's just iced tea."
+                    nick eyeclose"It's just iced tea."
+                    show nick -eyeclose
                     dhannica "And? I'm not gonna drink that."
-                    nick "Didn't I say it was for your foot?"
+                    nick browsus"Didn't I say it was for your foot?"
                     "There was a tone of pushiness and arrogance when he responded."
                     dhannica_i "Pushy and arrogant? I can play that game."
                     dhannica "I barely know you."
                     "What kind of a half-baked response was that?"
-                    nick "You soon will."
+                    nick eyeclose "You soon will."
                     show nick:
                         ease_back 1.0 yalign 7.0 
                     "He rose from his seat and knelt down to your level, leaving you confused."
-                    dhannica "W-what are you doing?"
-                    nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
+                    dhannica browsad sweat"W-what are you doing?"
+                    nick -eyeclose -browsus"You look dumb walking. I figure out you'd be injured or something. And looks like I was right."
+                    nick eyeclose smile "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
                     "You feel embarassed, after hearing his intentions."
-                    dhannica "A-actually, it was my toe..."
-                    nick "What?"
-                    dhannica "I stubbed my toe because I was running late."
+                    dhannica eyelook "A-actually, it was my toe..."
+                    nick -eyeclose -smile"What?"
+                    dhannica -eyelook -sweat browangy"I stubbed my toe because I was running late."
+                    show nick eyeclose smile
                     "You explained with a hint of annoyance, which made him chuckled. But this only frustrated you even further."
                     dhannica "What's so funny?"
                     "He didn't answer. Instead, he removed your shoe and held the flask close to your foot."
-                    dhannica "Wait!" with vpunch
-                    nick "What is it?"
-                    dhannica "I-it'll get dirty."
+                    dhannica sweat -browangy"Wait!" with vpunch
+                    nick -eyeclose -smile "What is it?"
+                    dhannica browsad "I-it'll get dirty."
 
-                dhannica "Aren't you bothered that I'm going to get your drink dirty from my foot?"
+                dhannica browsad "Aren't you bothered that I'm going to get your drink dirty from my foot?"
 
                 if n_takeIcedTea:
-                    nick "I'm not going to drink it from the side anyway. As long as the mouth of the flask isn't soiled, then it's fine."
-                    dhannica_i "Why is he so pushy?"
+                    nick -eyeclose "I'm not going to drink it from the side anyway. As long as the mouth of the flask isn't soiled, then it's fine."
+                    dhannica_i -sweat "Why is he so pushy?"
                     "He retrieved a hand towel from his bag that looked like it could cover the entire surface of a flask."
                     "He took the flask from your hands and started wrapping around it."
                     "You looked at him for a moment, convincing yourself that it was okay while you're applying the flask on your affected area."
@@ -463,12 +497,13 @@ label chap1_dhannica:
                     "As you knelt down, tending to your swollen toe, you couldn't help but notice his shoes."
                     
                 else:
-                    nick "You have socks on. It's fine."
-                    dhannica "It's not! It'll be gross!"
+                    nick eyeclose "You have socks on. It's fine."
+                    dhannica -sweat eyelook "It's not! It'll be gross!"
                     "With a sigh, he seemed to give in and took out a hand towel from his bag. He wrapped it around the flask, not too thick that it would insulate the cold, but not too thin that it would hurt."
                     "Gently, he handled your foot with caution, trying not to cause any pain, and positioned it on his knee."
                     "He then began patting the cold flask to your foot. At first, it hurt, but you soon felt immense relief."
-                    dhannica_i "This is weird."
+                    dhannica_i sweat "This is weird."
+                    show nick -eyeclose
                     "He gave you a quick glance, checking if you were alright and if he'd done a good job."
                     "In that moment, you saw them clearly: his eyes, one blue and the other green. Something about him felt peculiar to you."
                     "As he tended to your foot, you couldn't help but notice his shoes."
@@ -577,7 +612,7 @@ label chap1_dhannica:
                         "You scrutinized him and couldn't help but notice his shoes."
 
         "They were quite rugged, classic black and white high-top Chuck Taylors."
-        dhannica_i "Hmm...cute."
+        dhannica_i eyehappy neutral brow -sweat "Hmm...cute."
         dhannica_i "There are little cute spiderhero webs drawn all over the tips of his shoes." 
 
         if n_takeIcedTea:
@@ -588,15 +623,15 @@ label chap1_dhannica:
                 trans3
             nick "There, that should do it."
             show nick at trans3
-            nick "..."
-            dhannica "..."
+            nick eyelook "..."
+            dhannica sweat sad -eyehappy "..."
             nick "I uhh, gotta go."
-            show nick:
+            show nick -eyelook:
                 ease_back 1.0 offscreenright
             dhannica "Wait! Your flask!..."
             "You're clueless at what just happened."
-            dhannica_i "I didn't even get to ask his name."
-            dhannica_i "Guess I'll return this..."
+            dhannica_i eyeclose sweat browsad "I didn't even get to ask his name."
+            dhannica_i -eyeclose -sweat -browsad "Guess I'll return this..."
 
         if n_refuseIcedTea:
             show nick:
@@ -606,12 +641,12 @@ label chap1_dhannica:
             camera:
                 ease 1.0 truecenter zoom 1.0
             "It was sort of giving a public display of affection, garnering curious glances from onlookers."
-            nick "J-just put that there. Give the bottle back to me when you get a chance."
-            show nick:
+            nick eyelook "J-just put that there. Give the bottle back to me when you get a chance."
+            show nick -eyelook:
                 ease_back 1.0 offscreenright
             "He soon left at a fastened pace, leaving you all alone in the bus stop."
-            dhannica_i "I didn't even get to ask his name."
-            dhannica_i "Guess I'll return this..."
+            dhannica_i -eyehappy sweat browsad sad "I didn't even get to ask his name."
+            dhannica_i eyeclose -sweat "Guess I'll return this..."
 
         if n_takeFlask:
             show nick at trans3
@@ -661,7 +696,7 @@ label chap1_dhannica:
         "The air around you was chilly, and the birds were all up and singing."
         "Not sure what the time was, you checked your phone. You just needed to make sure you had time before the class started."
         dhannica_i "Guess I should hurry up."
-        dhannica_i "As if this stupid toe would make it easier for me."
+        dhannica_i eyeclose browsad sad"As if this stupid toe would make it easier for me."
     
 label school:
     camera:
@@ -755,14 +790,14 @@ label classroom:
     play ambient2 classroom volume 0.5 fadein 1.0
     if beLate:
         "You hustle to class, pulling yourself towards the door with just a minute to spare before the teacher arrives."
-        "Suddenly, a gentle touch on your arm catches your attention."
+        "Suddenly, a gentle touch on your arm catches your attention as the door closes behind you."
         show alec at trans3
         $ meetAlec = True
         $ update_journal("Character added.")
         "You turn to see a person with white hair and adorned with lots of jewelry."
         "Those unmistakable green eyes meet yours."
-        dhannica "O-oh, thanks."
-        alec "No problem, I was about to get in anyway."
+        dhannica "S-sorry, I didn't know you were behind me."
+        alec "No problem."
         "He guides you to an empty seat, introducing himself along the way."
         $ a_name = "Alec"
         alec "I'm Alec, by the way."

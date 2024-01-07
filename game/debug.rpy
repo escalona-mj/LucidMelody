@@ -27,11 +27,7 @@ init python:
         remove_entry(entry1)
 
 style test_text:
-    outlines [(3, "#16161d", 0, 1)]
-
-init python:
-    def make_it_unseen():
-        renpy.mark_label_unseen("dream1")
+    outlines [(2, "#16161d", 0, 1)]
 
 screen dev_screen():
     default devtools = False
@@ -61,9 +57,9 @@ screen dev_screen():
         text "_skipping = [underscore_skip]"
         $ seen_label = persistent.seen_dream1
         text "Dream1 has been seen? [seen_label]"
-        # textbutton "make it unseen" action make_it_unseen()
         text "Alec points = {0}".format(alec_likePoints)
         text "Nick points = {0}".format(nick_likePoints)
+        textbutton "image" action ShowMenu("image_tools")
 
     showif devtools:
         add "gui/overlay/confirm.png":

@@ -1,4 +1,6 @@
 label after_load:
+    #remove any ghost side images
+    $ _side_image_attributes = None
     if not persistent.seen_controls:
         play notif phone_notif
         call screen controls_modal

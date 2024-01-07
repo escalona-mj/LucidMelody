@@ -130,7 +130,7 @@ screen say(who, what):
             text what id "what"
 
         use quick_menu
-        add SideImage() xalign 0.0 yalign 1.0 xoffset 120 yoffset -10:
+        add SideImage() xalign 0.0 yalign 1.0 xoffset 110 yoffset 120:
             zoom 0.75
             rotate -5
 
@@ -841,7 +841,7 @@ screen fake_mainMenu():
             yfill True
             activate_sound None
             hover_sound None
-            action [Show(screen="main_menu",transition=dissolve), Hide(screen="fake_mainMenu")]
+            action [Show(screen="main_menu",transition=Dissolve(0.2)), Hide(screen="fake_mainMenu")]
 
 screen main_menu():
 
@@ -871,7 +871,7 @@ screen main_menu():
             text "[config.version]":
                 style "main_menu_version"
 
-    timer 300 action [Show(screen="fake_mainMenu", transition=dissolve), Function(mainMenu_ach.grant)]
+    timer 300 action [Show(screen="fake_mainMenu", transition=Dissolve(0.2)), Function(mainMenu_ach.grant)]
 
 style main_menu_frame is empty
 style main_menu_vbox is vbox

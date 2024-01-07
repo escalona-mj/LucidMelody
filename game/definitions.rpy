@@ -404,17 +404,17 @@ define audio.hospital = "audio/ambient/hospital.ogg"
 ###########################################################################################################
 
 image side dhannica = LayeredImageMask("dhannica",
-    Transform(crop=(315, 100, 300, 300)),
+    Transform(crop=(364, 140, 300, 300), zoom=1.5),
     background="gui/side_image/dhannica_bg_sideImage.png",
     mask="gui/side_image/newMask_sideImage.png")
 
 image side nick = LayeredImageMask("nick",
-    Transform(crop=(340, 20, 300, 300)),
+    Transform(crop=(390, 60, 300, 300), zoom=1.5),
     background="gui/side_image/nick_bg_sideImage.png",
     mask="gui/side_image/newMask_sideImage.png")
 
 image side alec = LayeredImageMask("alec",
-    Transform(crop=(365, 100, 300, 300)),
+    Transform(crop=(415, 130, 300, 300), zoom=1.5),
     background="gui/side_image/alec_bg_sideImage.png",
     mask="gui/side_image/newMask_sideImage.png")
 
@@ -436,25 +436,59 @@ image dhannica_blink:
     .10
     repeat
 
+image dhannica_blink_look:
+    "images/characters/dhannica/face/eyes_look.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "images/characters/dhannica/face/eyes_closed.png"
+    .10
+    repeat
+
 layeredimage dhannica:
 
-    group base: #body
-        attribute base default:
+    group body: #body
+        attribute body default:
             "images/characters/dhannica/base.png"
 
     group eyes:
         attribute blink default:
             "dhannica_blink"
+        attribute eyelook:
+            "dhannica_blink_look"
         attribute eyeclose:
             "images/characters/dhannica/face/eyes_closed.png"
+        attribute eyehappy:
+            "images/characters/dhannica/face/eyes_closed2.png"
 
     group brows:
         attribute brow default:
             "images/characters/dhannica/face/brow_normal.png"
+        attribute browsad:
+            "images/characters/dhannica/face/brow_worried.png"
+        attribute browangy:
+            "images/characters/dhannica/face/brow_angy.png"
+
+    group lips:
+        attribute neutral default:
+            "images/characters/dhannica/face/lips.png"
+        attribute sad:
+            "images/characters/dhannica/face/lips_sad.png"
+
+    group misc:
+        attribute tear:
+            "images/characters/dhannica/face/tear.png"
+        attribute sweat:
+            "images/characters/dhannica/face/sweat.png"
 
     group accesories:
         attribute glasses default:
             "images/characters/dhannica/face/glasses.png"
+        attribute no_glasses:
+            Null()
 
 ###### ALEC ######
 
@@ -470,21 +504,50 @@ image alec_blink:
     .10
     repeat
 
+image alec_blink_look:
+    "images/characters/alec/face/eyes_look.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "images/characters/alec/face/eyes_closed.png"
+    .10
+    repeat
+
 layeredimage alec:
 
-    group base: #body
-        attribute base default:
+    group body: #body
+        attribute body default:
             "images/characters/alec/base.png"
 
     group eyes:
         attribute blink default:
             "alec_blink"
+        attribute eyelook:
+            "alec_blink_look"
         attribute eyeclose:
             "images/characters/alec/face/eyes_closed.png"
+        attribute eyehappy:
+            "images/characters/alec/face/eyes_closed2.png"
 
     group brows:
         attribute brow default:
             "images/characters/alec/face/brow_normal.png"
+        attribute browsad:
+            "images/characters/alec/face/brow_worried.png"
+
+    group lips:
+        attribute neutral default:
+            "images/characters/alec/face/lips.png"
+        attribute smile:
+            "images/characters/alec/face/lips_smile.png"
+
+    group misc:
+        attribute sweat:
+            "images/characters/alec/face/sweat.png"
+
 
 ###### NICK ######
 
@@ -500,21 +563,68 @@ image nick_blink:
     .10
     repeat
 
+image nick_blink_look:
+    "images/characters/nick/face/eyes_look.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "images/characters/nick/face/eyes_closed.png"
+    .10
+    repeat
+
 layeredimage nick:
 
-    group base: #body
-        attribute base default:
+    group body: #body
+        attribute body default:
             "images/characters/nick/base.png"
 
     group eyes:
         attribute blink default:
             "nick_blink"
+        attribute eyelook:
+            "nick_blink_look"
         attribute eyeclose:
             "images/characters/nick/face/eyes_closed.png"
 
     group brows:
         attribute brow default:
             "images/characters/nick/face/brow_normal.png"
+        attribute browsus:
+            "images/characters/nick/face/brow_sideeye.png"
+
+    group lips:
+        attribute neutral default:
+            "images/characters/nick/face/lips.png"
+        attribute smile:
+            "images/characters/nick/face/lips_smile.png"
+        attribute smirk:
+            "images/characters/nick/face/lips_smirk.png"
+
+layeredimage dhannica_phone:
+    zoom 1.5
+
+    group screens:
+        attribute screen_off default:
+            "images/misc/phone/lock_phone.png"
+        attribute lockscreen:
+            "images/misc/phone/lock_screen_notime.png"
+        attribute lockscreen_time:
+            "images/misc/phone/lock_screen_time.png"
+        attribute lockscreen_lucid_time:
+            "images/misc/phone/lock_screen_lucid_time.png"
+        attribute stream_app:
+            "images/misc/phone/stream_appsplash.png"
+        attribute vid_cat:
+            "images/misc/phone/cat1.png"
+        attribute vid_cat2:
+            "images/misc/phone/cat2.png"
+
+    attribute hand default:
+        "images/misc/phone/hand.png"
+
 
 #blue 014d81
 #pantone 6463b1

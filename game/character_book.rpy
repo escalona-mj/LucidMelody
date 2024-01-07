@@ -45,6 +45,7 @@ init python:
         store.notify_journal = True
         
         if persistent.seen_journal == False:
+            renpy.pause(1.0, hard=True)
             renpy.call_in_new_context("journal_tutorial")
             persistent.seen_journal = True
 
@@ -143,7 +144,7 @@ init python:
     journal_info_dict = {
         'dialog_1': {
             'title': "Welcome to Journal!",
-            'info': "Welcome to your {u}personalized journal!{/u} This journal will keep track of what's happening on your current playthrough. Use this to gain advantage of the game!\n\n{i}(Note: The contents of the journals are stored locally, which means info from other saves won't be carried.){/i}",
+            'info': "Welcome to your journal! This will keep track of what's happening in your current playthrough. Use this to gain advantage of the game!",
             'action': Return(),
             'pic': None
         },
@@ -155,7 +156,7 @@ init python:
         },
         'dialog_3': {
             'title': "Characters",
-            'info': "As you progress, characters you meet will be added automatically to the journal and view on how it will affect the story. You can also tracks their like points.",
+            'info': "As you progress, characters you meet will be added automatically to the journal. You might miss them at some point of the game, which will affect the story. You can also track their likes and dislikes, and even their like points.",
             'action': Return(),
             'pic': "gui/journal/journal_tutorial_2.png"
         },
@@ -167,7 +168,7 @@ init python:
         },
         'dialog_5': {
             'title': "Accessing your Journal",
-            'info': "Don't forget to regularly check your journal. You will be notified when the journal updates. You can access it on the quick menu throughout the game anytime.",
+            'info': "Don't forget to check your journal. You will be notified when the journal updates. You can access it on the quick menu throughout the game anytime.",
             'action': [ShowMenu("journal"), Return()],
             'pic': "gui/journal/journal_tutorial_4.png"
         },
