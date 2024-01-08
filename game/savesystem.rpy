@@ -1,39 +1,3 @@
-image save_dhannica_indicator:
-    "gui/save_indicator/save_dhannica_1.png"
-    choice:
-        4.5
-    choice:
-        3.5
-    choice:
-        1.5
-    "gui/save_indicator/save_dhannica_2.png"
-    .10
-    repeat
-
-image save_alec_indicator:
-    "gui/save_indicator/save_alec_1.png"
-    choice:
-        4.5
-    choice:
-        3.5
-    choice:
-        1.5
-    "gui/save_indicator/save_alec_2.png"
-    .10
-    repeat
-
-image save_nick_indicator:
-    "gui/save_indicator/save_nick_1.png"
-    choice:
-        4.5
-    choice:
-        3.5
-    choice:
-        1.5
-    "gui/save_indicator/save_nick_2.png"
-    .10
-    repeat
-
 init python:
     def save_indicator(data):
         data['route'] = current_route
@@ -160,11 +124,11 @@ screen file_slots():
                                             textbutton "SAVE" action FileSave(slot)
 
                             if cur_route == 'common':
-                                add 'side dhannica' zoom 0.35 rotate 5 xpos 1085 ypos -25
+                                add 'side dhannica' zoom 0.35 rotate 5 xpos 1070 ypos -30
                             elif cur_route == 'alec':
-                                add 'side alec' zoom 0.35 rotate 5 xpos 1085 ypos -25
+                                add 'side alec' zoom 0.35 rotate 5 xpos 1070 ypos -30
                             elif cur_route == 'nick':
-                                add 'side nick' zoom 0.35 rotate 5 xpos 1085 ypos -25
+                                add 'side nick' zoom 0.35 rotate 5 xpos 1070 ypos -30
                             
                         if slot_selected == slot:
                             if FileLoadable(slot):

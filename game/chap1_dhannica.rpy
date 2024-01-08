@@ -194,8 +194,8 @@ label chap1_dhannica:
         "Get up and turn off the alarm":
             camera at dizzy
             scene bg dhannica room with eye_open
-            dhannica_i no_glasses sad browsad "Ugh... That was such a dream."
-            dhannica_i eyeclose "Why did I set this alarm so early?"
+            dhannica_i eyeclose no_glasses sad browsad "Ugh... That was such a dream."
+            dhannica_i -eyeclose "Why did I set this alarm so early?"
             play sound stomachgrowl
             window hide(None)
             pause 1.25
@@ -240,11 +240,10 @@ label chap1_dhannica:
                 "Go eat breakfast":
                     $ eatBreakfast = True
                     dhannica_i "Nah, I think I've had enough with social media."
-                    $ journal = True
                     show dhannica_phone:
                         ypos 1.0 yanchor 1.0
                         ease 0.5 ypos 1.0 yanchor 0.0
-                    $ update_journal("Journal unlocked.")
+                    $ update_journal()
                     "Since it was still early, you made your bed before leaving your bedroom. Once you were done, you changed into your uniform and head downstairs."
 
         "Snooze for another 5 minutes":
@@ -282,8 +281,7 @@ label chap1_dhannica:
             ypos 1.0 yanchor 1.0
             ease 0.25 ypos 1.0 yanchor 0.0
         dhannica "{sc}SHOOT!{/sc}"
-        $ journal = True
-        $ update_journal("Journal unlocked.")
+        $ update_journal()
         if usePhone:
             "You jumped out of bed after spending a good 45 minutes scrolling on your phone and head downstairs."
         else:
@@ -525,14 +523,14 @@ label chap1_dhannica:
                 $ current_route = 'nick'
                 $ update_journal("Character added.")
                 play music meet fadein 1.0
-                nick "Why are you looking at me like that?"
+                nick browsus "Why are you looking at me like that?"
                 "You tried your best not to appear obvious and began to slowly make your way to a nearby bench, attempting not to limp to hide your injury."
                 "He continued to stand there, waiting for the next bus to arrive."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
                 "The silence was there, stagnating in the air."
-                dhannica "You can sit down if you'd like. The next bus comes in about 15 minutes anyway."
+                dhannica eyehappy -sad -sweat"You can sit down if you'd like. The next bus comes in about 15 minutes anyway."
                 ".{w=0.5}.{w=0.5}.{w=0.5}"
-                dhannica_i "DID I JUST SAY THAT, [Main!u]?!" with vpunch
+                dhannica_i sweat"DID I JUST SAY THAT, [Main!u]?!" with vpunch
                 show nick at trans3
                 "Dumbfounded, he joined you on the bench after a few moments."
                 hide nick at trans3
@@ -540,7 +538,7 @@ label chap1_dhannica:
                 "It was becoming increasingly worrisome that such a minor incident was causing so much pain."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
                 dhannica_i "Sometimes, I don't even know why I hit the snooze button."
-                dhannica "{size=-10}How does anyone wake up after the first alarm?{/size}"
+                dhannica eyeclose sad"{size=-10}How does anyone wake up after the first alarm?{/size}"
                 play ambient2 busengine fadein 2.0
                 show bg busstop with dissolve
                 "As you sat there contemplating your life choices, the next bus had already arrived."
@@ -552,62 +550,64 @@ label chap1_dhannica:
                 stop ambient2 fadeout 1.0
                 scene bg bus with blur_fade
                 "Upon entering, you scanned the area for seats, only to meet disatisfaction as all were taken."
-                dhannica_i "No seats. Great, more fun."
-                dhannica_i "Guess I'll be standing then."
+                dhannica_i sad browsad"No seats. Great, more fun."
+                dhannica_i eyeclose "Guess I'll be standing then."
                 "By this point, you had grown accustomed to discomfort. Getting comfortable with it seemed like the only way to endure."
-                dhannica_i "Dang, this sucks. I never should've catch more zZz."
+                dhannica_i eyelook "Dang, this sucks. I never should've catch more zZz."
                 dhannica_i "But thank goodness for these handrails. I could barely maintain my balance."
                 "To alleviate your pain, you decided to entertain yourself by gazing out the window, watching people going about their lives without a care in the world."
                 "Sighing, you eventually turned your gaze on your left."
-                dhannica_i "Great, it's that guy from the bus stop."
+                dhannica_i -eyelook -browsad"Great, it's that guy from the bus stop."
                 "Your eyes met him, and the only thought that entered your mind was about his eyes."
                 "He was gazing at you, with his laid back posture and his bleak expression before drifting his eyes to the ground."
                 "You hadn't even realized you were staring until you watched him rise from his seat, towering over you."
-                nick "Sit down."
+                nick eyelook "Sit down."
                 "He commanded with a strong yet mellow voice, which your body obeyed, and took a seat."
-                dhannica "U-uhm, okay."
+                dhannica browsad sweat eyehappy -sad sweat"U-uhm, okay."
                 "You were quite embarrassed, trying not to look at his face."
                 "You draped your hair over your features as you bent down, concealing your expression, which was in complete utter embarrassment."
                 dhannica "{size=-5}Thank you...{/size}"
                 "He handed you a flask, with its exterior dripping wet with pebbles of moist water sliding off of it."
                 show nick at trans3
-                nick "Here."
-                nick "Put this on your foot. The cold will help your swelling."
+                nick -eyelook "Here."
+                nick smile "Put this on your foot. The cold will help your swelling."
 
                 menu:
                     "Take the flask":
                         $ Nick.add(5)
                         $ n_takeFlask = True
-                        dhannica "Are you sure?"
-                        nick "Just do it."
+                        dhannica -eyehappy -sweat"Are you sure?"
+                        nick -smile "Just do it."
                         hide nick at trans3
                         "You wrapped the bottle with his hand towel, mindful of the fact that a complete stranger had just offered you his personal belonging to alleviate your discomfort."
-                        "He doesn't look like the helping type."
-                        "In fact, he appears as though he doesn't want to interact with anyone."
+                        "He doesn't look like the helping type, but he did help you."
+                        "It's just that he appears as if he doesn't want to interact with anyone."
                         "You gently applied the cold flask to the side of your foot and instantly began to experience relief. Your pinky toe had swelled and grown warm, but this remedy appeared to be reducing the discomfort."
                         "Leaning down as you tended your injury, you couldn't help but notice his shoes."
 
                     "Refuse":
                         $ n_refuseTake = True
                         dhannica "You wouldn't want me to do that."
-                        nick "Why not?"
-                        dhannica "I mean, you drink from that. Wouldn't you be bothered if I put it on my foot?"
+                        nick browsus -smile"Why not?"
+                        dhannica -eyehappy"I mean, that's where you drink. Wouldn't that be disgusting?"
+                        show nick -browsus
                         "In response, he retrieved a hand towel from his shoulder bag."
                         nick "Here, wrap this around the bottle. That'll keep it cleaner, if that's your concern."
-                        dhannica "Please, you don't have to. I'm fine."
+                        dhannica eyehappy "Please, you don't have to. I'm fine."
                         "You plead in the most convincing way you could."
                         hide nick at trans3
                         "However, your efforts were in vain, as he knelt down and took matters into his own hands."
-                        dhannica "W-what are you doing?"
-                        nick "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
+                        dhannica -eyehappy -browsad sad"W-what are you doing?"
+                        nick eyeclose smile"I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
                         "As he glanced at you, you saw his eyes clearly."
                         "Blue and green, a peculiar and intriguing combination."
-                        nick "Remove the shoe."
-                        dhannica "O-oh, right."
+                        nick -eyeclose -smile"Remove the shoe."
+                        dhannica eyehappy browsad -sad"O-oh, right."
+                        dhannica_i "It feels like I'm being treated with royalty."
                         "He carefully wrapped the bottle in his hand towel and gently placed your foot on his knee, applying the cold bottle to the sore area."
                         "You winced at the pain."
-                        dhannica_i "Ow...!" with vpunch
-                        dhannica_i "No wait, that's actually not bad."
+                        dhannica_i sad "Ow...!" with vpunch
+                        dhannica_i -eyehappy -browsad -sweat "No wait, that's actually not bad."
                         "You watched as he continued to gently pat the cool towel on your foot. Your gaze wandered to his features."
                         "You scrutinized him and couldn't help but notice his shoes."
 
@@ -621,9 +621,9 @@ label chap1_dhannica:
                 ease 1.0 truecenter zoom 1.0
             show nick:
                 trans3
-            nick "There, that should do it."
+            nick smile "There, that should do it."
             show nick at trans3
-            nick eyelook "..."
+            nick eyelook -smile "..."
             dhannica sweat sad -eyehappy "..."
             nick "I uhh, gotta go."
             show nick -eyelook:
@@ -649,12 +649,13 @@ label chap1_dhannica:
             dhannica_i eyeclose -sweat "Guess I'll return this..."
 
         if n_takeFlask:
-            show nick at trans3
+            show nick smile at trans3
             nick "There, that should do it."
-            nick "..."
-            dhannica "..."
-            nick "Err...keep that until the cold is gone. Just give it back to me when you're done."
-            show nick:
+            nick -smile eyelook "..."
+            dhannica -eyehappy sad "..."
+            nick -eyelook "Err...keep that until the cold is gone. Just give it back to me when you're done."
+            dhannica "H-huh? Wh-what about your-{w=0.3}{nw}"
+            show nick eyelook:
                 ease 1.0 offscreenleft
             pause 1.0
             play sound busopen
@@ -674,7 +675,7 @@ label chap1_dhannica:
             "After a few minutes, you began to feel better, albeit only slightly."
             "Part of you felt embarrassed by how conspicuous your situation with him must have appeared, considering that he had been kneeling for a while."
             "With the bus being so crowded, you both stood out for sure."
-            show nick at trans3
+            show nick eyelook -smile at trans3
             "He seemed to notice it too. It's obvious because of how he promptly stood up, maintaining his composure."
             nick "Err...keep that until the cold is gone. Just give it back to me when you're done."
             show nick:
@@ -705,7 +706,7 @@ label school:
     $ welcome.grant()
     if beLate:
         $ update_journal("Character updated.")
-        $ nick_description = "A strange guy that offered me help. Had blue and green eyes...\n\nIt's weird that he had to leave me his flask. Couldn't he just wait for it before leaving me?"
+        $ nick_description = "A strange guy that offered me help. Had blue and green eyes...\n\nIt's weird that he had to leave me his flask. Couldn't he just wait for it before leaving me? What a weird way of encountering him."
         "You finally reached the school in a faster pace, thanks to the cold flask that was applied to you by a stranger."
         dhannica_i "I gotta thank him for this."
         dhannica_i "But first, my classroom!"
@@ -715,14 +716,14 @@ label school:
         $ update_journal("Journal updated.")
         $ dhannica_description = "{0} Well, an early bird I suppose.".format(dhannica_description)
         "You finally reached the school, walking through the gates limping on your other foot."
-        dhannica_i "I look like a total loser. That's just great."
-        dhannica_i "Is this how people are gonna remember me...? The limping kid on the first day of school..."
+        dhannica_i eyeclose browsad sad "I look like a total loser. That's just great."
+        dhannica_i -eyeclose "Is this how people are gonna remember me...? The limping kid on the first day of school..."
         "You gaze before you a school, with an interesting color choice that seem be used redundantly everywhere."
         "..."
         "It didn't take long for you to finally realize what you're here for."
-        dhannica "Right, my class schedule."
+        dhannica -browsad "Right, my class schedule."
         "You rummaged through your bag, only to find out your outer pocket was open and your class schedule had fallen out."
-        dhannica_i "Oh great! This day just gets better and better."
+        dhannica_i eyeclose browsad "Oh great! Could this day get any better?"
         "Sarcasm was the only thing that could sugarcoat this situation."
         "You start to trace back your previous steps, carefully searching for your schedule, with your eyes glued to the ground."
         "Suddenly...a hand appeared in your field of vision, holding a piece of paper."
@@ -736,22 +737,22 @@ label school:
         "You looked at his hand and followed the trail of grungy accessories, to his chain necklace up to his green eyes."
         "You don't know what you felt, but you felt some sort of gratitude."
         "That you wouldn't have to pay extra to get another copy of your schedule."
-        dhannica "Uhm...thank you... for the, uhm...this."
+        dhannica -sad -eyeclose "Uhm...thank you... for the, uhm...this."
         $ Alec.add(3)
-        alec "No biggie."
+        alec smile "No biggie."
         alec "I noticed your bag was open and this fell out."
-        alec "It seems that we're in the same class. Nice to meet you classmate."
+        alec eyehappy"It seems that we're in the same class. Nice to meet you classmate."
         "He stretches out his hand for a handshake."
         "In which, you relunctantly returned the offer."
         $ a_name = "Alec"
         $ update_journal("Character updated.")
-        alec "I'm Alec."
-        alec "By the way, are you okay? You don't seem to be walking right."
-        dhannica "Oh...yeah haha, I stubbed my toe this morning. And well, I thought it was gonna be okay after a few minutes, but I guess that's still yet to come."
+        alec -eyehappy "I'm Alec."
+        alec browsad -smile "By the way, are you okay? You don't seem to be walking right."
+        dhannica eyehappy sweat "Oh...yeah haha, I stubbed my toe this morning. And well, I thought it was gonna be okay after a few minutes, but I guess that's still yet to come."
         alec "Is that so?"
 
         menu:
-            alec "Would you like me to accompany you to the infirmary?"
+            alec smile "Would you like me to accompany you to the infirmary?"
             "Accept":
                 $ Alec.add(2)
                 $ a_clinic = True
@@ -759,20 +760,23 @@ label school:
 
             "Deny":
                 dhannica "You don't have to, I mean I wouldn't want to bother you."
-                alec "Nonsense, friends don't bother me."
+                alec eyeclose -browsad "Nonsense, friends don't bother me."
+                show alec -eyeclose
                 dhannica "..."
-                alec "We're friends, right?"
+                alec browsad -smile "We're friends, right?"
                 dhannica "I guess...?"
-                dhannica_i "I've made a friend~"
+                show alec -browsad smile
+                dhannica_i "Wow, a friend already~"
                 dhannica_i "And he's quite upfront with it."
                 dhannica "But we'll be late if we go now."
             
-        alec "I guess so. How about after the first subject? We have 30 minutes vacant. I'm sure that's enough time for the nurse to patch you up."
+        alec -browsad "I guess so. How about after the first subject? We have 30 minutes vacant. I'm sure that's enough time for the nurse to patch you up."
 
         if a_clinic:
             dhannica "Thanks, but you really don't have to do this."
-            alec "And leave my first friend to an injury? I don't think so."
-            dhannica_i "I've made a friend~"
+            alec eyeclose "And leave my first friend to an injury? I don't think so."
+            show alec -eyeclose
+            dhannica_i "I've made a friend already~"
             dhannica_i "And he's quite upfront with it."
 
         $ update_journal("Character updated.")
@@ -790,17 +794,21 @@ label classroom:
     play ambient2 classroom volume 0.5 fadein 1.0
     if beLate:
         "You hustle to class, pulling yourself towards the door with just a minute to spare before the teacher arrives."
-        "Suddenly, a gentle touch on your arm catches your attention as the door closes behind you."
-        show alec at trans3
+        "As you close the door behind you, a hand catches your attention as it peeks through, leaving the hand stuck halfway at the door." with vpunch
+        unknown "Oww..."
+        show alec eyeclose browsad sweat at trans3
         $ meetAlec = True
         $ update_journal("Character added.")
         "You turn to see a person with white hair and adorned with lots of jewelry."
+        show alec -eyeclose
         "Those unmistakable green eyes meet yours."
-        dhannica "S-sorry, I didn't know you were behind me."
-        alec "No problem."
+        dhannica browsad sad"Oh! S-sorry, I didn't know you were behind me."
+        alec smile "No problem. Don't worry about that."
+        show alec -sweat
         "He guides you to an empty seat, introducing himself along the way."
         $ a_name = "Alec"
-        alec "I'm Alec, by the way."
+        alec -browsad "I'm Alec, by the way."
+        dhannica eyehappy -sad sweat "I-I'm [Main]. Sorry, again."
         hide alec at trans3
         "The teacher calls the class to order."
     else:
@@ -819,22 +827,22 @@ label classroom:
     play ambient2 classroom volume 0.5 fadein 1.0
     "As the professor continued with the lively discussion while inserting puns to keep the atmosphere engaging, you find it challenging to focus."
     "The pain in your left foot is intensifying, and you sense Alec noticing your discomfort."
-    dhannica_i "When is he gonna stop blabbering?"
+    dhannica_i eyeclose browsad sweat sad"When is he gonna stop blabbering?"
     if beLate:
         "The door opens, and a newcomer rushes in, catching his breath."
         unknown "Sorry, I'm late!"
         prof "Ah, first day and he's already late."
     "Suddenly, Alec raises his hand, catching the professor's attention."
     prof "Yes, Mr. Boyband with the grunge style. What's up?"
-    alec "My friend here has sprained herself on the way to school and she wanted to ask if she could go to the nurse's office to get it checked out."
+    alec "[Main] sprained herself on her way to school. She wanted to ask if she could go to the clinic to get it checked out."
     prof "Well, why didn't you go there before class started?"
     if beLate:
-        dhannica "Uhh..."
+        dhannica -eyeclose "Uhh..."
         "Alec looks at you as if he's expecting a better answer."
     else:
-        dhannica "Uhh, we didn't want to be marked late, so we came in and took attendance first."
+        dhannica eyelook -sad "Uhh, we didn't want to be marked late, so we came in and took attendance first."
     prof "Well, you could've just given me the nurse's note and come in after you've gone to see her, and you'd still be marked as present, just excused."
-    dhannica "W-we didn't think about that."
+    dhannica eyehappy "W-we didn't think about that."
     prof "Well, now you have."
     prof "Class, next time prioritize your health, as long as it's valid, alright?"
     prof "You may go."
@@ -848,20 +856,20 @@ label classroom:
             ease 1.0 offscreenleft
         "As you take a good look at your assigned escort, surprise washes over you."
         stop ambient2 fadeout 1.0
-        dhannica "{sc}It's YOU?!{/sc}" with vpunch
+        dhannica -eyehappy -sweat -browsad"{sc}It's YOU?!{/sc}" with vpunch
     else:
         prof "Aren't you going to bring your friend?"
         "Alec walks towards you to escort you to the nurse's room."
         dhannica "Thanks."
-        alec "No problem."
+        alec smile eyehappy"No problem."
         stop ambient2 fadeout 1.0
         scene bg school hallway with blur_fadehold
-        show nick:
+        show nick eyeclose browsus:
             offscreenright
             ease 1.0 xalign 0.5
             pause .1
             ease 1.0 offscreenleft
         "As you exited, a guy rushed towards the door, abruptly halting in front of you before swerving to enter."
-        nick "Sorry, I'm late!"
+        nick -eyeclose -browsus"Sorry, I'm late!"
 
     return

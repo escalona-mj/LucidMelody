@@ -39,13 +39,17 @@ init python:
         def update(self):
             setattr(store, self.points_var, self.new_points)
 
-    def update_journal(message):
-        renpy.notify(message)
-        renpy.play("audio/sfx/journal.ogg", channel="notif2")
+    def update_journal(message=None):
+        if not journal:
+            renpy.show_screen("journal_get", _transient=True)
+            store.journal = True
+        if message is not None:
+            renpy.notify(message)
+            renpy.play("audio/sfx/journal.ogg", channel="notif2")
         store.notify_journal = True
         
         if persistent.seen_journal == False:
-            renpy.pause(1.0, hard=True)
+            renpy.pause(1.5, hard=True)
             renpy.call_in_new_context("journal_tutorial")
             persistent.seen_journal = True
 
@@ -146,43 +150,91 @@ init python:
             'title': "Welcome to Journal!",
             'info': "Welcome to your journal! This will keep track of what's happening in your current playthrough. Use this to gain advantage of the game!",
             'action': Return(),
-            'pic': None
+            'pic': None,
+            "centered": True
         },
         'dialog_2': {
             'title': "Introduction",
             'info': "Your journal is a reflection of your in-game experiences. Every significant event, character interaction, or pivotal decision is documented here. The journal dynamically updates based on your choices.",
             'action': Return(),
-            'pic': "gui/journal/journal_tutorial_1.png"
+            'pic': "gui/journal/journal_tutorial_1.png",
+            "centered": False
         },
         'dialog_3': {
             'title': "Characters",
             'info': "As you progress, characters you meet will be added automatically to the journal. You might miss them at some point of the game, which will affect the story. You can also track their likes and dislikes, and even their like points.",
             'action': Return(),
-            'pic': "gui/journal/journal_tutorial_2.png"
+            'pic': "gui/journal/journal_tutorial_2.png",
+            "centered": False
         },
         'dialog_4': {
             'title': "Dream Journal?",
             'info': "[persistent.playername] tends to dream a lot, so she records her dreams in the journal. Explore these entries to gain insights into her thoughts and emotions.",
             'action': Return(),
-            'pic': "gui/journal/journal_tutorial_3.png"
+            'pic': "gui/journal/journal_tutorial_3.png",
+            "centered": False
         },
         'dialog_5': {
             'title': "Accessing your Journal",
             'info': "Don't forget to check your journal. You will be notified when the journal updates. You can access it on the quick menu throughout the game anytime.",
             'action': [ShowMenu("journal"), Return()],
-            'pic': "gui/journal/journal_tutorial_4.png"
-        },
+            'pic': "gui/journal/journal_tutorial_4.png",
+            "centered": False
+        }
     }
 
 label journal_tutorial:
     python:
         for key, value in journal_info_dict.items():
-            renpy.call_screen("tutorial_dialog", title=value['title'], message=value['info'], ok_action=value['action'], pic=value['pic'])
+            renpy.call_screen("tutorial_dialog", title=value['title'], message=value['info'], ok_action=value['action'], pic=value['pic'], centered_text=value['centered'])
     if _menu:
         call screen journal
     return
 
-screen tutorial_dialog(title, message, ok_action, pic=None):
+screen journal_get():
+    on "show" action Play("sfx2", "audio/sfx/get_item.mp3")
+
+    style_prefix "get_item"
+
+    add "gui/overlay/confirm.png":
+        at transform:
+            on show:
+                alpha 0.0
+                easein .25 alpha 0.5
+            on hide:
+                alpha 0.5
+                ease 1.0 alpha 0.0
+    frame:
+        at transform:
+            on show:
+                parallel:
+                    zoom 5.0 alpha 0.0
+                    ease_back 0.5 zoom 1.0 alpha 1.0
+                parallel:
+                    rotate 0
+                    linear 0.1 rotate 10
+                    linear 0.1 rotate 0
+                    linear 0.1 rotate -10
+                    linear 0.1 rotate 0
+                    repeat 2
+            on hide:
+                ease 1.0 xalign 0.85 yalign 0.75 zoom 0.1 alpha 0.0
+        background None
+        align (0.5, 0.35)
+        vbox:
+            add "gui/journal/journal_icon.png"
+            text "Journal unlocked!"
+
+    timer 1.5 action Hide()
+        
+style get_item_text:
+    font gui.interface_text_font
+    size gui.interface_text_size
+    outlines gui.slot_button_text_outlines
+    text_align 0.5
+    xalign 0.5
+
+screen tutorial_dialog(title, message, ok_action, pic=None, centered_text=False):
     on "show" action Function(renpy.show_layer_at, withBlur, layer="master"), Play("sfx3", "audio/sfx/modal_open.ogg")
     on "hide" action Function(renpy.show_layer_at, noBlur, layer="master")
     modal True
@@ -200,6 +252,8 @@ screen tutorial_dialog(title, message, ok_action, pic=None):
                 alpha 0.5
                 easein .25 alpha 0.0
 
+    if _menu:
+        key "game_menu" action None
     key "K_RETURN" action ok_action
 
     frame at screen_appear:
@@ -214,7 +268,10 @@ screen tutorial_dialog(title, message, ok_action, pic=None):
         if pic:
             add pic xalign 0.5
 
-        text message
+        text message:
+            xalign 0.5
+            if not centered_text:
+                text_align 0.0
 
         hbox:
             xalign 0.5

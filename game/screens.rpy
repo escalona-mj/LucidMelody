@@ -740,12 +740,12 @@ style navigation_button_text:
 image menu_particle = SnowBlossom("gui/menu/particle.png", count=10, xspeed=(100,250), yspeed=(-150,-90), fast=True, horizontal=False)
 
 init python:
-    def dynamicMCMenu():
+    def dynamicMenu():
         last_save = renpy.slot_json(renpy.newest_slot())
 
-        if last_save is None or 'common' or 'lucid' in last_save:
-            return "gui/menu/menu_NONE.png"
-        elif last_save['route'] == 'dhannica':
+        if last_save is None or 'lucid' in last_save:
+            return Null()
+        elif last_save['route'] == 'common':
             return "gui/menu/menu_dhannica.png"
         elif last_save['route'] == 'alec':
             return "gui/menu/menu_alec.png"
@@ -770,7 +770,7 @@ screen bg():
                 time 0.5
                 easein .75 alpha 1.0
 
-    default last_character = dynamicMCMenu()
+    default last_character = dynamicMenu()
     add last_character:
         xalign 0.875
         yalign 0.65

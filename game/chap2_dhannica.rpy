@@ -11,42 +11,38 @@ label chap2_dhannica:
         "You both walk in the long hallways of the school, searching for the infirmary."
         "You tried to maintain your posture, but your limping slowed you down."
         nick "Hey, slow down. You're going to hurt yourself more."
-        dhannica "I know what I'm doing. I can manage."
-        nick "You know what? I'll walk with you. Just in case."
+        dhannica browangy eyeclose sad"I know what I'm doing. I can manage."
+        nick eyelook "You know what? I'll walk with you. Just in case."
         "You appreciate his concern, but you felt a bit embarrassed about being so dependent."
         "His insistence was comforting in a way."
         nick "There's the infirmary."
-        nick "Let's get you there."
+        nick -eyelook smile "Let's get you there."
         "As you both walked, the hallways were bustling with students and you noticed them stealing a glance at both of you, probably wondering about the unusual pair."
 
     else:
-        dhannica_i "Sheesh, talk about being late..."
-        dhannica_i "Glad I woke up in time."
+        dhannica_i eyehappy browsad sweat "Sheesh, talk about being late..."
+        dhannica_i -eyehappy -browsad -sweat "Glad I woke up in time."
         "You both walk in the long hallways of the school, searching for the infirmary."
         alec "Ah, there it is."
-        alec "Let's get you there."
+        alec smile "Let's get you there."
         "He holds you from the side to offer support from your limping state."
-        dhannica_i "Woah-"
-        dhannica_i "Yep. Very upfront."
+        dhannica_i sad "Woah-"
+        dhannica_i eyehappy browsad sweat -sad "Yep. Very upfront."
 
     scene bg clinic with long_dissolve
     nurse "It seems you've broken your pinky toe pretty badly. It's been dislocated."
-    dhannica "Yeah... I stubbed my toe this morning pretty hard because I was in a hurry."
+    dhannica sad browsad sweat "Yeah... I stubbed my toe this morning pretty hard because I was in a hurry."
 
     if beLate:
-        show nick at trans3
+        show nick smile browsus at trans3
         "You stole a glance at him and he was concealing a mockingly irritiating smirk, as if laughing at you."
-        dhannica "Tsk."
+        show nick eyeclose
+        dhannica browangy -sweat "Tsk."
         hide nick at trans3
         "He collects himself and acts as if nothing happened."
-        dhannica "Anyways, yeah that happened. And well, it got a bit worse because I kind of ran for the bus because I was running late."
-        nurse "Well, did you make it? Did you make it to the bus?"
-        if n_takeBus:
-            dhannica "I did."
-        else:
-            dhannica "I didn't."
+        dhannica browsad "Anyways, yeah that happened. And well, it got a bit worse because I kind of ran for the bus because I was running late."
         "You turn your head in a snap, glaring at him, with your eyes narrowed. Mentally screaming at him to shut up."
-        dhannica_i "This guy has an unbelievable way of making my blood boil."
+        dhannica_i browangy eyeclose "This guy has an unbelievable way of making my blood boil."
         nurse "Well, I can't do anything about your case. It's gotten quite severe, although I expected it to look a lot worse since you mentioned that you ran."
         nurse "But to my suprise, it's not as worse as I'd expected it to be. Although, this is not something that I can treat without making it worse."
         nurse "I'll have to arrange an excuse letter for this because this injury is needed to be treated and taken to the hospital."
@@ -59,36 +55,40 @@ label chap2_dhannica:
         "There was a moment of brief silence."
         "You could feel the awkwardness. Like lost words in the air, not able to form anything but tension. Uncomfortable tension in the silence is surrounding the both of you."
         "A slight hint of guilt suddenly reminded you of his act this morning."
-        dhannica "Oh! Before I forget..."
+        dhannica -browangy -eyeclose "Oh! Before I forget..."
         "You rummage through your bag to give back his flask."
-        dhannica "Thank you, by the way."
-        show nick at trans3
+        dhannica eyehappy -sad"Thank you, by the way."
+        show nick eyeclose smile at trans3
         nick "I've been waiting for that."
+        show nick -eyeclose
         "..."
-        dhannica "I'm sorry, but your eyes look unusual."
-        nick "Eh, I get that a lot."
+        dhannica -eyehappy sad "I'm sorry, but your eyes look unusual."
+        nick eyelook -smile "Eh, I get that a lot."
+        show nick -eyelook
         dhannica "I know what it is. I've heard of it, but I forgot what it's called."
+        show nick browsus
         dhannica "Heterosexual...?"
-        dhannica "Heterochrome...?"
+        show nick eyeclose
         dhannica "Homosapien...?"
         "Your thoughts start to wander as he noticed you doing your best retrieving the word you were looking for."
         nick "Heterochromia."
         dhannica "Hetero-what?"
-        nick "It's heterochromia."
+        nick -eyeclose -browsus "It's heterochromia."
         dhannica "Yep, I knew it."
-        dhannica_i "Heterochromia..."
+        dhannica_i eyehappy -sad"Heterochromia..."
         "You repeated, trying to imprint the word in your memory."
         dhannica "It's unique."
-        nick "Well yeah, it's a genetic thing. Nothing special."
+        nick smile eyelook  "Well y-yeah, it's a genetic thing. Nothing special."
         "You sense a hint of defensiveness in his tone, like he had to downplay it. It made you curious."
-        dhannica "So, why were you late this morning? Is it a habit or just bad luck today?"
+        dhannica -eyehappy "So, why were you late this morning? Is it a habit or just bad luck today?"
+        show nick -smile
         "He hesitated for a moment, as if weighing whether to share."
         nick "Just one of those days, I guess. Overslept, missed the alarm."
         "You wanted to probe further but decided against it. You both sat in silence for a moment, before you realized you haven't properly introduced yourself."
         dhannica "I'm [Main], by the way."
         $ n_name = 'Nick'
         $ update_journal("Character updated.")
-        nick "Nick. Nice to officially meet you, [Main]."
+        nick -eyelook "Nick. Nice to officially meet you, [Main]."
         hide nick at trans3
         "Just then, the nurse returned, holding a slip of paper."
         nurse "[Main], you'll need to visit the hospital for proper treatment."
@@ -100,7 +100,7 @@ label chap2_dhannica:
         nurse "Take care of your foot, [Main]. And try not to be too adventurous with stairs."
         "She handed you the note, and you took it, mixed with a feeling of embarrassment and gratitude."
         dhannica "Thanks for everything, Nick. I guess I'll see you around?"
-        show nick at trans3
+        show nick smile at trans3
         nick "Yeah, sure. Take care of that foot. And, uh, maybe try not to rush so much."
         "He gave a small, almost shy smile, which seemed out of character from the Nick you encountered earlier."
         "It made you wonder about the many layers he might have."
@@ -390,8 +390,7 @@ label chap2_dhannica:
             alec "Well, if you need a recap of what you've missed or just someone to hang with during lunch, I'm here."
             "His offer made you smile, a genuine sense of gratitude welling up inside you."
             dhannica "I might take you up on that. Thanks again, Alec."
-            hide alec at trans3
-            "As he left, you felt a newfound appreciation for his friendship. It was nice that you had someone like Alec at school."
+            "You felt a newfound appreciation for his friendship. It was nice that you had someone like Alec at school."
 
     stop ambient fadeout 1.0
 
@@ -406,4 +405,71 @@ label classroom2:
     "It felt surreal, almost a premonition of the complexities you were now facing in your waking life."
     "Alec, sitting next to you, leaned in with a whisper, breaking your reverie."
     alec "You sure you're okay? You seem a bit... distant."
+    dhannica "Oh! U-uh..."
+    "You hesitated, feeling the weight of your thoughts."
+
+    if not beLate:
+        menu:
+            dhannica_i "Should I reveal it to him?"
+            "Tell him about the dream":
+                $ Alec.add(2)
+                dhannica "Y-Yeah, just a strange dream about a concert. It popped back in my mind."
+                "His eyes lit up with curiosity."
+                alec "A dream about a concert? Sounds interesting. Care to share more?"
+                dhannica "O-okay, so it went like this..."
+                scene bg classroom with long_dissolve
+                "You found yourself opening up about the dream, describing about the mysterious singer and the emotional intensity of the experience."
+                "However, you left the part about the color of the eyes that you found mesmerizing."
+                "During your explanation, Alec listened intently, nodding along."
+                "There were times where Alec found it confusing, but it's understandable given that dreams tend to not make sense."
+                alec "Sounds like a powerful dream. Maybe it means something important about your life right now."
+                alec "You explaining the dream in great detail tells me that this could be destiny, haha."
+                alec "It must have taken a sharp mind to remember it all in detail."
+                dhannica "Well, I keep a journal to my side always, so I won't forget them after I wake up."
+                alec "That's even better. You know, you could piece your dreams together and hope for some miracle to happen."
+                dhannica "That only happens in movies, haha."
+                alec "Well either way, your dream sounds interesting."
+                dhannica "Yeah..."
+                "His positive response encouraged you to ponder the deeper significance of your dream."
+                dhannica_i "Maybe I should keep an eye to that."
+            "Keep it to yourself":
+                label .keepit:
+                    dhannica "I'm fine, just a bit tired. Thanks for asking."
+                    alec "Alright, just letting you know I'm here if you need to talk."
+                    "You appreciated his respect for your privacy, and it made you feel more at ease knowing you had a friend like Alec in class."
+                    "As the lesson began, you found yourself splitting your attention between the professor's words and your lingering thoughts about the dream."
+                    "You couldn't quite decipher its meaning behind the paperbag mask of the singer."
+                    if not beLate:
+                        dhannica_i "The resemblance is there..."
+                        dhannica_i "Green eyes. Alec has those."
+                        if a_hangOut:
+                            dhannica_i "He also plays in a band, though I'm not sure if he's the singer or just the bassist."
+                        "You continued to wander through your thoughts."
+                    dhannica_i "Oh, what the heck. I'll just forget it."
+    
+    else:
+        jump .keepit
+
+    stop ambient fadeout 1.0
+    scene bg classroom2 with long_dissolve
+
+    "The day finally concluded."
+    "The room slowly began to empty itself as everyone leaves."
+    "You find yourself thinking what should you do after class."
+
+    if not meetNick:
+        jump .goAlec
+
+    else:
+        menu:
+            dhannica "Let's see..."
+            "Go with Alec":
+                label .goAlec:
+                    dhannica "I guess I'll go with Alec."
+            "Go with Nick" if meetNick:
+                dhannica "I guess I'll go with Nick."
+                scene bg school hallway with blur_dissolve
+
+    
+
     block "END"

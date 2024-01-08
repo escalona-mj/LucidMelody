@@ -66,8 +66,16 @@ label alt_lucid_dream1:
     dhannica ".....!{fast}" with vpunch
     dhannica_i "..."
     dhannica "Another nightmare..."
+    show dhannica_phone:
+        xalign 0.5 yoffset 250 xoffset 150
+        ypos 1.0 yanchor 0.0
+        ease 1.0 ypos 1.0 yanchor 1.0
     "You look around your room to find your phone and check the time."
+    show dhannica_phone lockscreen_lucid_time with dissolve
     dhannica "5:30AM..."
+    show dhannica_phone:
+        ypos 1.0 yanchor 1.0
+        ease 0.5 ypos 1.0 yanchor 0.0
     "Since it was still early, you made your bed before leaving your bedroom. Once you were done, you head downstairs."
     window auto
     scene bg living room with blur_fade
@@ -94,8 +102,7 @@ label alt_lucid_dream1:
     "You nodded, and went back to you room."
     scene bg dhannica room with blur_fade
     dhannica_i "Now, let's see."
-    $ journal = True
-    $ update_journal("Journal unlocked.")
+    $ update_journal()
     "You rummage through your room, looking for your newly bought bag and school supplies."
     dhannica_i "I guess that's everything."
     block "END"

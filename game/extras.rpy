@@ -102,9 +102,9 @@ screen extras():
                         label "Gallery"
                         text "See those memorable moments again."
             
-            if mainMenu_ach.has():
+            if persistent.seen_dream1:
                 button:
-                    action If(persistent.seen_dream1, true=Start("enter_lucid"), false=Show(screen="dialog", message="We were unable to access the protocol.\nPlease try again later.", ok_btn="OK", ok_action=Hide()))
+                    action Start("enter_lucid")
                     foreground "lucid_button"
 
                     frame:

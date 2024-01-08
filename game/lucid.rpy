@@ -244,8 +244,7 @@ screen lucid():
                     hover_background AlphaMask(At("bg stage", hover_dream_thumb), "gui/lucid/slot_mask.png")
                     action [ShowTransient("dream_enter", which_dream="dream1", transition=Dissolve(0.2))]
                     at move_around
-                    # action ShowTransient("lucid_modal", message="Are you sure you want to commence this dream?", first_btn="Yes", first_action=[Hide(), Replay("dream1")], second_btn="No", second_action=Hide())
-                
+                    
                 button:
                     xsize 470
                     ysize 720
