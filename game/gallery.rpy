@@ -125,7 +125,7 @@ image new_year_unlocked = Composite((380, 213), (0, 0), "gui/gallery/slot_scene_
 screen extras_gallery():
     grid gallerycols galleryrows:
         spacing 20
-        if mainMenu_ach.has():
+        if persistent.seen_dream1:
             add extras_gallery.make_button(name="cg_dhannica_gojo", unlocked="cg_dhannica_gojo_unlocked", hover_border="gui/gallery/slot_scene_hover.png", locked="gui/gallery/slot_scene_locked.png")
             add extras_gallery.make_button(name="extras_dhannica_gojo", unlocked="extras_dhannica_gojo_unlocked", hover_border="gui/gallery/slot_scene_hover.png", locked="gui/gallery/slot_scene_locked.png")
         add extras_gallery.make_button(name="new_year_special", unlocked="new_year_unlocked", hover_border="gui/gallery/slot_scene_hover.png")
