@@ -347,7 +347,7 @@ screen dream_enter(which_dream):
                     textbutton "Start" style_prefix "title_lucid":
                         xalign 1.0
                         yalign 1.0
-                        action Call(dream_dict[which_dream]['label'])
+                        action Replay(dream_dict[which_dream]['label'])
 
     key "game_menu" action [Hide(transition=Dissolve(0.2))]
 
