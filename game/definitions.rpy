@@ -71,7 +71,7 @@ init python:
 
 
             if not config.developer:
-                config.rollback_enabled = False
+                renpy.block_rollback()
                 store._skipping = False
 
             if _in_replay:
@@ -87,7 +87,9 @@ init python:
             store.current_scene = None
             renpy.hide("black_bars", layer="dream")
 
-            config.rollback_enabled = True
+            if not config.developer:
+                renpy.block_rollback()
+                
             store._skipping = True
             
             #delete the dream history to make it more authentic like she forgor
@@ -390,6 +392,7 @@ define audio.stomachgrowl = "audio/sfx/stomachgrowl.ogg"
 define audio.thump = "audio/sfx/thump.mp3"
 define audio.busopen = "audio/sfx/bus_open.ogg"
 define audio.knock = "audio/sfx/knock.ogg"
+define audio.page = "audio/sfx/page.ogg"
 
 #AMBIENT
 define audio.cheer = "audio/sfx/cheer.ogg"
@@ -398,6 +401,7 @@ define audio.busengine = "audio/ambient/bus_engine.ogg"
 define audio.classroom = "audio/ambient/classroom.ogg"
 define audio.schoolhallway = "audio/ambient/hallway.ogg"
 define audio.hospital = "audio/ambient/hospital.ogg"
+define audio.night = "audio/ambient/night.ogg"
 
 ###########################################################################################################
 #                                               SIDE IMAGES                                               #

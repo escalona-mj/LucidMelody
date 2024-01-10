@@ -57,6 +57,8 @@ screen dev_screen():
         text "_skipping = [underscore_skip]"
         $ seen_label = persistent.seen_dream1
         text "Dream1 has been seen? [seen_label]"
+        text "finished pieces = [finished_pieces]"
+        text "page pieces = [page_pieces]"
         text "Alec points = {0}".format(alec_likePoints)
         text "Nick points = {0}".format(nick_likePoints)
         textbutton "image" action ShowMenu("image_tools")
