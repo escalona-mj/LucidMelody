@@ -1225,6 +1225,37 @@ screen about():
                 text "Rechelle Añover"
                 text "Kristian Magallanes"
                 text "John Christian Mantele"
+
+            null height 100
+
+            ###ART
+            frame style "empty_frame":
+                style_prefix "about_title"
+                label "SPECIAL MENTION"
+            
+            hbox:
+                xalign 0.5
+                spacing 100
+
+                frame style "empty_frame":
+                    has vbox:
+                        style_prefix "about_role"
+                    label "\"Diwata\""
+
+                    frame style "empty_frame":
+                        style_prefix "about_person"
+                        has vbox
+                        text "by Kahel"
+                
+                frame style "empty_frame":
+                    has vbox:
+                        style_prefix "about_role"
+                    label "Vocals"
+
+                    frame style "empty_frame":
+                        style_prefix "about_person"
+                        has vbox
+                        text "Erol Corwyn Manalo"
                     
         null height 100
                

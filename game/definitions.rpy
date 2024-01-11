@@ -142,6 +142,9 @@ image bg stage:
 image bg living room:
     im.Blur("images/bg/livingroom.png", 1.5)
 
+image bg living room food:
+    im.Blur("images/bg/livingroom_food.png", 1.5)
+
 image bg school:
     im.Blur("images/bg/school.jpg", 1.5)
 
@@ -383,6 +386,7 @@ define audio.titlescreen = "audio/bgm/titlescreen.mp3"
 define audio.merrygoround2 = "<loop 24.162>audio/bgm/merrygoround2.mp3"
 define audio.meet = "<loop 04.024>audio/bgm/meet.ogg"
 define audio.into_a_dream = "<loop 0>audio/bgm/into_a_dream.ogg"
+define audio.diwata_dream = "<loop 0>audio/bgm/diwata_dream.ogg"
 
 #SFX
 define audio.alarm = "audio/sfx/alarm.ogg"

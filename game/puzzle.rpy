@@ -72,7 +72,7 @@ label puzzle_test:
     "Tonight was the night you had chosen to infiltrate the school, armed with nothing but curiosity towards Alec."
     dhannica_i "There's no way he would do that... right?"
     "As you tiptoed through the empty hallways, you heard a faint rustling coming from one of the classrooms."
-    $ renpy.music.set_volume(0.5, delay=0.5, channel='ambient')
+    $ renpy.music.set_volume(0.0, delay=0.5, channel='ambient')
     scene bg classroom2
     show nick:
         xalign 0.25

@@ -136,6 +136,7 @@ label chap1_dhannica:
         dhannica "Oh uhm... Maybe..."
         scene black with eye_close
         "You whisper to him discreetly the song."
+        $ renpy.music.set_volume(0.0, delay=1.0, channel='ambient')
         d_singer "Ah, I see. Alright, get yourself ready, as this crowd's about to get hectic!"
         camera:
             zoom 1.03
@@ -154,6 +155,7 @@ label chap1_dhannica:
             xalign 0.5
             yalign 1.0
         show dream1_cg_scene5_light at pulse
+        play music diwata_dream
         with blur_dissolve
         show dream1_cg_part5
         hide dream1_cg_part5
@@ -172,6 +174,7 @@ label chap1_dhannica:
         $ renpy.music.set_volume(1.0, delay=0.0, channel='sfx2')
         stop sfx2 fadeout 1.0
         stop ambient
+        stop music fadeout 3.0
         camera
         hide dust_particle onlayer dream behind black_bars
         hide dust_particle_blur onlayer dream behind black_bars
@@ -289,7 +292,7 @@ label chap1_dhannica:
 
     scene black with blur_dissolve
     play sound thump
-    scene bg living room with blur_dissolve
+    scene bg living room food with blur_dissolve
     dhannica sad eyehappy browsad "Ow!" with vpunch
 
     if beLate or usePhone:
@@ -403,14 +406,6 @@ label chap1_dhannica:
                 "It's as if he was trying to assess what was wrong with you discreetly."
                 camera:
                     ease 1.0 yalign 0.6
-                show flask:
-                    alpha 0.0
-                    zoom 0.7
-                    blur 10
-                    xalign 0.5
-                    yalign 0.9
-                    parallel:
-                        ease 3.0 alpha 1.0
                 "You decided not to pay him any mind and sat uncomfortably, trying to remain calm and not draw attention to yourself."
                 show nick -eyelook
                 "Suddenly, a cold sensation touched your skin."
@@ -554,7 +549,7 @@ label chap1_dhannica:
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
                 "The silence was there, stagnating in the air."
                 hide cg_nick_busstop with blur_dissolve
-                "You didn't pay him much attention, not wit your primary concern being your throbbing toe."
+                "You didn't pay him much attention, now with your primary concern being your throbbing toe."
                 "It was becoming increasingly worrisome that such a minor incident was causing so much pain."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
                 dhannica_i "Sometimes, I don't even know why I hit the snooze button."
@@ -878,8 +873,10 @@ label classroom:
         "The door opens, and a newcomer rushes in, catching his breath."
         unknown "Sorry, I'm late!"
         prof "Ah, first day and he's already late."
+    show alec raise_hand at trans3
     "Suddenly, Alec raises his hand, catching the professor's attention."
     prof "Yes, Mr. Boyband with the grunge style. What's up?"
+    show alec -raise_hand
     alec "[Main] sprained herself on her way to school. She wanted to ask if she could go to the clinic to get it checked out."
     prof "Well, why didn't you go there before class started?"
     if beLate:
@@ -892,6 +889,7 @@ label classroom:
     prof "Well, now you have."
     prof "Class, next time prioritize your health, as long as it's valid, alright?"
     prof "You may go."
+    hide alec at trans3
     "You stood up, limping, and headed towards the door."
     if beLate:
         prof "Are you going alone looking like that? I don't think so."
