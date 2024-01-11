@@ -303,7 +303,7 @@ label chap1_dhannica:
         girlMom "Honey, aren't you going to eat your breakfast?"
         dhannica -tear -eyeclose "I'm late mom, I have to go!"
         "As soon as you're off, your mother stepped towards you and noticed your groggy appearance."
-        show mom at trans3
+        show mom worried at trans3
         girlMom "Why are you limping? What's wrong with your foot?"
         dhannica eyehappy sweat browsad -sad "I stubbed my toe but it's fine, it'll go away in a few minutes."
         girlMom "I don't think you should go to school today, that might get worse if you force yourself to school."
@@ -323,13 +323,14 @@ label chap1_dhannica:
         dhannica_i -tear "This day just started in a bad note. Let's hope it doesn't get worse for the rest of the day."
         "You came down the stairs limping on your one leg, while checking your phone for the notification that had rung a few moments ago."
         "Suddenly, your mother swiftly came through the scene and noticed your groggy appearance."
-        show mom at trans3
+        show mom worried at trans3
         girlMom "What happened hon?!"
         dhannica eyehappy sweat browsad -sad "I'm fine mom, I just stubbed my toe on the way down the stairs. I'm fine."
         girlMom "You don't seem fine. I don't think you'd have a pretty good day at school limping like that."
         dhannica "It doesn't hurt that much."
         dhannica_i eyelook "It hurts a lot~"
         dhannica -eyelook -sweat "I just stubbed my toe, it's not like I dislocated it. It's gonna be fine after a few minutes."
+        show mom -worried
         girlMom "You sure? I can send your teacher a note."
         dhannica sad -browsad "I'd rather go limping to school than be the weird kid who misses the first day, and ends up having no friends for the rest of the school year."
         girlMom "Well, if you say so. Just don't push yourself too hard. We don't wanna spend money to the doctors now, do we?"
@@ -447,8 +448,10 @@ label chap1_dhannica:
                     show nick:
                         ease_back 1.0 yalign 7.0 
                     "He applies the cold side of his flask to the affected area."
+                    show cg_nick_busstop_scene2 with blur_dissolve
                     dhannica sweat -browangy "H-hey, isn't this a bit too much?"
-                    nick eyeclose "Just take it, or it'll get worse."
+                    camera at reset_dizzy
+                    nick "Just take it, or it'll get worse."
                     dhannica "But it'll get dirty!"
                     
                 elif n_refuseIcedTea:
@@ -466,7 +469,9 @@ label chap1_dhannica:
                     show nick:
                         ease_back 1.0 yalign 7.0 
                     "He rose from his seat and knelt down to your level, leaving you confused."
+                    show cg_nick_busstop_scene2 with blur_dissolve
                     dhannica browsad sweat"W-what are you doing?"
+                    camera at reset_dizzy
                     nick -eyeclose -browsus"You look dumb walking. I figure out you'd be injured or something. And looks like I was right."
                     nick eyeclose smile "I've had these injuries last month, and trust me, you wouldn't want this to get worse than it already is."
                     "You feel embarassed, after hearing his intentions."
@@ -486,18 +491,35 @@ label chap1_dhannica:
                 if n_takeIcedTea:
                     nick -eyeclose "I'm not going to drink it from the side anyway. As long as the mouth of the flask isn't soiled, then it's fine."
                     dhannica_i -sweat "Why is he so pushy?"
-                    "He retrieved a hand towel from his bag that looked like it could cover the entire surface of a flask."
+                    show expression "images/cg/cg_nick/comic_reach_bag.png" as comic1:
+                        xpos 0.0 xanchor 1.0
+                        ease 1.0 xpos 0.0 xanchor 0.0 xoffset 100 yoffset 100
+                    "He retrieved a hand towel from his bag."
+                    show expression "images/cg/cg_nick/comic_towel_flask.png" as comic2:
+                        xpos 1.0 xanchor 0.0
+                        ease 1.0 xpos 1.0 xanchor 1.0 xoffset -100 yoffset 300
                     "He took the flask from your hands and started wrapping around it."
-                    "You looked at him for a moment, convincing yourself that it was okay while you're applying the flask on your affected area."
+                    show expression "images/cg/cg_nick/comic_quieres_flask.png" as comic3:
+                        xpos 0.0 xanchor 1.0
+                        ease 1.0 xpos 0.0 xanchor 0.0 xoffset 100 yoffset 500
+                    "You looked at him for a moment, convincing yourself that it was okay while he applies the flask on your affected area."
                     "At first, it hurt, but the pain had subsided."
-                    camera:
-                        ease 1.0 yalign 0.6
                     "As you knelt down, tending to your swollen toe, you couldn't help but notice his shoes."
                     
                 else:
                     nick eyeclose "You have socks on. It's fine."
                     dhannica -sweat eyelook "It's not! It'll be gross!"
-                    "With a sigh, he seemed to give in and took out a hand towel from his bag. He wrapped it around the flask, not too thick that it would insulate the cold, but not too thin that it would hurt."
+                    show expression "images/cg/cg_nick/comic_reach_bag.png" as comic1:
+                        xpos 0.0 xanchor 1.0
+                        ease 1.0 xpos 0.0 xanchor 0.0 xoffset 100 yoffset 100
+                    "With a sigh, he seemed to give in and took out a hand towel from his bag."
+                    show expression "images/cg/cg_nick/comic_towel_flask.png" as comic2:
+                        xpos 1.0 xanchor 0.0
+                        ease 1.0 xpos 1.0 xanchor 1.0 xoffset -100 yoffset 300
+                    "He wrapped it around the flask, not too thick that it would insulate the cold, but not too thin that it would hurt."
+                    show expression "images/cg/cg_nick/comic_quieres_flask.png" as comic3:
+                        xpos 0.0 xanchor 1.0
+                        ease 1.0 xpos 0.0 xanchor 0.0 xoffset 100 yoffset 500
                     "Gently, he handled your foot with caution, trying not to cause any pain, and positioned it on his knee."
                     "He then began patting the cold flask to your foot. At first, it hurt, but you soon felt immense relief."
                     dhannica_i sweat "This is weird."
@@ -517,30 +539,29 @@ label chap1_dhannica:
                 "You stood there, observing the commotion, unintentionally fixating on a man berating the driver."
                 stop ambient2 fadeout 3.0
                 show bg busstop_no_bus with dissolve
+                show cg_nick_busstop with blur_dissolve
                 "You didn't realize you'd been standing there for 20 seconds, nor did you know why you had."
+                show cg_nick_busstop:
+                    ease 1.5 yalign 0.0
                 "He finally looked in your direction, and when both of your eyes met, you instinctively glanced at the ground, as if you hadn't already been caught staring."
                 $ meetNick = True
                 $ current_route = 'nick'
                 $ update_journal("Character added.")
                 play music meet fadein 1.0
                 nick browsus "Why are you looking at me like that?"
-                "You tried your best not to appear obvious and began to slowly make your way to a nearby bench, attempting not to limp to hide your injury."
-                "He continued to stand there, waiting for the next bus to arrive."
+                "You tried your best not to appear obvious and slowly began to make your way to the nearby bench, attempting not to limp to hide your injury."
+                "He continued to stare at you, whilst waiting for the next bus to arrive."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
                 "The silence was there, stagnating in the air."
-                dhannica eyehappy -sad -sweat"You can sit down if you'd like. The next bus comes in about 15 minutes anyway."
-                ".{w=0.5}.{w=0.5}.{w=0.5}"
-                dhannica_i sweat"DID I JUST SAY THAT, [Main!u]?!" with vpunch
-                show nick at trans3
-                "Dumbfounded, he joined you on the bench after a few moments."
-                hide nick at trans3
-                "The rest of the wait was quiet. You didn't pay him much attention, your primary concern being your throbbing toe."
+                hide cg_nick_busstop with blur_dissolve
+                "You didn't pay him much attention, not wit your primary concern being your throbbing toe."
                 "It was becoming increasingly worrisome that such a minor incident was causing so much pain."
                 ".{w=1.0}.{w=1.0}.{w=1.0}"
                 dhannica_i "Sometimes, I don't even know why I hit the snooze button."
                 dhannica eyeclose sad"{size=-10}How does anyone wake up after the first alarm?{/size}"
                 play ambient2 busengine fadein 2.0
-                show bg busstop with dissolve
+                show bg busstop
+                with dissolve
                 "As you sat there contemplating your life choices, the next bus had already arrived."
                 play sound busopen
                 "Both of you stood up at the same time, despite the atmosphere being thick between the two of you."
@@ -556,6 +577,7 @@ label chap1_dhannica:
                 dhannica_i eyelook "Dang, this sucks. I never should've catch more zZz."
                 dhannica_i "But thank goodness for these handrails. I could barely maintain my balance."
                 "To alleviate your pain, you decided to entertain yourself by gazing out the window, watching people going about their lives without a care in the world."
+                scene bg bus2 with blur_dissolve
                 "Sighing, you eventually turned your gaze on your left."
                 dhannica_i -eyelook -browsad"Great, it's that guy from the bus stop."
                 "Your eyes met him, and the only thought that entered your mind was about his eyes."
@@ -567,8 +589,8 @@ label chap1_dhannica:
                 "You were quite embarrassed, trying not to look at his face."
                 "You draped your hair over your features as you bent down, concealing your expression, which was in complete utter embarrassment."
                 dhannica "{size=-5}Thank you...{/size}"
+                scene cg_nick_bus with blur_dissolve
                 "He handed you a flask, with its exterior dripping wet with pebbles of moist water sliding off of it."
-                show nick at trans3
                 nick -eyelook "Here."
                 nick smile "Put this on your foot. The cold will help your swelling."
 
@@ -582,6 +604,9 @@ label chap1_dhannica:
                         "You wrapped the bottle with his hand towel, mindful of the fact that a complete stranger had just offered you his personal belonging to alleviate your discomfort."
                         "He doesn't look like the helping type, but he did help you."
                         "It's just that he appears as if he doesn't want to interact with anyone."
+                        hide cg_nick_bus
+                        show bg bus
+                        with blur_dissolve
                         "You gently applied the cold flask to the side of your foot and instantly began to experience relief. Your pinky toe had swelled and grown warm, but this remedy appeared to be reducing the discomfort."
                         "Leaning down as you tended your injury, you couldn't help but notice his shoes."
 
@@ -590,9 +615,17 @@ label chap1_dhannica:
                         dhannica "You wouldn't want me to do that."
                         nick browsus -smile"Why not?"
                         dhannica -eyehappy"I mean, that's where you drink. Wouldn't that be disgusting?"
-                        show nick -browsus
+                        show expression "images/cg/cg_nick/comic_reach_bag.png" as comic1:
+                            xpos 0.0 xanchor 1.0
+                            ease 1.0 xpos 0.0 xanchor 0.0 xoffset 100 yoffset 100
                         "In response, he retrieved a hand towel from his shoulder bag."
+                        show expression "images/cg/cg_nick/comic_towel_flask.png" as comic2:
+                            xpos 1.0 xanchor 0.0
+                            ease 1.0 xpos 1.0 xanchor 1.0 xoffset -100 yoffset 300
                         nick "Here, wrap this around the bottle. That'll keep it cleaner, if that's your concern."
+                        show expression "images/cg/cg_nick/comic_quieres_flask.png" as comic3:
+                            xpos 0.0 xanchor 1.0
+                            ease 1.0 xpos 0.0 xanchor 0.0 xoffset 100 yoffset 500
                         dhannica eyehappy "Please, you don't have to. I'm fine."
                         "You plead in the most convincing way you could."
                         hide nick at trans3
@@ -617,10 +650,13 @@ label chap1_dhannica:
 
         if n_takeIcedTea:
             $ Nick.add(5)
-            camera:
-                ease 1.0 truecenter zoom 1.0
-            show nick:
-                trans3
+            hide cg_nick_busstop_scene2
+            hide comic1
+            hide comic2
+            hide comic3
+            hide nick
+            with blur_dissolve
+            show nick at trans3
             nick smile "There, that should do it."
             show nick at trans3
             nick eyelook -smile "..."
@@ -634,12 +670,14 @@ label chap1_dhannica:
             dhannica_i -eyeclose -sweat -browsad "Guess I'll return this..."
 
         if n_refuseIcedTea:
-            show nick:
-                ease_back 1.0 yalign 1.03
+            hide cg_nick_busstop_scene2
+            hide comic1
+            hide comic2
+            hide comic3
+            hide nick
+            with blur_dissolve
             show nick at trans3
             "He rose abruptly, seemingly aware that the interaction between you two was drawing attention."
-            camera:
-                ease 1.0 truecenter zoom 1.0
             "It was sort of giving a public display of affection, garnering curious glances from onlookers."
             nick eyelook "J-just put that there. Give the bottle back to me when you get a chance."
             show nick -eyelook:
@@ -653,6 +691,7 @@ label chap1_dhannica:
             nick "There, that should do it."
             nick -smile eyelook "..."
             dhannica -eyehappy sad "..."
+            nick "My stop is here."
             nick -eyelook "Err...keep that until the cold is gone. Just give it back to me when you're done."
             dhannica "H-huh? Wh-what about your-{w=0.3}{nw}"
             show nick eyelook:
@@ -672,6 +711,13 @@ label chap1_dhannica:
 
         if n_refuseTake:
             $ Nick.add(10)
+            hide cg_nick_bus
+            hide comic1
+            hide comic2
+            hide comic3
+            hide nick
+            show bg bus
+            with blur_dissolve
             "After a few minutes, you began to feel better, albeit only slightly."
             "Part of you felt embarrassed by how conspicuous your situation with him must have appeared, considering that he had been kneeling for a while."
             "With the bus being so crowded, you both stood out for sure."

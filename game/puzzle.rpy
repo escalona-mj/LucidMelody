@@ -60,17 +60,19 @@ transform dark_tint:
 
 label puzzle_test:
     $ Main = persistent.playername
+    $ _game_menu_screen = 'emptymenu'
     $ n_name = "Nick"
     camera at dark_tint
     scene bg school hallway
-    play ambient night volume 0.1 fadein 1.0
+    play ambient night volume 0.5 fadein 1.0
     with blur_fade
     window auto
     "The moon hung low in the night sky, casting a silvery glow over the school grounds."
-    dhannica_i "M-maybe this was a bad idea..."
-    "Tonight was the night you had chosen to infiltrate the school, armed with nothing but curiosity towards Nick."
+    dhannica_i "Sneaking into the school this late might be a bad idea..."
+    "Tonight was the night you had chosen to infiltrate the school, armed with nothing but curiosity towards Alec."
     dhannica_i "There's no way he would do that... right?"
     "As you tiptoed through the empty hallways, you heard a faint rustling coming from one of the classrooms."
+    $ renpy.music.set_volume(0.5, delay=0.5, channel='ambient')
     scene bg classroom2
     show nick:
         xalign 0.25
@@ -81,20 +83,20 @@ label puzzle_test:
     show nick:
         ease 1.0 xalign 0.5
     "In the dim light, you saw a figure, hunched over a desk, tearing sheets of paper with an intensity that seemed almost desperate."
-    show nick eyeclose:
+    show nick eyelook:
         ease 1.0 xalign 0.75 matrixcolor BrightnessMatrix(0) blur 0
+    "As the figure moves pass at the dim light shining from the moon, a familiar face emerges."
+    show nick eyeclose raise_arm:
         easein .1 yoffset 20
         easeout .1 yoffset 0
-    "As the figure moves pass at the dim light shining from the moon, a familiar face emerges."
-    show nick eyelook
     "It's... Nick?"
     dhannica_i "What's he doing here?"
-    show nick:
+    show nick -eyeclose -raise_arm:
         ease_back 2.0 offscreenright
-    "Curiosity overpowering caution, you waited until Nick hastily gathered the torn pieces and slipped out of the room."
+    "Curiosity overpowering caution, you waited until Nick hastily gathered the torn pieces, threw them in the bin and slipped out of the room."
     hide nick
     "Fortunately, you managed to remain out of sight even after he unknowingly passes by at your side."
-    "As he left, you switfly darted inside, scanning the remnants that were left scattered across the desk."
+    "As he left, you switfly darted inside, headed for the bin where the remnants were left discarded."
     "You picked up a few pieces, each containing fragments of what appeared to be a handwritten note."
     "You pulled out a small flashlight from your backpack and began to examine each torn edge."
     dhannica_i "Let's see..."
@@ -106,20 +108,21 @@ label assemble_complete:
     if not config.developer:
         $ renpy.block_rollback()
     # hide screen reassemble_puzzle
-    "You look at the paper."
     show expression "images/Pieces/full-page.png" as paper:
         xalign 0.5
         parallel:
             slideup(50)
-    "The scribbled handwriting on the neatly reconstructed paper suggested a message of some importance."
-    "It was clear that Nick had gone to great lengths to keep whatever it was a secret."
+    "You look at the paper."
+    "The scribbled handwriting on the reconstructed paper depicted what it seems to be lyrics for a song."
+    dhannica_i "Did he wrote this?"
+    "It was clear that Nick had gone to great lengths to keep whatever this was a secret."
     hide paper at slidedown(50)
     "Just as you finished reconstructing the note, you heard footsteps approaching the classroom."
     dhannica_i "Oh crap! Someone's coming!"
-    "Panic surged through your whole body. But even with little time, you managed to slip the reassembled message into your pocket."
+    "Panic surged through your whole body. But even with little time, you managed to slip the reassembled paper into your pocket."
     show nick browsus at trans3
     "The door creaked open, revealing Nick with an expression of surprise and suspicion."
-    nick "[Main]? What are you doing here?"
+    nick raise_arm"[Main]? What are you doing here?"
     # dhannica "I... uh, heard some strange noises and thought I'd check it out."
     $ renpy.end_replay()
     return

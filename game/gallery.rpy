@@ -51,6 +51,24 @@ init python:
     extras_gallery.button("new_year_special")
     extras_gallery.image("images/cg/cg_extras/new_year_artwork.png")
 
+    #EXTRAS
+    nick_gallery = Gallery()
+
+    #allow navigation
+    nick_gallery.navigation = True
+
+    #add transition
+    nick_gallery.transition = Dissolve(0.2)
+
+    nick_gallery.button("cg_nick_busstop")
+    nick_gallery.unlock_image("cg_nick_busstop")
+
+    nick_gallery.button("cg_nick_busstop_scene2")
+    nick_gallery.unlock_image("cg_nick_busstop_scene2")
+
+    nick_gallery.button("cg_nick_bus")
+    nick_gallery.unlock_image("cg_nick_bus")
+
 
 transform resize_thumb:
     xsize thumbnail_x
@@ -70,6 +88,8 @@ screen gallery():
             use cg_gallery 
         showif which_gallery == "extras_gallery":
             use extras_gallery
+        showif which_gallery == "nick_gallery":
+            use nick_gallery
     
     fixed:
         vbox:
@@ -88,6 +108,12 @@ screen gallery():
                 hover_foreground Text(_("Extras"), style="gal_nav_btn_hover")
                 selected_foreground Text(_("Extras"), style="gal_nav_btn_selected")
                 action [SetScreenVariable("which_gallery", "extras_gallery"), SelectedIf(which_gallery == "extras_gallery")]
+            imagebutton:
+                auto "gui/navigation/blank_%s.png"
+                foreground Text(_("Nick"), style="gal_nav_btn")
+                hover_foreground Text(_("Nick"), style="gal_nav_btn_hover")
+                selected_foreground Text(_("Nick"), style="gal_nav_btn_selected")
+                action [SetScreenVariable("which_gallery", "nick_gallery"), SelectedIf(which_gallery == "nick_gallery")]
 
 style gal_nav_image_button is button
 
@@ -129,8 +155,17 @@ screen extras_gallery():
             add extras_gallery.make_button(name="cg_dhannica_gojo", unlocked="cg_dhannica_gojo_unlocked", hover_border="gui/gallery/slot_scene_hover.png", locked="gui/gallery/slot_scene_locked.png")
             add extras_gallery.make_button(name="extras_dhannica_gojo", unlocked="extras_dhannica_gojo_unlocked", hover_border="gui/gallery/slot_scene_hover.png", locked="gui/gallery/slot_scene_locked.png")
         add extras_gallery.make_button(name="new_year_special", unlocked="new_year_unlocked", hover_border="gui/gallery/slot_scene_hover.png")
-    
-default gal_navi = False
+
+image cg_nick_busstop_unlocked = Composite((380, 213), (0, 0), "gui/gallery/slot_scene_shadow.png", (0, 0), AlphaMask(At("cg_nick_busstop", zoom_thumb), "gui/gallery/slot_mask.png"))
+image cg_nick_busstop_scene2_unlocked = Composite((380, 213), (0, 0), "gui/gallery/slot_scene_shadow.png", (0, 0), AlphaMask(At("cg_nick_busstop_scene2", resize_thumb), "gui/gallery/slot_mask.png"))
+image cg_nick_bus_unlocked = Composite((380, 213), (0, 0), "gui/gallery/slot_scene_shadow.png", (0, 0), AlphaMask(At("cg_nick_bus", resize_thumb), "gui/gallery/slot_mask.png"))
+
+screen nick_gallery():
+    grid gallerycols galleryrows:
+        spacing 20
+        add nick_gallery.make_button(name="cg_nick_busstop", unlocked="cg_nick_busstop_unlocked", hover_border="gui/gallery/slot_scene_hover.png", locked="gui/gallery/slot_scene_locked.png")
+        add nick_gallery.make_button(name="cg_nick_busstop_scene2", unlocked="cg_nick_busstop_scene2_unlocked", hover_border="gui/gallery/slot_scene_hover.png", locked="gui/gallery/slot_scene_locked.png")
+        add nick_gallery.make_button(name="cg_nick_bus", unlocked="cg_nick_bus_unlocked", hover_border="gui/gallery/slot_scene_hover.png", locked="gui/gallery/slot_scene_locked.png")
 
 screen gallery_navigation:
     hbox:
@@ -148,3 +183,20 @@ style gallery_nav_button_text:
     color "#666"
     hover_color "#fff"
     selected_color "#fff"
+
+init -1:
+    screen _gallery(locked, displayables, index, count, gallery, **properties):
+        if locked:
+            add "#000"
+            text _("Image [index] of [count] locked.") align (0.5, 0.5)
+        else:
+            for d in displayables:
+                add d fit "contain" ysize 1080
+
+        if gallery.slideshow:
+            timer gallery.slideshow_delay action Return("next") repeat True
+
+        key "game_menu" action gallery.Return()
+
+        if gallery.navigation:
+            use gallery_navigation(gallery=gallery)

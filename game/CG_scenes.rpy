@@ -127,3 +127,24 @@ layeredimage dhannica_gojo:
     group accesories:
         attribute glasses default:
             "images/cg/cg_extras/dhannica_gojo_glasses.png"
+
+
+image cg_nick_busstop_blink:
+    "images/cg/cg_nick/cg_nicknoBlink_busstop.png"
+    choice:
+        4.5
+    choice:
+        3.5
+    choice:
+        1.5
+    "images/cg/cg_nick/cg_nickBlink_busstop.png"
+    .10
+    repeat
+
+image cg_nick_busstop = Composite(
+    (1920, 2160),
+    (0, 0), "images/cg/cg_nick/cg_nick_busstop.png",
+    (0, 0), "cg_nick_busstop_blink"
+)
+
+image cg_nick_bus = "images/cg/cg_nick/cg_nick_bus.png"

@@ -250,7 +250,7 @@ screen lucid():
                     ysize 720
                     background AlphaMask(At("bg classroom2", dark_tint, dream_thumb), "gui/lucid/slot_mask.png")
                     hover_background AlphaMask(At("bg classroom2", dark_tint, hover_dream_thumb), "gui/lucid/slot_mask.png")
-                    action [ShowTransient("dream_enter", which_dream="dream2", transition=Dissolve(0.2))]
+                    action [ShowTransient("dream_enter", which_dream="puzzle", transition=Dissolve(0.2))]
                     at move_around
 
                 button:
@@ -293,7 +293,7 @@ init python:
             'thumb': "bg stage",
             'label': "dream1"
         },
-        'dream2': {
+        'puzzle': {
             'title': "Torn Notes",
             'desc': "Things are get interesting. Piecing the torn pages back together, whatever it was, unfolds a hidden story behind Nick that changes everything.",
             'thumb': "puzzle_thumb",
@@ -307,7 +307,7 @@ transform blur_nick:
 image puzzle_thumb = Composite(
     (1920, 1080),
     (0, 0), At("bg classroom2", dark_tint),
-    (450, 145), At("nick", blur_nick, move_around, dark_tint)
+    (450, 145), At("nick raise_arm", blur_nick, move_around, dark_tint)
     )
 
 screen dream_enter(which_dream):
@@ -347,7 +347,7 @@ screen dream_enter(which_dream):
                     textbutton "Start" style_prefix "title_lucid":
                         xalign 1.0
                         yalign 1.0
-                        action Replay(dream_dict[which_dream]['label'])
+                        action Replay(dream_dict[which_dream]['label'], locked=False)
 
     key "game_menu" action [Hide(transition=Dissolve(0.2))]
 

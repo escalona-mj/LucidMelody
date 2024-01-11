@@ -29,25 +29,30 @@ label chap2_dhannica:
         dhannica_i sad "Woah-"
         dhannica_i eyehappy browsad sweat -sad "Yep. Very upfront."
 
-    scene bg clinic with long_dissolve
+    scene bg clinic
+    show nurse at trans3
+    with long_dissolve
     nurse "It seems you've broken your pinky toe pretty badly. It's been dislocated."
     dhannica sad browsad sweat "Yeah... I stubbed my toe this morning pretty hard because I was in a hurry."
 
     if beLate:
+        show nurse at trans2
         show nick smile browsus at trans3
         "You stole a glance at him and he was concealing a mockingly irritiating smirk, as if laughing at you."
         show nick eyeclose
         dhannica browangy -sweat "Tsk."
         hide nick at trans3
+        show nurse at trans3
         "He collects himself and acts as if nothing happened."
         dhannica browsad "Anyways, yeah that happened. And well, it got a bit worse because I kind of ran for the bus because I was running late."
         "You turn your head in a snap, glaring at him, with your eyes narrowed. Mentally screaming at him to shut up."
         dhannica_i browangy eyeclose "This guy has an unbelievable way of making my blood boil."
-        nurse "Well, I can't do anything about your case. It's gotten quite severe, although I expected it to look a lot worse since you mentioned that you ran."
+        nurse look "Well, I can't do anything about your case. It's gotten quite severe, although I expected it to look a lot worse since you mentioned that you ran."
         nurse "But to my suprise, it's not as worse as I'd expected it to be. Although, this is not something that I can treat without making it worse."
         nurse "I'll have to arrange an excuse letter for this because this injury is needed to be treated and taken to the hospital."
         "The nurse seems to be looking for something, and it looks like whatever it was, it wasn't in the room."
-        nurse "Please wait for me here."
+        nurse -look "Please wait for me here."
+        hide nurse at trans3
         "The nurse goes outside."
         window hide
         pause 2.5
@@ -56,11 +61,20 @@ label chap2_dhannica:
         "You could feel the awkwardness. Like lost words in the air, not able to form anything but tension. Uncomfortable tension in the silence is surrounding the both of you."
         "A slight hint of guilt suddenly reminded you of his act this morning."
         dhannica -browangy -eyeclose "Oh! Before I forget..."
+        show nick browsus at trans3
         "You rummage through your bag to give back his flask."
+        show expression "images/misc/return_flask.png":
+            zoom 1.5
+            xalign 0.5 yoffset 250 xoffset 0
+            ypos 1.0 yanchor 0.0
+            ease 1.0 ypos 1.0 yanchor 1.0
         dhannica eyehappy -sad"Thank you, by the way."
-        show nick eyeclose smile at trans3
+        show nick eyeclose -browsus smile at trans3
         nick "I've been waiting for that."
         show nick -eyeclose
+        show expression "images/misc/return_flask.png":
+            ypos 1.0 yanchor 1.0
+            ease 0.25 ypos 1.0 yanchor 0.0
         "..."
         dhannica -eyehappy sad "I'm sorry, but your eyes look unusual."
         nick eyelook -smile "Eh, I get that a lot."
@@ -78,30 +92,34 @@ label chap2_dhannica:
         dhannica_i eyehappy -sad"Heterochromia..."
         "You repeated, trying to imprint the word in your memory."
         dhannica "It's unique."
-        nick smile eyelook  "Well y-yeah, it's a genetic thing. Nothing special."
+        nick smile eyelook raise_arm  "Well y-yeah, it's a genetic thing. Nothing special."
         "You sense a hint of defensiveness in his tone, like he had to downplay it. It made you curious."
         dhannica -eyehappy "So, why were you late this morning? Is it a habit or just bad luck today?"
         show nick -smile
         "He hesitated for a moment, as if weighing whether to share."
-        nick "Just one of those days, I guess. Overslept, missed the alarm."
+        nick -raise_arm "Just one of those days, I guess. Overslept, missed the alarm."
         "You wanted to probe further but decided against it. You both sat in silence for a moment, before you realized you haven't properly introduced yourself."
         dhannica "I'm [Main], by the way."
         $ n_name = 'Nick'
         $ update_journal("Character updated.")
         nick -eyelook "Nick. Nice to officially meet you, [Main]."
-        hide nick at trans3
+        show nick at trans1
+        show nurse at trans3
         "Just then, the nurse returned, holding a slip of paper."
         nurse "[Main], you'll need to visit the hospital for proper treatment."
         nurse "Should I call your parent or guardian to bring you to the hospital?"
         dhannica "My mother. Yeah, here's her number."
         "You gave your mother's number to the nurse."
         nurse "And Nick, since you escorted her, you're excused from being late. I'll inform your teachers."
+        show nick smile
         "Nick seemed relieved, almost grateful for the excuse."
         nurse "Take care of your foot, [Main]. And try not to be too adventurous with stairs."
+        hide nurse at trans3
+        show nick at trans3
         "She handed you the note, and you took it, mixed with a feeling of embarrassment and gratitude."
         dhannica "Thanks for everything, Nick. I guess I'll see you around?"
-        show nick smile at trans3
-        nick "Yeah, sure. Take care of that foot. And, uh, maybe try not to rush so much."
+        show nick raise_arm -smile
+        nick eyelook "Yeah, sure. Take care of that foot. And, uh, maybe try not to rush so much."
         "He gave a small, almost shy smile, which seemed out of character from the Nick you encountered earlier."
         "It made you wonder about the many layers he might have."
         hide nick at trans3
@@ -113,7 +131,7 @@ label chap2_dhannica:
         "Sitting in the clinic while waiting for your mother, you couldn't shake off the feeling that today was the start of something new."
         "Maybe it was the pain in your foot or the unexpected kindness from a stranger..."
         "But you felt like this was a turning point."
-        show mom at trans3
+        show mom worried at trans3
         "Soon enough, your mother arrived, her face etched with worry."
         if Main == "Dhannica":
             girlMom "Dhanni, you really need to be more careful. Why the rush this morning?"
@@ -127,7 +145,8 @@ label chap2_dhannica:
         alec "But yours looks worse. I can't imagine how you're feeling right now." 
         dhannica "Kinda meh. Gotten used to the pain."
         "You gave him a thumbs up and acted cool to hide the pain in front of him."
-        show alec at trans3
+        show alec at trans4
+        show nurse at trans2
         alec "Oh stop acting cool, it doesn't suit you, hahaha."
         dhannica "Well I try my best, hahaha."
         nurse "D'aww, you guys are cute."
@@ -146,6 +165,7 @@ label chap2_dhannica:
                 dhannica "Ahaha..."
 
         hide alec at trans3
+        show nurse at trans3
         dhannica_i "But we do seem to get along quite well."
         nurse "Well, I suggest you get this treated at a hospital so they can patch up your dislocated toe. I can't do anything since I'm only a nurse; that's beyond my skills."
         nurse "I treat students with injuries but yours seems to have gotten worse."
@@ -168,7 +188,8 @@ label chap2_dhannica:
         dhannica "My mother. Yeah, here's her number."
         "You gave your mother's number to the nurse."
         dhannica_i "I guess I need some catching up to do once all of this is over."
-        show alec at trans3
+        show alec at trans4
+        show nurse at trans2
         alec "Well, I'll better be going, I don't want to miss too much in class."
         dhannica "Okay, thanks for helping me by the way!"
         alec "No problem, I'll send you some of my notes so you'd be able to keep up with us."
@@ -176,6 +197,7 @@ label chap2_dhannica:
         dhannica "That'd be great! Thanks a bunch!"
         alec "Take care!"
         hide alec at trans3
+        show nurse at trans3
         "He fastened his pace and went outside of the infirmary."
         $ update_journal("Character updated.")
         $ alec_description = "{0}\n\nHe's quite very upfront with everything, but I don't mind. But for a moment, someone actually looks after me despite everything. And Alec is no greater example of that.".format(alec_description)

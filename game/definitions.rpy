@@ -117,11 +117,11 @@ define alec = Character('[a_name]', kind=speak, color='#21a733', image="alec", c
 define phone_alec = Character('[a_name]', kind=alec, image="alec", what_font="fonts/JetBrainsMono-Regular.ttf", what_size=31, namebox_background=Frame("gui/namebox/alec_namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign))
 
 #side characters
-define girlMom = Character('Mom', kind=speak)
+define girlMom = Character('Mom', kind=speak, image="mom")
 define d_singer = Character('Singer',kind=speak)
 define prof = Character('Prof', kind=speak)
 define unknown = Character('???', kind=speak)
-define nurse = Character('Nurse', kind=speak)
+define nurse = Character('Nurse', kind=speak, image="nurse")
 define doctor = Character('Doctor', kind=speak)
 define everyone = Character('Everyone', kind=speak)
 
@@ -154,6 +154,9 @@ image bg busstop_no_bus:
 image bg bus:
     im.Blur("images/bg/bus.png", 1.5)
 
+image bg bus2:
+    im.Blur("images/bg/bus_2.jpg", 1.5)
+
 image bg school hallway:
     im.Blur("images/bg/schoolhallway.jpg", 1.5)
 
@@ -170,8 +173,6 @@ image bg hospital:
     im.Blur("images/bg/hospital.jpg", 1.5)
 
 image black_bars = "gui/black_bars.png"
-
-image mom = "images/characters/mom.png"
 
 image camera_flash:
     Solid("#ffffff2c")
@@ -525,6 +526,8 @@ layeredimage alec:
     group body: #body
         attribute body default:
             "images/characters/alec/base.png"
+        attribute raise_hand:
+            "images/characters/alec/raise_hand.png"
 
     group eyes:
         attribute blink default:
@@ -584,6 +587,8 @@ layeredimage nick:
     group body: #body
         attribute body default:
             "images/characters/nick/base.png"
+        attribute raise_arm:
+            "images/characters/nick/raise_arm.png"
 
     group eyes:
         attribute blink default:
@@ -629,6 +634,18 @@ layeredimage dhannica_phone:
     attribute hand default:
         "images/misc/phone/hand.png"
 
+
+layeredimage mom:
+    attribute neutral default:
+            "images/characters/mom.png"
+    attribute worried:
+            "images/characters/mom_worried.png"
+
+layeredimage nurse:
+    attribute neutral default:
+            "images/characters/nurse_neutral.png"
+    attribute look:
+            "images/characters/nurse_look.png"
 
 #blue 014d81
 #pantone 6463b1
