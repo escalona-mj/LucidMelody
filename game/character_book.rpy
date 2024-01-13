@@ -384,7 +384,7 @@ screen journal():
                                 if LoveMeter == True:
                                     vbox:
                                         xalign 0.5
-                                        text "Current points: [points]" style 'love_bar_text':
+                                        text "Love points: [points]" style 'love_bar_text':
                                             size 40
                                             xoffset 55
                                             yoffset 40
